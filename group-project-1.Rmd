@@ -1,0 +1,71 @@
+---
+title: "Group exercise 1: Survey research"
+subtitle: "DATA5207: Data Analysis in the Social Sciences"
+author: Emily Wong
+output:
+  pdf_document:
+    toc: no
+    latex_engine: xelatex
+header-includes:
+   - \usepackage{caption}
+   - \captionsetup[figure]{font=scriptsize}
+# mainfont: Avenir Book
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+In this study, data from The World Value Survey will be explored to explain quality of life. Part 1 will explore potential predictors to predict higher/lower quality of life with supported theory. Part 2 will tests these predictors through the creation of a dependent variable and predictive models.
+
+## Part 1: Understanding survey data
+
+```{r survey}
+survey.data <- read.csv("Data/wvs_data.csv")
+```
+
+### Chosen Predictors
+
+Quality of life is difficult to quantify and can be affected by numerous factors in ones life. Another issue is that 'quality' for an individual could be determined by numerous things such as satisfaction, health and wealth. \
+\
+To help guide our choices of predictors, we will use the World Health Organisations definition of quality of life (QoL) as an "individuals' perceptions of their position in life in the context of the culture and value systems in which they live and in relation to their goals, expectations, standards and concerns".
+
+[<https://www.who.int/tools/whoqol>]
+
+We believe the factors that affect an indiviudal's perception of life spans further than physical health and wellbeing (however this is obviously also a factor to consider), it can include psychological, environmental, societal and spiritual factors.
+
+Employment - as means of wealth
+
+Q279: Are you employed now or not? If yes, about how many hours a week do you work? If you have more than one job, please tell us about your main job only.\
+Education - as means of standard of living
+
+Q275: What is your highest educational level that you have attained?
+
+Security
+
+Q131: how secure do you feel these days?
+
+Human Rights
+
+Q253: How much respect is there for individual human rights nowadays in this country? Do you feel there is...
+
+### Theory
+
+Education and employment: When an individual has higher educational attainments and are employed, they are able to have a better quality of life. This is due to higher economic well being and financial security to meet basic needs such as healthcare access and participating in leisure activites. It also can lead to a greater sense of purpose and personal development.
+
+Confounding factor here may be income, since these factors are indicators of what sort of job an individual has an how much they are getting paid as a result (higher education levels = greater income, more hours in employment = higher income)
+
+Security: When an individual is able to live without fear or risk and feels stable, their quality of life will increase. Security can be an impact on the quality of life as it is a measure of both physical safety and economic safety, physical safety affecting individuals health and mental well being, while as economic security to have social safety net to tackle financial challenges and access basic needs.
+
+Human rights: When society upholds and protects human rights, individuals tend to experience better QoL. It is a basic need but also a measure of psychological well-being because of its ability to foster belonging within communities and equality within a just society. It also could promote quality of opportunity, a fair chance for success in society.
+
+### Exploring Predictors
+
+```{r data}
+colnames(survey.data)
+```
+
+Not entirely that helpful.
