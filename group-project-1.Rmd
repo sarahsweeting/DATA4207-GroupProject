@@ -90,7 +90,7 @@ colnames(survey.data)
 Not entirely that helpful.
 
 ```{r}
-survey.data
+#survey.data
 ```
 ```{r}
 categories = c("Employment", "Employment", "Security", "Human Rights", "Health Levels", "Health Levels", "Social & Personal Connectivity ", "Social & Personal Connectivity ")
@@ -191,7 +191,5 @@ v5_friends = c(
 )
 
 values.5 = c(-2,1,2,3,4)
-
-
 ```
 
