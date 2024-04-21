@@ -31,7 +31,7 @@ survey.data <- read.csv("wvs_data.csv")
 
 ### Chosen Predictors
 
-Quality of life is difficult to quantify and can be affected by numerous factors in ones life. Another issue is that 'quality' for an individual could be determined by numerous things such as satisfaction, health and wealth. \
+Quality of life is difficult to quantify and can be affected by numerous factors in ones life. Another issue is that 'quality' for an individual could be determined by numerous things such as satisfaction, health and wealth.\
 \
 To help guide our choices of predictors, we will use the World Health Organisations definition of quality of life (QoL) as an "individuals' perceptions of their position in life in the context of the culture and value systems in which they live and in relation to their goals, expectations, standards and concerns".
 
@@ -54,13 +54,13 @@ Human Rights
 
 Q253: How much respect is there for individual human rights nowadays in this country? Do you feel there is...
 
-Health Levels 
+Health Levels
 
 Q47. All in all, how would you describe your state of health these days? Would you say it is...?
 
 Q53: "In the last 12 months, how often have you or your family gone without medicine or medical treatment that you needed?
 
-Social & Personal Connectivity 
+Social & Personal Connectivity
 
 Q46. Taking all things together,would you say you are...?
 
@@ -74,12 +74,11 @@ Confounding factor here may be income, since these factors are indicators of wha
 
 Security: When an individual is able to live without fear or risk and feels stable, their quality of life will increase. Security can be an impact on the quality of life as it is a measure of both physical safety and economic safety, physical safety affecting individuals health and mental well being, while as economic security to have social safety net to tackle financial challenges and access basic needs.
 
-Human rights: When society upholds and protects human rights, individuals tend to experience better QoL. It is a basic need but also a measure of psychological well-being because of its ability to foster belonging within communities and equality within a just society. It also could promote quality of opportunity, a fair chance for success in society. can you add a blurb for health levels and social and personal connectivity 
+Human rights: When society upholds and protects human rights, individuals tend to experience better QoL. It is a basic need but also a measure of psychological well-being because of its ability to foster belonging within communities and equality within a just society. It also could promote quality of opportunity, a fair chance for success in society. can you add a blurb for health levels and social and personal connectivity
 
 Health Levels: Health is a foundational element of quality of life. Good health enables individuals to engage actively in various aspects of life including work, social interactions, and leisure activities, thus directly influencing their overall life satisfaction and well-being. The state of an individual's health often reflects the access to and quality of medical services, as well as their lifestyle choices. Chronic illnesses or frequent lack of access to necessary medical treatments can lead to decreased physical capabilities, psychological stress, and financial burdens, all of which negatively affect one's quality of life.
 
-Social & Personal Connectivity: Human beings are inherently social creatures, and the quality of our social interactions can significantly impact our mental and emotional well-being. Strong connections with family and friends provide emotional support, reduce stress, and contribute to a sense of belonging and happiness. These relationships can act as buffers against mental health issues and provide a network of support during times of crisis or need. Furthermore, personal relationships can influence one’s self-esteem and provide opportunities for meaningful engagement in community activities, thereby enhancing an individual’s overall quality of life.
-
+Social & Personal Connectivity: Human beings are inherently social creatures, and the quality of our social interactions can significantly impact our mental and emotional well-being. Strong connections with family and friends provide emotional support, reduce stress, and contribute to a sense of belonging and happiness. These relationships can act as buffers against mental health issues and provide a network of support during times of crisis or need. Furthermore, personal relationships can influence one's self-esteem and provide opportunities for meaningful engagement in community activities, thereby enhancing an individual's overall quality of life.
 
 ### Exploring Predictors
 
@@ -90,8 +89,13 @@ colnames(survey.data)
 Not entirely that helpful.
 
 ```{r}
-#survey.data
+survey.data
+
+glimpse(survey.data)
+
+head(survey.data)
 ```
+
 ```{r}
 categories = c("Employment", "Employment", "Security", "Human Rights", "Health Levels", "Health Levels", "Social & Personal Connectivity ", "Social & Personal Connectivity ")
 questions = c("Q279", "Q275", "Q131", "Q253", "Q47", "Q53", "Q46", "Q2")
@@ -101,8 +105,8 @@ Question.key = data.frame(Categories = categories, Question.Number = questions, 
 Question.key
 ```
 
-
 ###v249 Employment
+
 ```{r}
 # Define the vector of categories including a placeholder for the missing '-1' code
 v249_employment_status <- c(
@@ -193,3 +197,9 @@ v5_friends = c(
 values.5 = c(-2,1,2,3,4)
 ```
 
+```{r}
+summary(survey.data$Q275)
+
+barplot(table(survey.data$Q275), main = "Distribution of Categories", xlab = "Categories", ylab = "Frequency")
+
+```
