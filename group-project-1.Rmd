@@ -1,7 +1,7 @@
 ---
 title: "Group exercise 1: Survey research"
 subtitle: "DATA5207: Data Analysis in the Social Sciences"
-author: Emily Wong
+author: Emily Wong and Sarah Sweeting 
 output:
   pdf_document:
     toc: no
@@ -82,9 +82,9 @@ Security: When an individual is able to live without fear or risk and feels stab
 
 Human rights: When society upholds and protects human rights, individuals tend to experience better QoL. It is a basic need but also a measure of psychological well-being because of its ability to foster belonging within communities and equality within a just society. It also could promote quality of opportunity, a fair chance for success in society. can you add a blurb for health levels and social and personal connectivity
 
-Health Levels: Health is a foundational element of quality of life. Good health enables individuals to engage actively in various aspects of life including work, social interactions, and leisure activities, thus directly influencing their overall life satisfaction and well-being. The state of an individual's health often reflects the access to and quality of medical services, as well as their lifestyle choices. Chronic illnesses or frequent lack of access to necessary medical treatments can lead to decreased physical capabilities, psychological stress, and financial burdens, all of which negatively affect one's quality of life.
+Health Levels: Health is a foundational element of quality of life. Good health enables individuals to engage actively in various aspects of life including work, social interactions, and leisure activities, thus directly influencing their overall life satisfaction and well-being. Therefore, having a lack of access to necessary medical intervention can lead to decreased physical capabilities, psychological stress, and financial burdens, all of which negatively affect one's quality of life.
 
-Social & Personal Connectivity: Human beings are inherently social creatures, and the quality of our social interactions can significantly impact our mental and emotional well-being. Strong connections with family and friends provide emotional support, reduce stress, and contribute to a sense of belonging and happiness. These relationships can act as buffers against mental health issues and provide a network of support during times of crisis or need. Furthermore, personal relationships can influence one's self-esteem and provide opportunities for meaningful engagement in community activities, thereby enhancing an individual's overall quality of life.
+Social & Personal Connectivity: Human beings are inherently social creatures, and the quality of our social interactions can significantly impact our mental and emotional well-being. Strong connections with family and friends provide emotional support, reduce stress, and contribute to a sense of belonging and happiness. Furthermore, placing value in personal relationships can influence one's self-esteem and provide opportunities for meaningful engagement in community activities, thereby enhancing an individual's overall quality of life.
 
 ## Exploring Predictors
 
@@ -289,16 +289,7 @@ print(summary)
 ### Distribution of predictors
 
 ```{r}
-unique_codebooks <- unique(Question.key$Codebook)
-for (codebook in unique_codebooks) {
-  subset_data <- filter(Question.key, Codebook == codebook)
-  print(subset_data$Question.chars)
-  plot_barplots(column = column, name = unique(subset_data$Categories),
-  values_fill = subset_data$Question.chars)
-}
-```
 
-```{r}
 plot_barplots <- function(column, name, values_fill) {
   ggplot(survey.data, aes(x = factor(!!column), fill = factor(!!column))) +
     geom_bar() +
@@ -316,4 +307,13 @@ for (codebook in unique_codebooks) {
 }
 
 
+
+unique_codebooks <- unique(Question.key$Codebook)
+for (codebook in unique_codebooks) {
+  subset_data <- filter(Question.key, Codebook == codebook)
+  print(subset_data$Question.chars)
+  plot_barplots(column = column, name = unique(subset_data$Categories),
+  values_fill = subset_data$Question.chars)
+}
 ```
+
