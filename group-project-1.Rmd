@@ -19,6 +19,7 @@ library(readxl)
 library(dplyr)
 library(ggplot2)
 library(psych)
+library(tidyr)
 ```
 
 # Lab 1: Creating Predictors
@@ -106,82 +107,88 @@ key = c("V249", "Q275", "V170", "V142", "V190", "V5")
 ```
 
 ```{r}
-# Define the vector of categories including a placeholder for the missing '-1' code
-# v249_employment_status <- c(
-#   "No answer",                              
-#   "Full time employee (30 hours a week or more)",  
-#   "Part time employee (less than 30 hours a week)", 
-#   "Self-employed",                          
-#   "Retired / On a pension",                  
-#   "Home duties, not otherwise employed",    
-#   "Student",                                 
-#   "Unemployed",                             
-#   "Other (please specify)"                 
-# )
-# 
-# values.249 = c(-2,1,2,3,4,5,6,7,8)
-# 
-# q275_education = c("No answer",
-# "No formal education",
-# "Primary education only",
-# "Lower secondary education (i.e. Year 9 or less)",
-# "Upper secondary education (i.e. between Year 10 and Year 12)",
-# "Post-secondary non-tertiary education (e.g. apprenticeship or certificate)",
-# "Bachelor or equivalent",
-# "Master or equivalent",
-# "Doctoral or equivalent")
-# 
-# values.275 = c(-2,1,2,3,4,5,7,8,9)
-# 
-# v170_how_secure_are_you = c(
-# "No answer",
-# "Very secure",
-# "Quite secure",
-# "Not very secure",
-# "Not at all secure"
-# )
-# 
-# values.170 = c(-2,1,2,3,4)
-# 
-# v142_respect_human_rights = c(
-# "No answer",
-# "A great deal of respect",
-# "Some respect",
-# "Not much respect",
-# "No respect at all"
-# )
-# 
-# values.142 = c(-2,1,2,3,4)
-# 
-# 
-# v190_gone_without_medicine = c(
-# "No answer",
-# "Often",
-# "Sometimes",
-# "Rarely",
-# "Never"
-# )
-# 
-# values.190 = c(-2,1,2,3,4)
-# 
-# v5_friends = c(
-# "No answer",
-# "Very important",
-# "Rather important",
-# "Not very important",
-# "Not at all important"
-# )
-# 
-# values.5 = c(-2,1,2,3,4)
+survey.data
+
+v249_employment_status <- c(
+  "No answer",
+  "Full time employee (30 hours a week or more)",
+  "Part time employee (less than 30 hours a week)",
+  "Self-employed",
+  "Retired / On a pension",
+  "Home duties, not otherwise employed",
+  "Student",
+  "Unemployed",
+  "Other (please specify)"
+)
+
+values.249 = c(-2,1,2,3,4,5,6,7,8)
+
+q275_education = c("No answer",
+"No formal education",
+"Primary education only",
+"Lower secondary education (i.e. Year 9 or less)",
+"Upper secondary education (i.e. between Year 10 and Year 12)",
+"Post-secondary non-tertiary education (e.g. apprenticeship or certificate)",
+"Bachelor or equivalent",
+"Master or equivalent",
+"Doctoral or equivalent")
+
+values.275 = c(-2,1,2,3,4,5,7,8,9)
+
+v170_how_secure_are_you = c(
+"No answer",
+"Very secure",
+"Quite secure",
+"Not very secure",
+"Not at all secure"
+)
+
+values.170 = c(-2,1,2,3,4)
+
+v142_respect_human_rights = c(
+"No answer",
+"A great deal of respect",
+"Some respect",
+"Not much respect",
+"No respect at all"
+)
+
+values.142 = c(-2,1,2,3,4)
+
+
+v190_gone_without_medicine = c(
+"No answer",
+"Often",
+"Sometimes",
+"Rarely",
+"Never"
+)
+
+values.190 = c(-2,1,2,3,4)
+
+v5_friends = c(
+"No answer",
+"Very important",
+"Rather important",
+"Not very important",
+"Not at all important"
+)
+
+values.5 = c(-2,1,2,3,4)
 ```
 
+
+
 ```{r}
-# Define categories, questions, and key
 categories <- c("Employment", "Education", "Security", "Human Rights", "Treatment Levels", "Friendship Importance")
 questions <- c("Q279", "Q275", "Q131", "Q253", "Q53", "Q2")
 key <- c("V249", "Q275", "V170", "V142", "V190", "V5")
 
 # Define vectors for each category
+key <- c("V249", "Q275", "V170", "V142", "V190", "V5")
+
+survey.data
+
 vectors <- list(
   list(
     values = c(-2, 1, 2, 3, 4, 5, 6, 7, 8),
@@ -276,10 +283,8 @@ survey.predictors <- data.frame(
   employment = survey.data$V249,
   security = survey.data$V170,
   rights = survey.data$V142,
-  health1 = survey.data$V11,
-  health2 = survey.data$V190,
-  social1 = survey.data$V10,
-  social2 = survey.data$V5,
+  health = survey.data$V190,
+  social = survey.data$V5,
   satisfaction = survey.data$V23
 )
 ```
@@ -320,8 +325,7 @@ for (codebook in unique_codebooks) {
 # }
 ```
 
-<<<<<<< HEAD
-=======
+
 !!TODO PLEASE ADD DESCRIPTIONS FOR ABOVE GRAPHS
 
 # Lab 2: Relationship of independent and dependent variables
@@ -378,11 +382,7 @@ fa.fit <- fa(survey.data[,c("happiness",
 fa.fit
 ```
 
-```{r grab factor scores}
 
-survey.data$life.quality <- as.numeric(fa.fit$scores)
-
-```
 
 ```{r histogram_of_quality_of_life, fig.cap = "Distribution of quality of life measure produced by factor analysis.",  fig.width = 5, fig.height = 4, fig.align="center", message = FALSE, warning = FALSE}
 
@@ -391,4 +391,83 @@ ggplot(survey.data, aes(life.quality)) +
   theme_minimal()
 
 ```
->>>>>>> 86f47349352684b04864fc47b253a78c828cca7d
+
+
+```{r}
+
+survey.data$life.quality <- as.numeric(fa.fit$scores)
+
+survey.predictors2 <- data.frame(
+  education = survey.data$Q275,
+  employment = survey.data$V249,
+  security = survey.data$V170,
+  rights = survey.data$V142,
+  health = survey.data$V190,
+  social = survey.data$V5,
+  satisfaction = survey.data$V23,
+  life.qual = survey.data$life.quality
+)
+
+
+survey.predictors2 = drop_na(survey.predictors2, life.qual)
+
+
+regmodel = lm(life.qual ~ education + employment + security + rights + health + social + satisfaction  , data = survey.predictors2)
+
+summary(regmodel)
+```
+```{r}
+survey.data$V249 <- recode(survey.data$V249, 
+                           `-2` = "No answer", 
+                           `1` = "Full time employee (30 hours a week or more)", 
+                           `2` = "Part time employee (less than 30 hours a week)", 
+                           `3` = "Self-employed", 
+                           `4` = "Retired / On a pension", 
+                           `5` = "Home duties, not otherwise employed", 
+                           `6` = "Student", 
+                           `7` = "Unemployed", 
+                           `8` = "Other (please specify)")
+
+survey.data$Q275 <- recode(survey.data$Q275, 
+                           `-2` = "No answer", 
+                           `1` = "No formal education", 
+                           `2` = "Primary education only", 
+                           `3` = "Lower secondary education (i.e. Year 9 or less)", 
+                           `4` = "Upper secondary education (i.e. between Year 10 and Year 12)", 
+                           `5` = "Post-secondary non-tertiary education (e.g. apprenticeship or certificate)", 
+                           `7` = "Bachelor or equivalent", 
+                           `8` = "Master or equivalent", 
+                           `9` = "Doctoral or equivalent")
+
+survey.data$V170 <- recode(survey.data$V170, 
+                           `-2` = "No answer", 
+                           `1` = "Very secure", 
+                           `2` = "Quite secure", 
+                           `3` = "Not very secure", 
+                           `4` = "Not at all secure")
+
+survey.data$V142 <- recode(survey.data$V142, 
+                           `-2` = "No answer", 
+                           `1` = "A great deal of respect", 
+                           `2` = "Some respect", 
+                           `3` = "Not much respect", 
+                           `4` = "No respect at all")
+
+survey.data$V190 <- recode(survey.data$V190, 
+                           `-2` = "No answer", 
+                           `1` = "Often", 
+                           `2` = "Sometimes", 
+                           `3` = "Rarely", 
+                           `4` = "Never")
+
+survey.data$V5 <- recode(survey.data$V5, 
+                         `-2` = "No answer", 
+                         `1` = "Very important", 
+                         `2` = "Rather important", 
+                         `3` = "Not very important", 
+                         `4` = "Not at all important")
+
+# The survey_data data frame should now have the updated values as per the provided mappings.
+```
+
+
