@@ -18,13 +18,16 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readxl)
 library(dplyr)
 library(ggplot2)
+library(psych)
 ```
+
+# Lab 1: Creating Predictors
 
 ## Introduction
 
 In this study, data from The World Value Survey will be explored to explain quality of life. Part 1 will explore potential predictors to predict higher/lower quality of life with supported theory. Part 2 will tests these predictors through the creation of a dependent variable and predictive models.
 
-## Part 1: Understanding survey data
+## Understanding survey data
 
 ```{r survey}
 survey.data <- read.csv("wvs_data.csv")
@@ -315,5 +318,75 @@ for (codebook in unique_codebooks) {
   print(plot_barplots(column = sym(codebook), name = unique(subset_data$Categories), values_fill = unique(subset_data$Question.chars)))
 }
 
+
+```
+
+!!TODO PLEASE ADD DESCRIPTIONS FOR ABOVE GRAPHS
+
+# Lab 2: Relationship of independent and dependent variables
+
+Recode our variables. As we do this we provide the variables with more intuitive names, to make our work easier. This can be done with the code:
+
+```{r recode and standardise variables, message=FALSE, warning=FALSE}
+survey.data <- survey.data %>%
+  mutate(happiness = dplyr::recode(V10, 
+                                   '1' = 4,
+                                   '2' = 3,
+                                   '3' = 2,
+                                   '4' = 1, 
+                                   '-2' = NULL),
+         
+         health = dplyr::recode(V11,
+                                '1' = 5, 
+                                '2' = 4, 
+                                '3' = 3,
+                                '4' = 2,
+                                '5' = 1, 
+                                '-2' = NULL),
+         
+         finances = dplyr::recode(V59, 
+                                  '-2' = NULL,
+                                  .default = V59),
+         
+         satisfaction = dplyr::recode(V23, 
+                                  '-2' = NULL,
+                                  .default = V23),
+         
+         freedom = dplyr::recode(V55, 
+                                  '-2' = NULL,
+                                  .default = V55))
+
+```
+
+### Factor Analysis
+
+```{r factor analysis}
+
+fa.fit <- fa(survey.data[,c("happiness",
+                         "health",
+                         "finances", 
+                         "satisfaction",
+                         "freedom")], 
+             nfactors=1)
+
+
+```
+
+```{r factor analysis output, echo=FALSE}
+
+fa.fit
+```
+
+```{r grab factor scores}
+
+survey.data$life.quality <- as.numeric(fa.fit$scores)
+
+```
+
+```{r histogram_of_quality_of_life, fig.cap = "Distribution of quality of life measure produced by factor analysis.",  fig.width = 5, fig.height = 4, fig.align="center", message = FALSE, warning = FALSE}
+
+ggplot(survey.data, aes(life.quality)) + 
+  geom_histogram(fill = 'black') + 
+  theme_minimal()
 
 ```
