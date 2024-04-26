@@ -308,12 +308,12 @@ for (codebook in unique_codebooks) {
 
 
 
-unique_codebooks <- unique(Question.key$Codebook)
-for (codebook in unique_codebooks) {
-  subset_data <- filter(Question.key, Codebook == codebook)
-  print(subset_data$Question.chars)
-  plot_barplots(column = column, name = unique(subset_data$Categories),
-  values_fill = subset_data$Question.chars)
-}
+# unique_codebooks <- unique(Question.key$Codebook)
+# for (codebook in unique_codebooks) {
+#   subset_data <- filter(Question.key, Codebook == codebook)
+#   print(subset_data$Question.chars)
+#   plot_barplots(column = column, name = unique(subset_data$Categories),
+#   values_fill = subset_data$Question.chars)
+# }
 ```
 
