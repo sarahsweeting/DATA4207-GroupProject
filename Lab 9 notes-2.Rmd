@@ -1,0 +1,219 @@
+---
+title: "Lab 9: Measuring latent variables in the social world"
+subtitle: "DATA5207: Data Analysis in the Social Sciences"
+author: Dr Shaun Ratcliff
+output:
+  pdf_document:
+    toc: no
+    latex_engine: xelatex
+header-includes:
+   - \usepackage{caption}
+   - \captionsetup[figure]{font=scriptsize}
+mainfont: Avenir Book
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Your work in this lab consists of two parts. First we will walk you through the use of *factor analysis* in $R$. Then you will use the output from this model to complete your assessable group project from the last lab.
+
+In the lecture, we explored the use of different methodologies to understand measures of similarities used in the social sciences (also known as data reduction techniques). These methods are usually adopted in social science research to reduce the number of variables included in a model, or to detect structure in the associations between different variables. In this lab, we will primarily focus on the first of these. This strategy is particularly important for measuring characteristics of individuals for which a single question would often not provide an accurate result; due to measurement error, social desirability bias, or because what we are trying to measure is a latent trait where no one question could possibly capture the true picture.
+
+The most common method used to do this in the social sciences is factor analysis. While factor analysis expresses the underlying common factors for an entire group of variables, it also helps researchers differentiate these factors by grouping variables into different dimensions or factors, each of which is ideally uncorrelated with the others.
+
+During this lab, we will walk through the process of fitting a factor analysis to survey data on quality of life. The assessable component of the lab will require you to undertake an analysis of the measure we create using the other methods you have learned in this subject.
+
+\vspace{6mm}
+
+## Learning to use factor analysis
+
+In this session, we will look at factor analysis as a tool to understand quality of life. This is an appropriate method for this kind of research, as there are a number of variables in our dataset that provide information on the outcome we are interested in, and we can better understand the problem if we decompose the information they contain into a single measure, which we can then study further.
+
+We are using the 2018 Australian World Values Survey for this research. This is a survey of Australians, run in conjunction with other similar surveys conducted around the world. It asks respondents more questions than most other surveys, and therefore provides a useful data source for researchers. A copy of the dataset, code book and questionnaire is available in the zipped folder in the module for this class on canvas. These data come from the [Australian Data Archive](https://dataverse.ada.edu.au/dataverse/wvs).
+
+### Examining our data
+
+Using these data, we will examine how different personal characteristics might be associated with higher and lower quality of life. We will do this by fitting a factor analysis to five variables which cover reported happiness, life satisfaction, health, and financial situation. These variables are:
+
+-   *Q46.* Taking all things together, would you say you are... (variable V10)
+-   *Q47.* All in all, how would you describe your state of health these days? Would you say it is... (variable V11)
+-   *Q48.* Some people feel they have completely free choice and control over their lives, while other people feel that what they do has no real effect on what happens to them. Please use this scale where 1 means "no choice at all" and 10 means "a great deal of choice" to indicate how much freedom of choice and control you feel you have over the way your life turns out. (variable V55)
+-   *Q49.* All things considered, how satisfied are you with your life as a whole these days? (variable V23)
+-   *Q50.* How satisfied are you with the financial situation of your household? (variable V59)
+
+Using a factor analysis, we will create a measure for quality of life.
+
+We begin by making sure these are coded the correct way (greater quality of life being the positive score), and we standardise the scores.
+
+Begin by loading your data:
+
+\vspace{6mm}
+
+```{r read in data}
+
+wvs.dat <- read.csv("wvs_data.csv")
+
+```
+
+\vspace{6mm}
+
+We then recode our variables. As we do this we provide the variables with more intuitive names, to make our work easier. This can be done with the code:
+
+\vspace{6mm}
+
+```{r recode and standardise variables, message=FALSE, warning=FALSE}
+
+library(dplyr)
+
+wvs.dat <- wvs.dat %>%
+  mutate(happiness = dplyr::recode(V10, 
+                                   '1' = 4,
+                                   '2' = 3,
+                                   '3' = 2,
+                                   '4' = 1, 
+                                   '-2' = NULL),
+         
+         health = dplyr::recode(V11,
+                                '1' = 5, 
+                                '2' = 4, 
+                                '3' = 3,
+                                '4' = 2,
+                                '5' = 1, 
+                                '-2' = NULL),
+         
+         finances = dplyr::recode(V59, 
+                                  '-2' = NULL,
+                                  .default = V59),
+         
+         satisfaction = dplyr::recode(V23, 
+                                  '-2' = NULL,
+                                  .default = V23),
+         
+         freedom = dplyr::recode(V55, 
+                                  '-2' = NULL,
+                                  .default = V55))
+
+```
+
+\vspace{6mm}
+
+We use the `recode` function from `dplyr` to both switch around those variables that are coded incorrectly (where the higher value is associated with lower quality of life) and where missing values are included as a numeric value (such as -2 for `V10`), which will result in these values being included in our factor analysis and adding misleading information into our model. Here we are using the `recode()` function from `dplyr`.
+
+We are almost ready to fit a factor analysis to these data.
+
+To run our factor analysis, we use the `psych` package, which we need to download from CRAN using the `install.packages` function.
+
+Once you have done this, we load the package:
+
+\vspace{6mm}
+
+```{r load psych package, warning=FALSE}
+
+library(psych)
+
+```
+
+\vspace{6mm}
+
+We use the `fa` function, also from the `psych` package, to run our factor analysis. More information on this function can be found [here](https://www.rdocumentation.org/packages/psych/versions/1.7.8/topics/fa). We fit the model with this syntax:
+
+\vspace{6mm}
+
+```{r factor analysis}
+
+fa.fit <- fa(wvs.dat[,c("happiness",
+                         "health",
+                         "finances", 
+                         "satisfaction",
+                         "freedom")], 
+             nfactors=1)
+
+```
+
+\vspace{8mm}
+
+Within this function we specify our variables, the number of factors we wish to calculate (in our case, just one).
+
+It is not shown here, but there are several rotation methods available with factor analysis. These can be characterised as orthogonal, which do not allow the latent dimensions to be correlated, and oblique, which do allow correlation. Varimax is a popular method (especially in the social sciences) for orthogonal rotation in factor and principal components analysis, so in instances where you have multiple dimensions, they will remain uncorrelated. We have not included this here, as we have a single dimensional factor analysis, but good to know for future work you might do where there are two or more factors. If we had wanted to include a Varimax rotation, we could do so by adding `rotate="varimax"` after the `nfactors` command (separated by a comma, of course).
+
+The output from your model should look like this:
+
+```{r factor analysis output, echo=FALSE}
+
+fa.fit
+
+```
+
+There is a lot here, and we do not expect you to understand it all straight away. For this exercise, we will focus on the first table.
+
+The first column of the top table in our output, labelled `MR1`, shows how each item loads onto the latent trait for quality of life. 'MR' here stands for minimum residual, and its name reflects the fitting method (if we had used a different method we would get a different column name; `ML` for maximum likelihood, for instance). A positive loading means that a higher response on this variable indicates a higher score on the combined measure of life quality created by this analysis. A negative loading (if there was one) would suggest that a higher response predicts lower quality of life.
+
+It is only this simple to interpret the finding because we recoded our variables. If we had not, we would need to remember the way each variable was coded to infer the meaning of these results. You can see what I mean by replacing `happiness` and `health` with the original variables and re-running the factor analysis.
+
+Once you have done this, return to the original model. There are three other columns. The second column, `h2`, represents the communalities of the variables. These communalities are the total amount of common variance between the variable and the factor(s). Higher communalities are better. If communalities for a particular variable are low, then that variable may struggle to load significantly on any factor.
+
+The communalities for the $i$th variable are computed by taking the sum of the squared loadings for that variable. To compute the communality for `happiness`, for instance, we square the factor loading for this variable (if there was more than one dimension, we would square the loading for each then sum the results). This gives us `r round(.64^2, 2)`. You can think of these values as the equivalent of multiple *R\^2* values from regression models, predicting the variables of interest for your factors. The communality for a given variable can be interpreted as the proportion of variation in that variable explained by the factor(s). If we perform multiple regression of `happiness` against the factor score, we obtain an *R\^2* of `r round(.64^2, 2)`, indicating that about `r 100 * round(.64^2, 2)` per cent of the variation in happiness (as measured by this variable) is explained by the factor score.
+
+One assessment of how well this model is doing can be obtained from the communalities. What you want to see is values that are close to one. This would indicate that the model explains most of the variation for those variables. In this case, the model does better for some variables than it does for others. Our results suggest the factor analysis does the best job of explaining variation in `satisfaction`. This makes sense, as we're trying to measure quality of life, and self-reported life satisfaction is likely the closest variable to this in the model.
+
+The third column, `u2`, has nothing to do with the band, but is rather the measure of uniqueness. This is the proportion of a variable's variance that is not shared with a factor structure. Unique variance is composed of specific and error variance. The existence of uniquenesses is what distinguishes factor analysis from principal components analysis. If the variables in the model are thought to represent a 'true' or latent part of some phenomena, then factor analysis provides an estimate of the correlations with the latent factor(s) representing the data. If we believe them to be measured without error, then principal components provides the most parsimonious description of the data. When we look at our table factor loading table, the output in the third column is the direct inverse of the second; the more the variance of a item is explained by the factor score(s), the less the proportion a variable's variance will not shared with a factor structure.
+
+The last column, `com`, is the complexity of the factor loadings for that variable (see below). This will be '1' when you only have a single dimension, but will (usually) increase as you increase the number of dimensions in your model.
+
+Just below the first table, we can see that our latent dimension accounted for around 49 per cent of the variance in responses. If we had multiple dimensions we would be provided with a statistic for each dimension and the cumultive variance explained.
+
+We can take the factor scores from this analysis --- the latent quality of life estimated by our factor analysis --- and save this back into our existing dataset using the code:
+
+\vspace{6mm}
+
+```{r grab factor scores}
+
+wvs.dat$life.quality <- as.numeric(fa.fit$scores)
+
+```
+
+\vspace{6mm}
+
+This saves the factor scores as a new variable called `life.quality`. We can view a sample of these using the `head` function:
+
+```{r sample factor scores}
+
+head(wvs.dat$life.quality, 10)
+
+```
+
+As you can see, these are approximately standardised, with a mean of zero and standard deviation of (almost) one. We can then use this to analyse the association between quality of life and different individual characteristics that are also available in this dataset.
+
+\vspace{6mm}
+
+```{r histogram_of_quality_of_life, fig.cap = "Distribution of quality of life measure produced by factor analysis.",  fig.width = 5, fig.height = 4, fig.align="center", message = FALSE, warning = FALSE}
+
+library(ggplot2)
+
+ggplot(wvs.dat, aes(life.quality)) + 
+  geom_histogram(fill = 'black') + 
+  theme_minimal()
+
+```
+
+\vspace{6mm}
+
+## Assessable group work
+
+Now you are ready to finish the assessable group exercise we began in the previous lab.
+
+For this section of the project, you will undertake three main steps:
+
+1.  Calculate and plot the relationship between your dependent variable --- the quality of life measure we calculated above using factor analysis --- and the independent variables you selected in the last lab using descriptive statistics.
+
+2.  Run linear regressions on the quality of life measure. Use appropriate measures to test your theories.
+
+3.  Think about ways you can validate the quality of life measures we have created in this lab. See the lecture for details on this. This can be done concurrently with objectives 1 and 2.
+
+4.  Write up your findings.
+
+If you have any questions, do not hesitate to ask us for help. We cannot do the work for you --- this is an assessment -- but we can provide some advice.
+
+Good luck with the exercise!

@@ -1,7 +1,7 @@
 ---
 title: "Group exercise 1: Survey research"
 subtitle: "DATA5207: Data Analysis in the Social Sciences"
-author: Emily Wong
+author: Emily Wong and Sarah Sweeting 
 output:
   pdf_document:
     toc: no
@@ -86,9 +86,9 @@ Security: When an individual is able to live without fear or risk and feels stab
 
 Human rights: When society upholds and protects human rights, individuals tend to experience better QoL. It is a basic need but also a measure of psychological well-being because of its ability to foster belonging within communities and equality within a just society. It also could promote quality of opportunity, a fair chance for success in society. can you add a blurb for health levels and social and personal connectivity
 
-Health Levels: Health is a foundational element of quality of life. Good health enables individuals to engage actively in various aspects of life including work, social interactions, and leisure activities, thus directly influencing their overall life satisfaction and well-being. The state of an individual's health often reflects the access to and quality of medical services, as well as their lifestyle choices. Chronic illnesses or frequent lack of access to necessary medical treatments can lead to decreased physical capabilities, psychological stress, and financial burdens, all of which negatively affect one's quality of life.
+Health Levels: Health is a foundational element of quality of life. Good health enables individuals to engage actively in various aspects of life including work, social interactions, and leisure activities, thus directly influencing their overall life satisfaction and well-being. Therefore, having a lack of access to necessary medical intervention can lead to decreased physical capabilities, psychological stress, and financial burdens, all of which negatively affect one's quality of life.
 
-Social & Personal Connectivity: Human beings are inherently social creatures, and the quality of our social interactions can significantly impact our mental and emotional well-being. Strong connections with family and friends provide emotional support, reduce stress, and contribute to a sense of belonging and happiness. These relationships can act as buffers against mental health issues and provide a network of support during times of crisis or need. Furthermore, personal relationships can influence one's self-esteem and provide opportunities for meaningful engagement in community activities, thereby enhancing an individual's overall quality of life.
+Social & Personal Connectivity: Human beings are inherently social creatures, and the quality of our social interactions can significantly impact our mental and emotional well-being. Strong connections with family and friends provide emotional support, reduce stress, and contribute to a sense of belonging and happiness. Furthermore, placing value in personal relationships can influence one's self-esteem and provide opportunities for meaningful engagement in community activities, thereby enhancing an individual's overall quality of life.
 
 ## Exploring Predictors
 
@@ -107,82 +107,88 @@ key = c("V249", "Q275", "V170", "V142", "V190", "V5")
 ```
 
 ```{r}
-# Define the vector of categories including a placeholder for the missing '-1' code
-# v249_employment_status <- c(
-#   "No answer",                              
-#   "Full time employee (30 hours a week or more)",  
-#   "Part time employee (less than 30 hours a week)", 
-#   "Self-employed",                          
-#   "Retired / On a pension",                  
-#   "Home duties, not otherwise employed",    
-#   "Student",                                 
-#   "Unemployed",                             
-#   "Other (please specify)"                 
-# )
-# 
-# values.249 = c(-2,1,2,3,4,5,6,7,8)
-# 
-# q275_education = c("No answer",
-# "No formal education",
-# "Primary education only",
-# "Lower secondary education (i.e. Year 9 or less)",
-# "Upper secondary education (i.e. between Year 10 and Year 12)",
-# "Post-secondary non-tertiary education (e.g. apprenticeship or certificate)",
-# "Bachelor or equivalent",
-# "Master or equivalent",
-# "Doctoral or equivalent")
-# 
-# values.275 = c(-2,1,2,3,4,5,7,8,9)
-# 
-# v170_how_secure_are_you = c(
-# "No answer",
-# "Very secure",
-# "Quite secure",
-# "Not very secure",
-# "Not at all secure"
-# )
-# 
-# values.170 = c(-2,1,2,3,4)
-# 
-# v142_respect_human_rights = c(
-# "No answer",
-# "A great deal of respect",
-# "Some respect",
-# "Not much respect",
-# "No respect at all"
-# )
-# 
-# values.142 = c(-2,1,2,3,4)
-# 
-# 
-# v190_gone_without_medicine = c(
-# "No answer",
-# "Often",
-# "Sometimes",
-# "Rarely",
-# "Never"
-# )
-# 
-# values.190 = c(-2,1,2,3,4)
-# 
-# v5_friends = c(
-# "No answer",
-# "Very important",
-# "Rather important",
-# "Not very important",
-# "Not at all important"
-# )
-# 
-# values.5 = c(-2,1,2,3,4)
+survey.data
+
+v249_employment_status <- c(
+  "No answer",
+  "Full time employee (30 hours a week or more)",
+  "Part time employee (less than 30 hours a week)",
+  "Self-employed",
+  "Retired / On a pension",
+  "Home duties, not otherwise employed",
+  "Student",
+  "Unemployed",
+  "Other (please specify)"
+)
+
+values.249 = c(-2,1,2,3,4,5,6,7,8)
+
+q275_education = c("No answer",
+"No formal education",
+"Primary education only",
+"Lower secondary education (i.e. Year 9 or less)",
+"Upper secondary education (i.e. between Year 10 and Year 12)",
+"Post-secondary non-tertiary education (e.g. apprenticeship or certificate)",
+"Bachelor or equivalent",
+"Master or equivalent",
+"Doctoral or equivalent")
+
+values.275 = c(-2,1,2,3,4,5,7,8,9)
+
+v170_how_secure_are_you = c(
+"No answer",
+"Very secure",
+"Quite secure",
+"Not very secure",
+"Not at all secure"
+)
+
+values.170 = c(-2,1,2,3,4)
+
+v142_respect_human_rights = c(
+"No answer",
+"A great deal of respect",
+"Some respect",
+"Not much respect",
+"No respect at all"
+)
+
+values.142 = c(-2,1,2,3,4)
+
+
+v190_gone_without_medicine = c(
+"No answer",
+"Often",
+"Sometimes",
+"Rarely",
+"Never"
+)
+
+values.190 = c(-2,1,2,3,4)
+
+v5_friends = c(
+"No answer",
+"Very important",
+"Rather important",
+"Not very important",
+"Not at all important"
+)
+
+values.5 = c(-2,1,2,3,4)
 ```
 
+
+
 ```{r}
-# Define categories, questions, and key
 categories <- c("Employment", "Education", "Security", "Human Rights", "Treatment Levels", "Friendship Importance")
 questions <- c("Q279", "Q275", "Q131", "Q253", "Q53", "Q2")
 key <- c("V249", "Q275", "V170", "V142", "V190", "V5")
 
 # Define vectors for each category
+key <- c("V249", "Q275", "V170", "V142", "V190", "V5")
+
+survey.data
+
 vectors <- list(
   list(
     values = c(-2, 1, 2, 3, 4, 5, 6, 7, 8),
@@ -277,10 +283,8 @@ survey.predictors <- data.frame(
   employment = survey.data$V249,
   security = survey.data$V170,
   rights = survey.data$V142,
-  health1 = survey.data$V11,
-  health2 = survey.data$V190,
-  social1 = survey.data$V10,
-  social2 = survey.data$V5,
+  health = survey.data$V190,
+  social = survey.data$V5,
   satisfaction = survey.data$V23
 )
 ```
@@ -293,16 +297,7 @@ print(summary)
 ### Distribution of predictors
 
 ```{r}
-unique_codebooks <- unique(Question.key$Codebook)
-for (codebook in unique_codebooks) {
-  subset_data <- filter(Question.key, Codebook == codebook)
-  print(subset_data$Question.chars)
-  plot_barplots(column = column, name = unique(subset_data$Categories),
-  values_fill = subset_data$Question.chars)
-}
-```
 
-```{r}
 plot_barplots <- function(column, name, values_fill) {
   ggplot(survey.data, aes(x = factor(!!column), fill = factor(!!column))) +
     geom_bar() +
@@ -320,7 +315,16 @@ for (codebook in unique_codebooks) {
 }
 
 
+
+# unique_codebooks <- unique(Question.key$Codebook)
+# for (codebook in unique_codebooks) {
+#   subset_data <- filter(Question.key, Codebook == codebook)
+#   print(subset_data$Question.chars)
+#   plot_barplots(column = column, name = unique(subset_data$Categories),
+#   values_fill = subset_data$Question.chars)
+# }
 ```
+
 
 !!TODO PLEASE ADD DESCRIPTIONS FOR ABOVE GRAPHS
 
@@ -438,11 +442,7 @@ Factor analysis using fa will calculate the optimal weights as seen below.
 fa.fit
 ```
 
-```{r grab factor scores}
 
-survey.data$life.quality <- as.numeric(fa.fit$scores)
-
-```
 
 ```{r}
 summary(survey.data$life.quality)
@@ -521,6 +521,30 @@ ggplot(survey.data, aes(x=life.quality, y=V5, fill = V5)) +
   scale_fill_brewer(palette = "Spectral") +
   theme(legend.position = "None")
 ```
+### Regression Model
+```{r}
+
+survey.data$life.quality <- as.numeric(fa.fit$scores)
+
+survey.predictors2 <- data.frame(
+  education = survey.data$Q275,
+  employment = survey.data$V249,
+  security = survey.data$V170,
+  rights = survey.data$V142,
+  health = survey.data$V190,
+  social = survey.data$V5,
+  satisfaction = survey.data$V23,
+  life.qual = survey.data$life.quality
+)
+
+
+survey.predictors2 = drop_na(survey.predictors2, life.qual)
+
+
+regmodel = lm(life.qual ~ education + employment + security + rights + health + social + satisfaction  , data = survey.predictors2)
+
+summary(regmodel)
+```
 
 ### Validating Factor analysis
 
@@ -541,3 +565,7 @@ To validate this dependent variable, it is assessed using validity and reliabili
 To measure reliabilty, we examine the proportion of the variance of the predictor that is account for by variance in the latent variable.
 
 Inter-item reliability: the consistency between multiple items measuring the same construct, measured using Cronbach's alpha.
+
+
+
+
