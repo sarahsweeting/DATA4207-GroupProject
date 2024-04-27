@@ -457,9 +457,26 @@ survey.predictors2 <- data.frame(
 survey.predictors2 = drop_na(survey.predictors2, life.qual)
 
 
-regmodel = lm(life.qual ~ as.factor(education) + as.factor(employment) + as.factor(security) + as.factor(rights) + as.factor(health) + as.factor(social) + as.factor(satisfaction)  , data = survey.predictors2)
 
+
+# Creating a new dataframe with variables scaled and then divided by 2
+scaled_df <- survey.predictors2 %>%
+  mutate(
+    scaled_education = scale(education)[, 1] / 2,
+    scaled_employment = scale(employment)[, 1] / 2,
+    scaled_security = scale(security)[, 1] / 2,
+    scaled_rights = scale(rights)[, 1] / 2,
+    scaled_health = scale(health)[, 1] / 2,
+    scaled_social = scale(social)[, 1] / 2,
+    scaled_satisfaction = scale(satisfaction)[, 1] / 2
+  )
+
+# Then run the regression model on the new dataframe:
+regmodel <- lm(life.qual ~ scaled_education + scaled_employment + scaled_security + scaled_rights + scaled_health + scaled_social + scaled_satisfaction, data = scaled_df)
+
+# Summarise the regression model
 summary(regmodel)
+
 ```
 
 
