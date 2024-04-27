@@ -290,7 +290,7 @@ survey.predictors <- data.frame(
 ```
 
 ```{r}
-summary = summary(survey.predictors)
+summary = describe(survey.predictors)
 print(summary)
 ```
 
@@ -302,8 +302,8 @@ plot_barplots <- function(column, name, values_fill) {
   ggplot(survey.data, aes(x = factor(!!column), fill = factor(!!column))) +
     geom_bar() +
     labs(title = "Distribution", x = name, fill = name, y = "Count") +
-    scale_fill_discrete(labels = values_fill) +
-    theme_minimal()
+    scale_fill_brewer(palette = "Spectral") +
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 }
 
 # Get unique codebooks
@@ -330,7 +330,7 @@ for (codebook in unique_codebooks) {
 
 # Lab 2: Relationship of independent and dependent variables
 
-Recode our variables. As we do this we provide the variables with more intuitive names, to make our work easier. This can be done with the code:
+Recode our variables to provide the variables with more intuitive names, to make our work easier and also recode our predictors to character variables to do descriptive statistics.
 
 ```{r recode and standardise variables, message=FALSE, warning=FALSE}
 survey.data <- survey.data %>%
@@ -362,62 +362,6 @@ survey.data <- survey.data %>%
                                   .default = V55))
 
 ```
-
-### Factor Analysis
-
-```{r factor analysis}
-
-fa.fit <- fa(survey.data[,c("happiness",
-                         "health",
-                         "finances", 
-                         "satisfaction",
-                         "freedom")], 
-             nfactors=1)
-
-
-```
-
-```{r factor analysis output, echo=FALSE}
-
-fa.fit
-```
-
-
-
-```{r histogram_of_quality_of_life, fig.cap = "Distribution of quality of life measure produced by factor analysis.",  fig.width = 5, fig.height = 4, fig.align="center", message = FALSE, warning = FALSE}
-
-ggplot(survey.data, aes(life.quality)) + 
-  geom_histogram(fill = 'black') + 
-  theme_minimal()
-
-```
-
-
-
-```{r}
-
-survey.data$life.quality <- as.numeric(fa.fit$scores)
-
-survey.predictors2 <- data.frame(
-  education = survey.data$Q275,
-  employment = survey.data$V249,
-  security = survey.data$V170,
-  rights = survey.data$V142,
-  health = survey.data$V190,
-  social = survey.data$V5,
-  satisfaction = survey.data$V23,
-  life.qual = survey.data$life.quality
-)
-
-
-survey.predictors2 = drop_na(survey.predictors2, life.qual)
-
-
-regmodel = lm(life.qual ~ education + employment + security + rights + health + social + satisfaction  , data = survey.predictors2)
-
-summary(regmodel)
-```
-
 
 ```{r}
 survey.data$V249 <- recode(survey.data$V249, 
@@ -470,7 +414,158 @@ survey.data$V5 <- recode(survey.data$V5,
                          `3` = "Not very important", 
                          `4` = "Not at all important")
 
-# The survey_data data frame should now have the updated values as per the provided mappings.
 ```
+
+### Factor Analysis
+
+Factor Analysis is a measurement model of a latent\
+variable. Latent variable cannot be directly measured. Instead, it is seen through\
+relationships between 𝑌 variables. We\
+assume latent factor 𝐹 drives responses to variables 𝑌 .\
+
+```{r factor analysis}
+
+fa.fit <- fa(survey.data[,c("happiness",
+                         "health",
+                         "finances", 
+                         "satisfaction",
+                         "freedom")], 
+             nfactors=1)
+
+
+```
+
+Factor analysis using fa will calculate the optimal weights as seen below.
+
+```{r factor analysis output, echo=FALSE}
+
+fa.fit
+```
+
+
+
+```{r}
+summary(survey.data$life.quality)
+```
+
+As you can see, these are approximately standardised, with a mean of zero and standard deviation of (almost) one. We can then use this to analyse the association between quality of life and different individual characteristics that are also available in this dataset.
+
+```{r histogram_of_quality_of_life, fig.cap = "Distribution of quality of life measure produced by factor analysis.",  fig.width = 5, fig.height = 4, fig.align="center", message = FALSE, warning = FALSE}
+
+ggplot(survey.data, aes(life.quality)) + 
+  geom_histogram(fill = 'black') + 
+  theme_minimal()
+
+```
+
+## Descriptive Statistics
+
+As seen above, there are 55 NA values which will be difficult to plot. We will remove these.
+
+```{r remove nulls}
+survey.data = drop_na(survey.data, life.quality)
+```
+
+#### Relationship of dependent variable (quality of life) and the chosen predictors
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V249, fill = V249)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Employment categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=Q275, fill = Q275)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Education categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V170, fill = V170)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Security categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V142, fill = V142)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Human Rights categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V190, fill = V190)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Health Treatment categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V5, fill = V5)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Friendship categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+### Regression Model
+```{r}
+
+survey.data$life.quality <- as.numeric(fa.fit$scores)
+
+survey.predictors2 <- data.frame(
+  education = survey.data$Q275,
+  employment = survey.data$V249,
+  security = survey.data$V170,
+  rights = survey.data$V142,
+  health = survey.data$V190,
+  social = survey.data$V5,
+  satisfaction = survey.data$V23,
+  life.qual = survey.data$life.quality
+)
+
+
+survey.predictors2 = drop_na(survey.predictors2, life.qual)
+
+
+regmodel = lm(life.qual ~ education + employment + security + rights + health + social + satisfaction  , data = survey.predictors2)
+
+summary(regmodel)
+```
+
+### Validating Factor analysis
+
+Factor analysis has assumptions including:
+
+-   Underlying latent trait
+
+-   Items are continuous measures (or conceptualised as continuous)
+
+-   Correlations are linear
+
+-   There are no outliers
+
+-   There is adequate data
+
+To validate this dependent variable, it is assessed using validity and reliability where reliability is the measure of the latent trait with the least measurement error and validity is whether the measure actually represent what its supposed to.
+
+To measure reliabilty, we examine the proportion of the variance of the predictor that is account for by variance in the latent variable.
+
+Inter-item reliability: the consistency between multiple items measuring the same construct, measured using Cronbach's alpha.
+
+
 
 
