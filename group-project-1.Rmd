@@ -20,6 +20,8 @@ library(dplyr)
 library(ggplot2)
 library(psych)
 library(tidyr)
+library(MASS)
+
 ```
 
 # Lab 1: Creating Predictors
@@ -177,8 +179,6 @@ v5_friends = c(
 values.5 = c(-2,1,2,3,4)
 ```
 
-
-
 ```{r}
 categories <- c("Employment", "Education", "Security", "Human Rights", "Treatment Levels", "Friendship Importance")
 questions <- c("Q279", "Q275", "Q131", "Q253", "Q53", "Q2")
@@ -325,7 +325,6 @@ for (codebook in unique_codebooks) {
 # }
 ```
 
-
 !!TODO PLEASE ADD DESCRIPTIONS FOR ABOVE GRAPHS
 
 # Lab 2: Relationship of independent and dependent variables
@@ -442,8 +441,6 @@ Factor analysis using fa will calculate the optimal weights as seen below.
 fa.fit
 ```
 
-
-
 ```{r}
 summary(survey.data$life.quality)
 ```
@@ -477,6 +474,8 @@ ggplot(survey.data, aes(x=life.quality, y=V249, fill = V249)) +
   theme(legend.position = "None")
 ```
 
+The relationship plotted in this bar plot demonstrates that those who are employed tend to have a higher life quality than those who are not (besides those who are retired). Interestingly, those who are full time employed and retried show both ends quality of life with outliers towards the negative life quality (suggesting people who may struggle to increase life quality even though they have fulltime income or pension). Unemployment shows the largest range of life quality while as self-employed is mainly skewed towards higher values of life quality.
+
 ```{r}
 ggplot(survey.data, aes(x=life.quality, y=Q275, fill = Q275)) + 
   geom_boxplot() +
@@ -485,6 +484,8 @@ ggplot(survey.data, aes(x=life.quality, y=Q275, fill = Q275)) +
   scale_fill_brewer(palette = "Spectral") +
   theme(legend.position = "None")
 ```
+
+Life quality in relation to education interestingly is always has a median above 0, showing positive median life qualities for all categories. However, the spread of life quality is diverse with those having a doctoral or masters tending to have a smaller IQR and positioned to have a higher life quality while as those with primary education only or no formal education, more prone to a larger IQR spread suggesting more people experiencing lower life qualities in those categories as well as high. Interestingly, there are outliers in individuals with bachelors or post secondary non-tertiary education suggesting that there could be people with degrees however unable to achieve higher life quality maybe due to of lack of access to jobs, not enough specialisation in their degrees.
 
 ```{r}
 ggplot(survey.data, aes(x=life.quality, y=V170, fill = V170)) + 
@@ -495,6 +496,8 @@ ggplot(survey.data, aes(x=life.quality, y=V170, fill = V170)) +
   theme(legend.position = "None")
 ```
 
+Security demonstrates a strong positive relationship with life quality, those who are not feeling secure tend to have lower life quality while as those who are very secure tend to have higher life quality, aligning with our theory described in lab 1. Interestingly, those who are very secure, have a positive IQR, demonstrating a high proportion with positive life qualities while as those who are not at all secure have a large IQR below 0.
+
 ```{r}
 ggplot(survey.data, aes(x=life.quality, y=V142, fill = V142)) + 
   geom_boxplot() +
@@ -503,6 +506,8 @@ ggplot(survey.data, aes(x=life.quality, y=V142, fill = V142)) +
   scale_fill_brewer(palette = "Spectral") +
   theme(legend.position = "None")
 ```
+
+Human rights shows an interesting relationship to life quality. Those with a great deal of respect tend to have higher life quality in comparison to no respect at all, aligning with our theory. It is interesting that with no human respect at all, there can still be values in the positive life quality with Q3 reaching positive life quality values and the whisker on the right still reaching high life quality values.
 
 ```{r}
 ggplot(survey.data, aes(x=life.quality, y=V190, fill = V190)) + 
@@ -513,6 +518,8 @@ ggplot(survey.data, aes(x=life.quality, y=V190, fill = V190)) +
   theme(legend.position = "None")
 ```
 
+Those who never get health treatment show two ends of the spectrum of life quality, those who never get health treatment due to never being ill and those who never get health treatment due to lack of access. If we go with the first reasoning, the positive skew of the Never category makes sense as those with higher life quality will tend to not be ill. This is further represented in the lowest box plot category of Often, suggesting that those who require regular health treatment and are often ill, have lower life qualities. Similarly, the category of Sometimes has a slightly higher IQR range and then Rarely has an even higher IQR range. This relationship represent that those with better health tend to have a higher life quality.
+
 ```{r}
 ggplot(survey.data, aes(x=life.quality, y=V5, fill = V5)) + 
   geom_boxplot() +
@@ -521,7 +528,11 @@ ggplot(survey.data, aes(x=life.quality, y=V5, fill = V5)) +
   scale_fill_brewer(palette = "Spectral") +
   theme(legend.position = "None")
 ```
+
+Friendship is obviously an important factor to life quality with those who deem friendship as Very Important having the greatest positive skew in the boxplot. Rarely Important has not much of a lower IQR but Not very important and Not at all important highlight the decrease on life quality and the significance of this social factor on an individuals life quality.
+
 ### Regression Model
+
 ```{r}
 
 survey.data$life.quality <- as.numeric(fa.fit$scores)
@@ -562,10 +573,46 @@ Factor analysis has assumptions including:
 
 To validate this dependent variable, it is assessed using validity and reliability where reliability is the measure of the latent trait with the least measurement error and validity is whether the measure actually represent what its supposed to.
 
-To measure reliabilty, we examine the proportion of the variance of the predictor that is account for by variance in the latent variable.
+To measure reliabilty, we examine the proportion of the variance of the predictor that is account for by variance in the latent variable. In World Values survey data, there is other variables expected to be associated with the latent variable. For example, Q56. Comparing your standard of living with your parent's standard of living when they were about your age, would you say that you are better off, worse off, or about the same?
+
+```{r}
+result <- polr(formula = Q56 ~life.quality, data = survey.data %>% mutate(Q56 = factor(Q56, levels = c("2", "3", "1" ))))
+result
+```
+
+The results of the fitted proportional odds log regression model is presented above. The coefficient of 0.5679 is positive and indicates higher values of life quality associated with higher odds of moving to higher categories in Q56.
+
+!! TODO fix this model lol its so ugly
+
+```{r}
+# 1. Generate a sequence of values for life.quality
+life_quality_seq <- seq(min(survey.data$life.quality), max(survey.data$life.quality), length.out = 100)
+
+# 2. Compute predicted probabilities for each level of Q56 at each value of life.quality
+predicted_probs <- predict(result, data.frame(life.quality = life_quality_seq), type = "probs")
+
+# 3. Plot the predicted probabilities against life.quality for each level of Q56
+plot(life_quality_seq, predicted_probs[, 1], type = "l", ylim = c(0, 1), xlab = "Life Quality", ylab = "Predicted Probability", col = "blue", lwd = 2, main = "Predicted Probability of Q56")
+lines(life_quality_seq, predicted_probs[, 2], type = "l", col = "red", lwd = 2)
+lines(life_quality_seq, predicted_probs[, 3], type = "l", col = "green", lwd = 2)
+# Add more lines if you have additional levels of Q56
+legend("topright", legend = c("Better off", "Worse off", "About the same"), col = c("blue", "red", "green"), lwd = 2)
+```
+
+\
+We'd assume people with people with high quality of life, they should be the same or higher quality than their parents. This relationship can be seen in the graph as the quality of life is better than parents increases dramatically with quality of life. Those with lower life quality demonstrate low predicted probabilities below 20% to say they are living off better than their parents. This strong relationship is a good demonstration of reliability
 
 Inter-item reliability: the consistency between multiple items measuring the same construct, measured using Cronbach's alpha.
 
+```{r calculate alpha}
 
+alpha(survey.data[,c("happiness",
+                         "health",
+                         "finances", 
+                         "satisfaction",
+                         "freedom")])
+```
 
+Cronbach's alpha coefficient indicates the reliability with a value closer to 1 indicating higher reliability. Here the raw cronbach alpha is 0.77 (2dp) and the individiual raw alphas are all about 0.7 or higher suggesting that there is consistency of each item.
 
+### Conclusion
