@@ -19,6 +19,7 @@ library(readxl)
 library(dplyr)
 library(ggplot2)
 library(psych)
+library(tidyr)
 ```
 
 # Lab 1: Creating Predictors
@@ -285,7 +286,7 @@ survey.predictors <- data.frame(
 ```
 
 ```{r}
-summary = summary(survey.predictors)
+summary = describe(survey.predictors)
 print(summary)
 ```
 
@@ -306,8 +307,8 @@ plot_barplots <- function(column, name, values_fill) {
   ggplot(survey.data, aes(x = factor(!!column), fill = factor(!!column))) +
     geom_bar() +
     labs(title = "Distribution", x = name, fill = name, y = "Count") +
-    scale_fill_discrete(labels = values_fill) +
-    theme_minimal()
+    scale_fill_brewer(palette = "Spectral") +
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 }
 
 # Get unique codebooks
@@ -325,7 +326,7 @@ for (codebook in unique_codebooks) {
 
 # Lab 2: Relationship of independent and dependent variables
 
-Recode our variables. As we do this we provide the variables with more intuitive names, to make our work easier. This can be done with the code:
+Recode our variables to provide the variables with more intuitive names, to make our work easier and also recode our predictors to character variables to do descriptive statistics.
 
 ```{r recode and standardise variables, message=FALSE, warning=FALSE}
 survey.data <- survey.data %>%
@@ -358,7 +359,65 @@ survey.data <- survey.data %>%
 
 ```
 
+```{r}
+survey.data$V249 <- recode(survey.data$V249, 
+                           `-2` = "No answer", 
+                           `1` = "Full time employee (30 hours a week or more)", 
+                           `2` = "Part time employee (less than 30 hours a week)", 
+                           `3` = "Self-employed", 
+                           `4` = "Retired / On a pension", 
+                           `5` = "Home duties, not otherwise employed", 
+                           `6` = "Student", 
+                           `7` = "Unemployed", 
+                           `8` = "Other (please specify)")
+
+survey.data$Q275 <- recode(survey.data$Q275, 
+                           `-2` = "No answer", 
+                           `1` = "No formal education", 
+                           `2` = "Primary education only", 
+                           `3` = "Lower secondary education (i.e. Year 9 or less)", 
+                           `4` = "Upper secondary education (i.e. between Year 10 and Year 12)", 
+                           `5` = "Post-secondary non-tertiary education (e.g. apprenticeship or certificate)", 
+                           `7` = "Bachelor or equivalent", 
+                           `8` = "Master or equivalent", 
+                           `9` = "Doctoral or equivalent")
+
+survey.data$V170 <- recode(survey.data$V170, 
+                           `-2` = "No answer", 
+                           `1` = "Very secure", 
+                           `2` = "Quite secure", 
+                           `3` = "Not very secure", 
+                           `4` = "Not at all secure")
+
+survey.data$V142 <- recode(survey.data$V142, 
+                           `-2` = "No answer", 
+                           `1` = "A great deal of respect", 
+                           `2` = "Some respect", 
+                           `3` = "Not much respect", 
+                           `4` = "No respect at all")
+
+survey.data$V190 <- recode(survey.data$V190, 
+                           `-2` = "No answer", 
+                           `1` = "Often", 
+                           `2` = "Sometimes", 
+                           `3` = "Rarely", 
+                           `4` = "Never")
+
+survey.data$V5 <- recode(survey.data$V5, 
+                         `-2` = "No answer", 
+                         `1` = "Very important", 
+                         `2` = "Rather important", 
+                         `3` = "Not very important", 
+                         `4` = "Not at all important")
+
+```
+
 ### Factor Analysis
+
+Factor Analysis is a measurement model of a latent\
+variable. Latent variable cannot be directly measured. Instead, it is seen through\
+relationships between 𝑌 variables. We\
+assume latent factor 𝐹 drives responses to variables 𝑌 .\
 
 ```{r factor analysis}
 
@@ -372,6 +431,8 @@ fa.fit <- fa(survey.data[,c("happiness",
 
 ```
 
+Factor analysis using fa will calculate the optimal weights as seen below.
+
 ```{r factor analysis output, echo=FALSE}
 
 fa.fit
@@ -383,6 +444,12 @@ survey.data$life.quality <- as.numeric(fa.fit$scores)
 
 ```
 
+```{r}
+summary(survey.data$life.quality)
+```
+
+As you can see, these are approximately standardised, with a mean of zero and standard deviation of (almost) one. We can then use this to analyse the association between quality of life and different individual characteristics that are also available in this dataset.
+
 ```{r histogram_of_quality_of_life, fig.cap = "Distribution of quality of life measure produced by factor analysis.",  fig.width = 5, fig.height = 4, fig.align="center", message = FALSE, warning = FALSE}
 
 ggplot(survey.data, aes(life.quality)) + 
@@ -390,3 +457,87 @@ ggplot(survey.data, aes(life.quality)) +
   theme_minimal()
 
 ```
+
+## Descriptive Statistics
+
+As seen above, there are 55 NA values which will be difficult to plot. We will remove these.
+
+```{r remove nulls}
+survey.data = drop_na(survey.data, life.quality)
+```
+
+#### Relationship of dependent variable (quality of life) and the chosen predictors
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V249, fill = V249)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Employment categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=Q275, fill = Q275)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Education categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V170, fill = V170)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Security categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V142, fill = V142)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Human Rights categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V190, fill = V190)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Health Treatment categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+```{r}
+ggplot(survey.data, aes(x=life.quality, y=V5, fill = V5)) + 
+  geom_boxplot() +
+  xlab("Life Quality") +
+  ylab("Friendship categories") +
+  scale_fill_brewer(palette = "Spectral") +
+  theme(legend.position = "None")
+```
+
+### Validating Factor analysis
+
+Factor analysis has assumptions including:
+
+-   Underlying latent trait
+
+-   Items are continuous measures (or conceptualised as continuous)
+
+-   Correlations are linear
+
+-   There are no outliers
+
+-   There is adequate data
+
+To validate this dependent variable, it is assessed using validity and reliability where reliability is the measure of the latent trait with the least measurement error and validity is whether the measure actually represent what its supposed to.
+
+To measure reliabilty, we examine the proportion of the variance of the predictor that is account for by variance in the latent variable.
+
+Inter-item reliability: the consistency between multiple items measuring the same construct, measured using Cronbach's alpha.
