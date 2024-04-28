@@ -1,0 +1,1488 @@
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.15)  28 APR 2024 19:28
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**group-project-1.tex
+(./group-project-1.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-02-24> (/usr/local/texlive/2022/texmf-dist/tex/latex
+/base/article.cls
+Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2022/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count181
+\c@section=\count182
+\c@subsection=\count183
+\c@subsubsection=\count184
+\c@paragraph=\count185
+\c@subparagraph=\count186
+\c@figure=\count187
+\c@table=\count188
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2021/10/15 v2.17l AMS math features
+\@mathmargin=\skip49
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+(/usr/local/texlive/2022/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks16
+\ex@=\dimen139
+)) (/usr/local/texlive/2022/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen140
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2021/08/26 v2.02 operator names
+)
+\inf@bad=\count189
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count190
+\leftroot@=\count191
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count192
+\DOTSCASE@=\count193
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box50
+\strutbox@=\box51
+\big@size=\dimen141
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count194
+\c@MaxMatrixCols=\count195
+\dotsspace@=\muskip16
+\c@parentequation=\count196
+\dspbrk@lvl=\count197
+\tag@help=\toks17
+\row@=\count198
+\column@=\count199
+\maxfields@=\count266
+\andhelp@=\toks18
+\eqnshift@=\dimen142
+\alignsep@=\dimen143
+\tagshift@=\dimen144
+\tagwidth@=\dimen145
+\totwidth@=\dimen146
+\lineht@=\dimen147
+\@envbody=\toks19
+\multlinegap=\skip50
+\multlinetaggap=\skip51
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2938.
+LaTeX Info: Redefining \] on input line 2939.
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+(/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)) (/usr/local/texlive/2022/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2022/02/03 v1.0f TeX engine tests
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/unicode-math/unicode-math.sty (
+/usr/local/texlive/2022/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2022-02-24 L3 programming layer (loader) 
+(/usr/local/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
+File: l3backend-xetex.def 2022-02-07 L3 backend support: XeTeX
+(|extractbb --version)
+\c__kernel_sys_dvipdfmx_version_int=\count267
+\l__color_backend_stack_int=\count268
+\g__color_backend_stack_int=\count269
+\g__graphics_track_int=\count270
+\l__pdf_internal_box=\box52
+\g__pdf_backend_object_int=\count271
+\g__pdf_backend_annotation_int=\count272
+\g__pdf_backend_link_int=\count273
+))
+Package: unicode-math 2020/01/31 v0.8q Unicode maths in XeLaTeX and LuaLaTeX
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/unicode-math/unicode-math-xetex.s
+ty
+Package: unicode-math-xetex 2020/01/31 v0.8q Unicode maths in XeLaTeX and LuaLa
+TeX
+(/usr/local/texlive/2022/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2022-01-12 L3 Experimental document command parser
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.st
+y
+Package: l3keys2e 2022-01-12 LaTeX2e option processing using LaTeX3 keys
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/fontspec/fontspec.sty
+Package: fontspec 2022/01/15 v2.8a Font selection for XeLaTeX and LuaLaTeX
+(/usr/local/texlive/2022/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+Package: fontspec-xetex 2022/01/15 v2.8a Font selection for XeLaTeX and LuaLaTe
+X
+\l__fontspec_script_int=\count274
+\l__fontspec_language_int=\count275
+\l__fontspec_strnum_int=\count276
+\l__fontspec_tmp_int=\count277
+\l__fontspec_tmpa_int=\count278
+\l__fontspec_tmpb_int=\count279
+\l__fontspec_tmpc_int=\count280
+\l__fontspec_em_int=\count281
+\l__fontspec_emdef_int=\count282
+\l__fontspec_strong_int=\count283
+\l__fontspec_strongdef_int=\count284
+\l__fontspec_tmpa_dim=\dimen148
+\l__fontspec_tmpb_dim=\dimen149
+\l__fontspec_tmpc_dim=\dimen150
+(/usr/local/texlive/2022/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/fontspec/fontspec.cfg))) (/usr/
+local/texlive/2022/texmf-dist/tex/latex/base/fix-cm.sty
+Package: fix-cm 2020/11/24 v1.1t fixes to LaTeX
+(/usr/local/texlive/2022/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding TS1 on input line 47.
+))
+\g__um_fam_int=\count285
+\g__um_fonts_used_int=\count286
+\l__um_primecount_int=\count287
+\g__um_primekern_muskip=\muskip17
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/unicode-math/unicode-math-table.t
+ex))) (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/lmodern.sty
+Package: lmodern 2015/05/01 v1.6.1 Latin Modern Fonts
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/lmm/m/it on input line 23.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/lmsy/m/n on input line 24.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 25.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 26.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/lmm/b/it on input line 27.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/lmsy/b/n on input line 28.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/lmex/m/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 31.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/lmss/m/n on input line 32.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/lmr/m/it on input line 33.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 34.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/lmr/bx/n on input line 35.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/lmss/bx/n on input line 36.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/lmr/bx/it on input line 37.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/upquote/upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
+(/usr/local/texlive/2022/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+)) (/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/microtype.sty
+Package: microtype 2022/03/14 v3.0d Micro-typographical refinements (RS)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks21
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count288
+)
+\MT@toks=\toks22
+\MT@tempbox=\box53
+\MT@count=\count289
+LaTeX Info: Redefining \noprotrusionifhmode on input line 1027.
+LaTeX Info: Redefining \leftprotrusion on input line 1028.
+LaTeX Info: Redefining \rightprotrusion on input line 1036.
+LaTeX Info: Redefining \textls on input line 1195.
+\MT@outer@kern=\dimen151
+LaTeX Info: Redefining \textmicrotypecontext on input line 1781.
+\MT@listname@count=\count290
+(/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/microtype-xetex.def
+File: microtype-xetex.def 2022/03/14 v3.0d Definitions specific to xetex (RS)
+LaTeX Info: Redefining \lsstyle on input line 236.
+)
+Package microtype Info: Loading configuration file microtype.cfg.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2022/03/14 v3.0d microtype main configuration file (RS)
+)) (/usr/local/texlive/2022/texmf-dist/tex/latex/parskip/parskip.sty
+Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
+(/usr/local/texlive/2022/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+(/usr/local/texlive/2022/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+) (/usr/local/texlive/2022/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+))) (/usr/local/texlive/2022/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2021/10/31 v2.13 LaTeX color extensions (UK)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: xetex.def on input line 227.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/graphics-def/xetex.def
+File: xetex.def 2021/03/18 v5.0k Graphics/color driver for xetex
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1368.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1370.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1371.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1372.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1373.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1374.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1375.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/xcolor/svgnam.def
+File: svgnam.def 2021/10/31 v2.13 Predefined colors according to SVG 1.1 (UK)
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/xcolor/x11nam.def
+File: x11nam.def 2021/10/31 v2.13 Predefined colors according to Unix/X11 (UK)
+)) (/usr/local/texlive/2022/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+(/usr/local/texlive/2022/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+)
+\Gm@cnth=\count291
+\Gm@cntv=\count292
+\c@Gm@tempcnt=\count293
+\Gm@bindingoffset=\dimen152
+\Gm@wd@mp=\dimen153
+\Gm@odd@mp=\dimen154
+\Gm@even@mp=\dimen155
+\Gm@layoutwidth=\dimen156
+\Gm@layoutheight=\dimen157
+\Gm@layouthoffset=\dimen158
+\Gm@layoutvoffset=\dimen159
+\Gm@dimlist=\toks23
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Package: fancyvrb 2021/12/21 4.1b verbatim text (tvz,hv)
+\FV@CodeLineNo=\count294
+\FV@InFile=\read2
+\FV@TabBox=\box54
+\c@FancyVerbLine=\count295
+\FV@StepNumber=\count296
+\FV@OutFile=\write3
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/framed/framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip52
+\fb@frw=\dimen160
+\fb@frh=\dimen161
+\FrameRule=\dimen162
+\FrameSep=\dimen163
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2021/03/04 v1.4d Standard LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: xetex.def on input line 107.
+)
+\Gin@req@height=\dimen164
+\Gin@req@width=\dimen165
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2022/03/01 v3.6b Customizing captions (AR)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2022/03/17 v2.3b caption3 kernel (AR)
+\caption@tempdima=\dimen166
+\captionmargin=\dimen167
+\caption@leftmargin=\dimen168
+\caption@rightmargin=\dimen169
+\caption@width=\dimen170
+\caption@indent=\dimen171
+\caption@parindent=\dimen172
+\caption@hangindent=\dimen173
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count297
+\c@continuedfloat=\count298
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bookmark.sty
+Package: bookmark 2020-11-06 v1.29 PDF bookmarks (HO)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2022-02-21 v7.00n Hypertext links for LaTeX
+(/usr/local/texlive/2022/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+(/usr/local/texlive/2022/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode not found.
+) (/usr/local/texlive/2022/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+) (/usr/local/texlive/2022/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+\@linkdim=\dimen174
+\Hy@linkcounter=\count299
+\Hy@pagecounter=\count300
+(/usr/local/texlive/2022/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2022-02-21 v7.00n Hyperref: PDFDocEncoding definition (HO)
+) (/usr/local/texlive/2022/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+) (/usr/local/texlive/2022/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count301
+(/usr/local/texlive/2022/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2022-02-21 v7.00n Hyperref: PDF Unicode definition (HO)
+)
+Package hyperref Info: Option `unicode' set `true' on input line 4018.
+Package hyperref Info: Hyper figures OFF on input line 4137.
+Package hyperref Info: Link nesting OFF on input line 4142.
+Package hyperref Info: Hyper index ON on input line 4145.
+Package hyperref Info: Plain pages OFF on input line 4152.
+Package hyperref Info: Backreferencing OFF on input line 4157.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4390.
+\c@Hy@tempcnt=\count302
+(/usr/local/texlive/2022/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip18
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4749.
+\XeTeXLinkMargin=\dimen175
+(/usr/local/texlive/2022/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+(/usr/local/texlive/2022/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count303
+\Field@Width=\dimen176
+\Fld@charsize=\dimen177
+Package hyperref Info: Hyper figures OFF on input line 6027.
+Package hyperref Info: Link nesting OFF on input line 6032.
+Package hyperref Info: Hyper index ON on input line 6035.
+Package hyperref Info: backreferencing OFF on input line 6042.
+Package hyperref Info: Link coloring OFF on input line 6047.
+Package hyperref Info: Link coloring with OCG OFF on input line 6052.
+Package hyperref Info: PDF/A mode OFF on input line 6057.
+LaTeX Info: Redefining \ref on input line 6097.
+LaTeX Info: Redefining \pageref on input line 6101.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
+package with kernel methods
+)
+\Hy@abspage=\count304
+\c@Item=\count305
+\c@Hfootnote=\count306
+)
+Package hyperref Info: Driver (autodetected): hxetex.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/hyperref/hxetex.def
+File: hxetex.def 2022-02-21 v7.00n Hyperref driver for XeTeX
+(/usr/local/texlive/2022/texmf-dist/tex/generic/stringenc/stringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\pdfm@box=\box55
+\c@Hy@AnnotLevel=\count307
+\HyField@AnnotCount=\count308
+\Fld@listcount=\count309
+\c@bookmark@seq@number=\count310
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+(/usr/local/texlive/2022/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
+kage
+with kernel methods
+)
+(/usr/local/texlive/2022/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip53
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bkm-dvipdfm.def
+File: bkm-dvipdfm.def 2020-11-06 v1.29 bookmark driver for dvipdfm (HO)
+\BKM@id=\count311
+)) (/usr/local/texlive/2022/texmf-dist/tex/latex/xurl/xurl.sty
+Package: xurl 2022/01/09 v 0.10 modify URL breaks
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 114.
+No file group-project-1.aux.
+\openout1 = `group-project-1.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
+(Font)                  OT1/lmr/m/n --> TU/lmr/m/n on input line 127.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/lmr/m/it --> TU/lmr/m/it on input line 127.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/lmr/bx/n --> TU/lmr/bx/n on input line 127.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/lmss/m/n --> TU/lmss/m/n on input line 127.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/lmss/bx/n --> TU/lmss/bx/n on input line 127.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/lmtt/m/n --> TU/lmtt/m/n on input line 127.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/lmtt/m/n --> TU/lmtt/bx/n on input line 127.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(0)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,BoldFont={latinmodern-math.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(0)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 127.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(1)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf}].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:s
+cript=math;language=dflt;"<6-8.5>s*[0.9999964596882403]"[latinmodern-math.otf]/
+OT:script=math;language=dflt;+ssty=0;"<-6>s*[0.9999964596882403]"[latinmodern-m
+ath.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9999964596882403]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 10.0pt on input line 127.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `normal' on input line 127.
+
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/lmr/m/n --> TU/latinmodern-math.otf(1)/m/n on input
+ line 127.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `bold' on input line 127.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/lmr/bx/n --> TU/latinmodern-math.otf(1)/b/n on inpu
+t line 127.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 1.000096459334209.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(2)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf},ScaleAgain=1.0001,FontAdjustment={\f
+ontdimen
+(fontspec)             8\font =6.77pt\relax \fontdimen 9\font =3.94pt\relax
+(fontspec)             \fontdimen 10\font =4.44pt\relax \fontdimen 11\font
+(fontspec)             =6.86pt\relax \fontdimen 12\font =3.45pt\relax
+(fontspec)             \fontdimen 13\font =3.63pt\relax \fontdimen 14\font
+(fontspec)             =3.63pt\relax \fontdimen 15\font =2.89pt\relax
+(fontspec)             \fontdimen 16\font =2.47pt\relax \fontdimen 17\font
+(fontspec)             =2.47pt\relax \fontdimen 18\font =2.5pt\relax
+(fontspec)             \fontdimen 19\font =2.0pt\relax \fontdimen 22\font
+(fontspec)             =2.5pt\relax \fontdimen 20\font =0pt\relax \fontdimen
+(fontspec)             21\font =0pt\relax }].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[1.000096459334209]"[latinmodern-math.otf]/OT:sc
+ript=math;language=dflt;"<6-8.5>s*[1.000096459334209]"[latinmodern-math.otf]/OT
+:script=math;language=dflt;+ssty=0;"<-6>s*[1.000096459334209]"[latinmodern-math
+.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =6.77pt\relax \fontdimen 9\font
+(fontspec)             =3.94pt\relax \fontdimen 10\font =4.44pt\relax
+(fontspec)             \fontdimen 11\font =6.86pt\relax \fontdimen 12\font
+(fontspec)             =3.45pt\relax \fontdimen 13\font =3.63pt\relax
+(fontspec)             \fontdimen 14\font =3.63pt\relax \fontdimen 15\font
+(fontspec)             =2.89pt\relax \fontdimen 16\font =2.47pt\relax
+(fontspec)             \fontdimen 17\font =2.47pt\relax \fontdimen 18\font
+(fontspec)             =2.5pt\relax \fontdimen 19\font =2.0pt\relax \fontdimen
+(fontspec)             22\font =2.5pt\relax \fontdimen 20\font =0pt\relax
+(fontspec)             \fontdimen 21\font =0pt\relax 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[1.000096459334209]"[latinmodern-math.otf]/OT:scrip
+t=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =6.77pt\relax \fontdimen 9\font
+(fontspec)             =3.94pt\relax \fontdimen 10\font =4.44pt\relax
+(fontspec)             \fontdimen 11\font =6.86pt\relax \fontdimen 12\font
+(fontspec)             =3.45pt\relax \fontdimen 13\font =3.63pt\relax
+(fontspec)             \fontdimen 14\font =3.63pt\relax \fontdimen 15\font
+(fontspec)             =2.89pt\relax \fontdimen 16\font =2.47pt\relax
+(fontspec)             \fontdimen 17\font =2.47pt\relax \fontdimen 18\font
+(fontspec)             =2.5pt\relax \fontdimen 19\font =2.0pt\relax \fontdimen
+(fontspec)             22\font =2.5pt\relax \fontdimen 20\font =0pt\relax
+(fontspec)             \fontdimen 21\font =0pt\relax 
+
+LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
+(Font)              `symbols' in the math version `normal' on input line 127.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/lmsy/m/n --> TU/latinmodern-math.otf(2)/m/n on inpu
+t line 127.
+LaTeX Font Info:    Encoding `OMS' has changed to `TU' for symbol font
+(Font)              `symbols' in the math version `bold' on input line 127.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/lmsy/b/n --> TU/latinmodern-math.otf(2)/b/n on inpu
+t line 127.
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9999964596882403.
+
+
+Package fontspec Info: latinmodern-math scale = 0.9998964600422715.
+
+
+Package fontspec Info: Font family 'latinmodern-math.otf(3)' created for font
+(fontspec)             'latinmodern-math.otf' with options
+(fontspec)             [Scale=MatchLowercase,BoldItalicFont={},ItalicFont={},Sm
+allCapsFont={},Script=Math,SizeFeatures={{Size=8.5-},{Size=6-8.5,Font=latinmode
+rn-math.otf,Style=MathScript},{Size=-6,Font=latinmodern-math.otf,Style=MathScri
+ptScript}},BoldFont={latinmodern-math.otf},ScaleAgain=0.9999,FontAdjustment={\f
+ontdimen
+(fontspec)             8\font =0.4pt\relax \fontdimen 9\font =2.0pt\relax
+(fontspec)             \fontdimen 10\font =1.67pt\relax \fontdimen 11\font
+(fontspec)             =1.11pt\relax \fontdimen 12\font =6.0pt\relax
+(fontspec)             \fontdimen 13\font =0pt\relax }].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <8.5->s*[0.9998964600422715]"[latinmodern-math.otf]/OT:s
+cript=math;language=dflt;"<6-8.5>s*[0.9998964600422715]"[latinmodern-math.otf]/
+OT:script=math;language=dflt;+ssty=0;"<-6>s*[0.9998964600422715]"[latinmodern-m
+ath.otf]/OT:script=math;language=dflt;+ssty=1;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =0.4pt\relax \fontdimen 9\font
+(fontspec)             =2.0pt\relax \fontdimen 10\font =1.67pt\relax
+(fontspec)             \fontdimen 11\font =1.11pt\relax \fontdimen 12\font
+(fontspec)             =6.0pt\relax \fontdimen 13\font =0pt\relax 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9998964600422715]"[latinmodern-math.otf]/OT:scri
+pt=math;language=dflt;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             and font adjustment code:
+(fontspec)             \fontdimen 8\font =0.4pt\relax \fontdimen 9\font
+(fontspec)             =2.0pt\relax \fontdimen 10\font =1.67pt\relax
+(fontspec)             \fontdimen 11\font =1.11pt\relax \fontdimen 12\font
+(fontspec)             =6.0pt\relax \fontdimen 13\font =0pt\relax 
+
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `normal' on input line 1
+27.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/m/n on inpu
+t line 127.
+LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
+(Font)              `largesymbols' in the math version `bold' on input line 127
+.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/b/n on inpu
+t line 127.
+LaTeX Info: Redefining \microtypecontext on input line 127.
+Package microtype Info: Applying patch `item' on input line 127.
+Package microtype Info: Applying patch `toc' on input line 127.
+Package microtype Info: Applying patch `eqnum' on input line 127.
+Package microtype Info: Applying patch `footnote' on input line 127.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using protrusion set `basicmath'.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of spacing.
+Package microtype Info: No adjustment of kerning.
+
+(/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/mt-LatinModernRoman.cfg
+File: mt-LatinModernRoman.cfg 2021/02/21 v1.1 microtype config. file: Latin Mod
+ern Roman (RS)
+)
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+*geometry* verbose mode - [ preamble ] result:
+* driver: xetex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=469.75502pt
+* \textheight=650.43001pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=-37.0pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Link coloring ON on input line 127.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
+(/usr/local/texlive/2022/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/local/texlive/2022/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count312
+)
+LaTeX Info: Redefining \ref on input line 127.
+LaTeX Info: Redefining \pageref on input line 127.
+LaTeX Info: Redefining \nameref on input line 127.
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
+
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 12.0pt on input line 129.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 8.0pt on input line 129.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 6.0pt on input line 129.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
+29.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omllmm.fd
+File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 12.0011pt on input line 129.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 8.00073pt on input line 129.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 6.00055pt on input line 129.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 11.99872pt on input line 129.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 7.99915pt on input line 129.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 5.99936pt on input line 129.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 129
+.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 129
+.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) (/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+)
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 147.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 7.0pt on input line 165.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
+(Font)              scaled to size 5.0pt on input line 165.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 10.00092pt on input line 165.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 7.00064pt on input line 165.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
+(Font)              scaled to size 5.00046pt on input line 165.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 9.99893pt on input line 165.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 6.99925pt on input line 165.
+LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
+(Font)              scaled to size 4.99947pt on input line 165.
+[1
+
+] [2]
+Underfull \vbox (badness 10000) detected at line 350
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 350
+ []
+
+[3]
+Underfull \vbox (badness 10000) detected at line 443
+ []
+
+
+Overfull \vbox (0.22997pt too high) detected at line 443
+ []
+
+[4] [5]
+File: group-project-1_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-6-1.pdf>
+File: group-project-1_files/figure-latex/unnamed-chunk-6-2.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-6-2.pdf>
+File: group-project-1_files/figure-latex/unnamed-chunk-6-3.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-6-3.pdf>
+File: group-project-1_files/figure-latex/unnamed-chunk-6-4.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-6-4.pdf>
+File: group-project-1_files/figure-latex/unnamed-chunk-6-5.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-6-5.pdf>
+File: group-project-1_files/figure-latex/unnamed-chunk-6-6.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-6-6.pdf>
+
+Underfull \hbox (badness 10000) in paragraph at lines 506--512
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 506--512
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 506--512
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 506--512
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 506--512
+[]
+ []
+
+[6] [7] [8] [9] [10] [11]
+Missing character: There is no 𝑌 (U+1D44C) in font [lmroman10-regular]:mapping=
+tex-text;!
+Missing character: There is no 𝐹 (U+1D439) in font [lmroman10-regular]:mapping=
+tex-text;!
+Missing character: There is no 𝑌 (U+1D44C) in font [lmroman10-regular]:mapping=
+tex-text;!
+
+Underfull \hbox (badness 10000) in paragraph at lines 755--760
+
+ []
+
+[12]
+File: group-project-1_files/figure-latex/histogram_of_quality_of_life-1.pdf Gra
+phic file (type pdf)
+<use group-project-1_files/figure-latex/histogram_of_quality_of_life-1.pdf>
+[13]
+Overfull \hbox (2.74498pt too wide) in paragraph at lines 888--888
+[]\TU/lmtt/m/n/10 ## Warning: The following aesthetics were dropped during stat
+istical transformation: fill.[] 
+ []
+
+File: group-project-1_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-8-1.pdf>
+
+Overfull \vbox (0.28587pt too high) detected at line 910
+ []
+
+[14]
+Overfull \hbox (2.74498pt too wide) in paragraph at lines 923--923
+[]\TU/lmtt/m/n/10 ## Warning: The following aesthetics were dropped during stat
+istical transformation: fill.[] 
+ []
+
+File: group-project-1_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (ty
+pe pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-9-1.pdf>
+
+Overfull \hbox (2.74498pt too wide) in paragraph at lines 962--962
+[]\TU/lmtt/m/n/10 ## Warning: The following aesthetics were dropped during stat
+istical transformation: fill.[] 
+ []
+
+[15]
+File: group-project-1_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (t
+ype pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-10-1.pdf>
+
+Overfull \hbox (2.74498pt too wide) in paragraph at lines 996--996
+[]\TU/lmtt/m/n/10 ## Warning: The following aesthetics were dropped during stat
+istical transformation: fill.[] 
+ []
+
+File: group-project-1_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (t
+ype pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-11-1.pdf>
+[16]
+Overfull \hbox (2.74498pt too wide) in paragraph at lines 1030--1030
+[]\TU/lmtt/m/n/10 ## Warning: The following aesthetics were dropped during stat
+istical transformation: fill.[] 
+ []
+
+File: group-project-1_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (t
+ype pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-12-1.pdf>
+[17]
+Overfull \hbox (2.74498pt too wide) in paragraph at lines 1068--1068
+[]\TU/lmtt/m/n/10 ## Warning: The following aesthetics were dropped during stat
+istical transformation: fill.[] 
+ []
+
+File: group-project-1_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (t
+ype pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-13-1.pdf>
+[18]
+
+LaTeX Font Warning: Font shape `TU/lmtt/bx/it' in size <10> not available
+(Font)              Font shape `TU/lmtt/b/sl' tried instead on input line 1099.
+
+
+[19]
+Underfull \vbox (badness 10000) detected at line 1173
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 1173
+ []
+
+[20]
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ##                                                           
+                         Estimate[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## (Intercept)                                               
+                        -0.055001[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catHome duties, not otherwise employed                
+                         0.058519[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catOther (please specify)                             
+                        -0.397207[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catPart time employee (less than 30 hours a week)     
+                         0.076899[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catRetired / On a pension                             
+                         0.199020[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catSelf-employed                                      
+                         0.184175[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catStudent                                            
+                        -0.300322[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catUnemployed                                         
+                        -0.535204[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catDoctoral or equivalent                             
+                         0.051841[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catLower secondary education (i.e. Year 9 or less)    
+                         0.077258[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catMaster or equivalent                               
+                         0.050261[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catNo formal education                                
+                         0.168186[] 
+ []
+
+[21]
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPost-secondary non-tertiary education (e.g. apprent
+iceship or certificate) -0.002792[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPrimary education only                             
+                        -0.160930[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catUpper secondary education (i.e. between Year 10 and
+ Year 12)               -0.056069[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_security                                           
+                        -0.175845[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_rights                                             
+                        -0.118356[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_health                                             
+                         0.236538[] 
+ []
+
+
+Overfull \hbox (23.74498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_social                                             
+                        -0.080459[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ##                                                           
+                        Std. Error[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## (Intercept)                                               
+                          0.044376[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catHome duties, not otherwise employed                
+                          0.098363[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catOther (please specify)                             
+                          0.181176[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catPart time employee (less than 30 hours a week)     
+                          0.062766[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catRetired / On a pension                             
+                          0.052391[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catSelf-employed                                      
+                          0.082495[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catStudent                                            
+                          0.132031[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catUnemployed                                         
+                          0.121466[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catDoctoral or equivalent                             
+                          0.120766[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catLower secondary education (i.e. Year 9 or less)    
+                          0.096018[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catMaster or equivalent                               
+                          0.069853[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catNo formal education                                
+                          0.409225[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPost-secondary non-tertiary education (e.g. apprent
+iceship or certificate)   0.054922[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPrimary education only                             
+                          0.180245[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catUpper secondary education (i.e. between Year 10 and
+ Year 12)                 0.057674[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_security                                           
+                          0.022054[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_rights                                             
+                          0.021113[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_health                                             
+                          0.021507[] 
+ []
+
+
+Overfull \hbox (28.99498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_social                                             
+                          0.020465[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ##                                                           
+                        t value[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## (Intercept)                                               
+                         -1.239[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catHome duties, not otherwise employed                
+                          0.595[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catOther (please specify)                             
+                         -2.192[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catPart time employee (less than 30 hours a week)     
+                          1.225[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catRetired / On a pension                             
+                          3.799[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catSelf-employed                                      
+                          2.233[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catStudent                                            
+                         -2.275[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catUnemployed                                         
+                         -4.406[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catDoctoral or equivalent                             
+                          0.429[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catLower secondary education (i.e. Year 9 or less)    
+                          0.805[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catMaster or equivalent                               
+                          0.720[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catNo formal education                                
+                          0.411[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPost-secondary non-tertiary education (e.g. apprent
+iceship or certificate)  -0.051[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPrimary education only                             
+                         -0.893[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catUpper secondary education (i.e. between Year 10 and
+ Year 12)                -0.972[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_security                                           
+                         -7.974[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_rights                                             
+                         -5.606[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_health                                             
+                         10.998[] 
+ []
+
+
+Overfull \hbox (13.24498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_social                                             
+                         -3.932[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ##                                                           
+                        Pr(>|t|)[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## (Intercept)                                               
+                        0.215367[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catHome duties, not otherwise employed                
+                        0.551978[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catOther (please specify)                             
+                        0.028496[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catPart time employee (less than 30 hours a week)     
+                        0.220694[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catRetired / On a pension                             
+                        0.000151[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catSelf-employed                                      
+                        0.025716[] 
+ []
+
+[22]
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catStudent                                            
+                        0.023060[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## emp_catUnemployed                                         
+                        1.12e-05[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catDoctoral or equivalent                             
+                        0.667785[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catLower secondary education (i.e. Year 9 or less)    
+                        0.421157[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catMaster or equivalent                               
+                        0.471927[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catNo formal education                                
+                        0.681137[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPost-secondary non-tertiary education (e.g. apprent
+iceship or certificate) 0.959456[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catPrimary education only                             
+                        0.372078[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## edu_catUpper secondary education (i.e. between Year 10 and
+ Year 12)               0.331107[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_security                                           
+                        2.91e-15[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_rights                                             
+                        2.44e-08[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_health                                             
+                         < 2e-16[] 
+ []
+
+
+Overfull \hbox (18.49498pt too wide) in paragraph at lines 1322--1322
+[]\TU/lmtt/m/n/10 ## scaled_social                                             
+                        8.80e-05[] 
+ []
+
+[23] [24]
+File: group-project-1_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (t
+ype pdf)
+<use group-project-1_files/figure-latex/unnamed-chunk-18-1.pdf>
+[25] [26]
+
+! LaTeX Error: Too deeply nested.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1572 \begin{quote}
+                     
+Here is how much of TeX's memory you used:
+ 20801 strings out of 476179
+ 389186 string characters out of 5809544
+ 908544 words of memory out of 5000000
+ 41269 multiletter control sequences out of 15000+600000
+ 475702 words of font info for 80 fonts, out of 8000000 for 9000
+ 1348 hyphenation exceptions out of 8191
+ 86i,6n,121p,1012b,630s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+Output written on group-project-1.pdf (26 pages).

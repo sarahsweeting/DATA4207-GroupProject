@@ -1,0 +1,1582 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{caption}
+\captionsetup[figure]{font=scriptsize}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Group exercise 1: Survey research},
+  pdfauthor={Emily Wong and Sarah Sweeting},
+  colorlinks=true,
+  linkcolor={Maroon},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Group exercise 1: Survey research}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{DATA5207: Data Analysis in the Social Sciences}
+\author{Emily Wong and Sarah Sweeting}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{lab-1-creating-predictors}{%
+\section{Lab 1: Creating Predictors}\label{lab-1-creating-predictors}}
+
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
+
+In this study, data from The World Value Survey will be explored to
+explain quality of life. Part 1 will explore potential predictors to
+predict higher/lower quality of life with supported theory. Part 2 will
+tests these predictors through the creation of a dependent variable and
+predictive models.
+
+\hypertarget{understanding-survey-data}{%
+\subsection{Understanding survey data}\label{understanding-survey-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{survey.data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"wvs\_data.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{chosen-predictors}{%
+\subsubsection{Chosen Predictors}\label{chosen-predictors}}
+
+Quality of life is difficult to quantify and can be affected by numerous
+factors in ones life. Another issue is that `quality' for an individual
+could be determined by numerous things such as satisfaction, health and
+wealth.\\
+\strut \\
+To help guide our choices of predictors, we will use the World Health
+Organisations definition of quality of life (QoL) as an ``individuals'
+perceptions of their position in life in the context of the culture and
+value systems in which they live and in relation to their goals,
+expectations, standards and concerns''.
+
+{[}\url{https://www.who.int/tools/whoqol}{]}
+
+We believe the factors that affect an indiviudal's perception of life
+spans further than physical health and wellbeing (however this is
+obviously also a factor to consider), it can include psychological,
+environmental, societal and spiritual factors.
+
+\hypertarget{employment---as-means-of-wealth}{%
+\paragraph{Employment - as means of
+wealth}\label{employment---as-means-of-wealth}}
+
+Q279: Are you employed now or not? If yes, about how many hours a week
+do you work? If you have more than one job, please tell us about your
+main job only.
+
+\hypertarget{education---as-means-of-standard-of-living}{%
+\paragraph{Education - as means of standard of
+living}\label{education---as-means-of-standard-of-living}}
+
+Q275: What is your highest educational level that you have attained?
+
+\hypertarget{security}{%
+\paragraph{Security}\label{security}}
+
+Q131: how secure do you feel these days?
+
+\hypertarget{human-rights}{%
+\paragraph{Human Rights}\label{human-rights}}
+
+Q253: How much respect is there for individual human rights nowadays in
+this country? Do you feel there is\ldots{}
+
+\hypertarget{health-levels}{%
+\paragraph{Health Levels}\label{health-levels}}
+
+Q53: ``In the last 12 months, how often have you or your family gone
+without medicine or medical treatment that you needed?
+
+\hypertarget{social-personal-connectivity}{%
+\paragraph{Social \& Personal
+Connectivity}\label{social-personal-connectivity}}
+
+Q2. For each of the following, indicate how important it is in your
+life. How important is\ldots{} Family, Friends
+
+\hypertarget{theory}{%
+\subsubsection{Theory}\label{theory}}
+
+Education and employment: When an individual has higher educational
+attainments and are employed, they are able to have a better quality of
+life. This is due to higher economic well being and financial security
+to meet basic needs such as healthcare access and participating in
+leisure activites. It also can lead to a greater sense of purpose and
+personal development.
+
+Confounding factor here may be income, since these factors are
+indicators of what sort of job an individual has an how much they are
+getting paid as a result (higher education levels = greater income, more
+hours in employment = higher income)
+
+Security: When an individual is able to live without fear or risk and
+feels stable, their quality of life will increase. Security can be an
+impact on the quality of life as it is a measure of both physical safety
+and economic safety, physical safety affecting individuals health and
+mental well being, while as economic security to have social safety net
+to tackle financial challenges and access basic needs.
+
+Human rights: When society upholds and protects human rights,
+individuals tend to experience better QoL. It is a basic need but also a
+measure of psychological well-being because of its ability to foster
+belonging within communities and equality within a just society. It also
+could promote quality of opportunity, a fair chance for success in
+society. can you add a blurb for health levels and social and personal
+connectivity
+
+Health Levels: Health is a foundational element of quality of life. Good
+health enables individuals to engage actively in various aspects of life
+including work, social interactions, and leisure activities, thus
+directly influencing their overall life satisfaction and well-being.
+Therefore, having a lack of access to necessary medical intervention can
+lead to decreased physical capabilities, psychological stress, and
+financial burdens, all of which negatively affect one's quality of life.
+
+Social \& Personal Connectivity: Human beings are inherently social
+creatures, and the quality of our social interactions can significantly
+impact our mental and emotional well-being. Strong connections with
+family and friends provide emotional support, reduce stress, and
+contribute to a sense of belonging and happiness. Furthermore, placing
+value in personal relationships can influence one's self-esteem and
+provide opportunities for meaningful engagement in community activities,
+thereby enhancing an individual's overall quality of life.
+
+\hypertarget{exploring-predictors}{%
+\subsection{Exploring Predictors}\label{exploring-predictors}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(survey.data))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  chr [1:317] "ID" "Mode" "State" "V1" "V2" "V3" "V4" "V5" "V6" "V7" "V8" ...
+\end{verbatim}
+
+The column names aren't entirely that helpful. We re-code them for
+convenience.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{categories }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Employment"}\NormalTok{, }\StringTok{"Education"}\NormalTok{, }\StringTok{"Security"}\NormalTok{, }\StringTok{"Human Rights"}\NormalTok{, }\StringTok{"Treatment Levels"}\NormalTok{,  }\StringTok{"Friendship Importance"}\NormalTok{)}
+\NormalTok{questions }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"Q279"}\NormalTok{, }\StringTok{"Q275"}\NormalTok{, }\StringTok{"Q131"}\NormalTok{, }\StringTok{"Q253"}\NormalTok{, }\StringTok{"Q53"}\NormalTok{, }\StringTok{"Q2"}\NormalTok{)}
+\NormalTok{key }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"V249"}\NormalTok{, }\StringTok{"Q275"}\NormalTok{, }\StringTok{"V170"}\NormalTok{, }\StringTok{"V142"}\NormalTok{, }\StringTok{"V190"}\NormalTok{, }\StringTok{"V5"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{v249\_employment\_status }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"No answer"}\NormalTok{,}
+  \StringTok{"Full time employee (30 hours a week or more)"}\NormalTok{,}
+  \StringTok{"Part time employee (less than 30 hours a week)"}\NormalTok{,}
+  \StringTok{"Self{-}employed"}\NormalTok{,}
+  \StringTok{"Retired / On a pension"}\NormalTok{,}
+  \StringTok{"Home duties, not otherwise employed"}\NormalTok{,}
+  \StringTok{"Student"}\NormalTok{,}
+  \StringTok{"Unemployed"}\NormalTok{,}
+  \StringTok{"Other (please specify)"}
+\NormalTok{)}
+
+\NormalTok{values}\FloatTok{.249} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{)}
+
+\NormalTok{q275\_education }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\StringTok{"No answer"}\NormalTok{,}
+\StringTok{"No formal education"}\NormalTok{,}
+\StringTok{"Primary education only"}\NormalTok{,}
+\StringTok{"Lower secondary education (i.e. Year 9 or less)"}\NormalTok{,}
+\StringTok{"Upper secondary education (i.e. between Year 10 and Year 12)"}\NormalTok{,}
+\StringTok{"Post{-}secondary non{-}tertiary education (e.g. apprenticeship or certificate)"}\NormalTok{,}
+\StringTok{"Bachelor or equivalent"}\NormalTok{,}
+\StringTok{"Master or equivalent"}\NormalTok{,}
+\StringTok{"Doctoral or equivalent"}\NormalTok{)}
+
+\NormalTok{values}\FloatTok{.275} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{7}\NormalTok{,}\DecValTok{8}\NormalTok{,}\DecValTok{9}\NormalTok{)}
+
+\NormalTok{v170\_how\_secure\_are\_you }\OtherTok{=} \FunctionTok{c}\NormalTok{(}
+\StringTok{"No answer"}\NormalTok{,}
+\StringTok{"Very secure"}\NormalTok{,}
+\StringTok{"Quite secure"}\NormalTok{,}
+\StringTok{"Not very secure"}\NormalTok{,}
+\StringTok{"Not at all secure"}
+\NormalTok{)}
+
+\NormalTok{values}\FloatTok{.170} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+
+\NormalTok{v142\_respect\_human\_rights }\OtherTok{=} \FunctionTok{c}\NormalTok{(}
+\StringTok{"No answer"}\NormalTok{,}
+\StringTok{"A great deal of respect"}\NormalTok{,}
+\StringTok{"Some respect"}\NormalTok{,}
+\StringTok{"Not much respect"}\NormalTok{,}
+\StringTok{"No respect at all"}
+\NormalTok{)}
+
+\NormalTok{values}\FloatTok{.142} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+
+
+\NormalTok{v190\_gone\_without\_medicine }\OtherTok{=} \FunctionTok{c}\NormalTok{(}
+\StringTok{"No answer"}\NormalTok{,}
+\StringTok{"Often"}\NormalTok{,}
+\StringTok{"Sometimes"}\NormalTok{,}
+\StringTok{"Rarely"}\NormalTok{,}
+\StringTok{"Never"}
+\NormalTok{)}
+
+\NormalTok{values}\FloatTok{.190} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+
+\NormalTok{v5\_friends }\OtherTok{=} \FunctionTok{c}\NormalTok{(}
+\StringTok{"No answer"}\NormalTok{,}
+\StringTok{"Very important"}\NormalTok{,}
+\StringTok{"Rather important"}\NormalTok{,}
+\StringTok{"Not very important"}\NormalTok{,}
+\StringTok{"Not at all important"}
+\NormalTok{)}
+
+\NormalTok{values}\FloatTok{.5} \OtherTok{=} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{categories }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Employment"}\NormalTok{, }\StringTok{"Education"}\NormalTok{, }\StringTok{"Security"}\NormalTok{, }\StringTok{"Human Rights"}\NormalTok{, }\StringTok{"Treatment Levels"}\NormalTok{, }\StringTok{"Friendship Importance"}\NormalTok{)}
+\NormalTok{questions }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Q279"}\NormalTok{, }\StringTok{"Q275"}\NormalTok{, }\StringTok{"Q131"}\NormalTok{, }\StringTok{"Q253"}\NormalTok{, }\StringTok{"Q53"}\NormalTok{, }\StringTok{"Q2"}\NormalTok{)}
+\NormalTok{key }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"V249"}\NormalTok{, }\StringTok{"Q275"}\NormalTok{, }\StringTok{"V170"}\NormalTok{, }\StringTok{"V142"}\NormalTok{, }\StringTok{"V190"}\NormalTok{, }\StringTok{"V5"}\NormalTok{)}
+
+\CommentTok{\# Define vectors for each category}
+\NormalTok{key }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"V249"}\NormalTok{, }\StringTok{"Q275"}\NormalTok{, }\StringTok{"V170"}\NormalTok{, }\StringTok{"V142"}\NormalTok{, }\StringTok{"V190"}\NormalTok{, }\StringTok{"V5"}\NormalTok{)}
+
+\NormalTok{vectors }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{),}
+    \AttributeTok{chars =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"No answer"}\NormalTok{, }
+      \StringTok{"Full time employee (30 hours a week or more)"}\NormalTok{,  }
+      \StringTok{"Part time employee (less than 30 hours a week)"}\NormalTok{, }
+      \StringTok{"Self{-}employed"}\NormalTok{,                          }
+      \StringTok{"Retired / On a pension"}\NormalTok{,                  }
+      \StringTok{"Home duties, not otherwise employed"}\NormalTok{,    }
+      \StringTok{"Student"}\NormalTok{,                                 }
+      \StringTok{"Unemployed"}\NormalTok{,                             }
+      \StringTok{"Other (please specify)"}
+\NormalTok{    )}
+\NormalTok{  ),}
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{),}
+    \AttributeTok{chars =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"No answer"}\NormalTok{,}
+      \StringTok{"No formal education"}\NormalTok{,}
+      \StringTok{"Primary education only"}\NormalTok{,}
+      \StringTok{"Lower secondary education (i.e. Year 9 or less)"}\NormalTok{,}
+      \StringTok{"Upper secondary education (i.e. between Year 10 and Year 12)"}\NormalTok{,}
+      \StringTok{"Post{-}secondary non{-}tertiary education (e.g. apprenticeship or certificate)"}\NormalTok{,}
+      \StringTok{"Bachelor or equivalent"}\NormalTok{,}
+      \StringTok{"Master or equivalent"}\NormalTok{,}
+      \StringTok{"Doctoral or equivalent"}
+\NormalTok{    )}
+\NormalTok{  ),}
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{),}
+    \AttributeTok{chars =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"No answer"}\NormalTok{,}
+      \StringTok{"Very secure"}\NormalTok{,}
+      \StringTok{"Quite secure"}\NormalTok{,}
+      \StringTok{"Not very secure"}\NormalTok{,}
+      \StringTok{"Not at all secure"}
+\NormalTok{    )}
+\NormalTok{  ),}
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{),}
+    \AttributeTok{chars =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"No answer"}\NormalTok{,}
+      \StringTok{"A great deal of respect"}\NormalTok{,}
+      \StringTok{"Some respect"}\NormalTok{,}
+      \StringTok{"Not much respect"}\NormalTok{,}
+      \StringTok{"No respect at all"}
+\NormalTok{    )}
+\NormalTok{  ),}
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{),}
+    \AttributeTok{chars =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"No answer"}\NormalTok{,}
+      \StringTok{"Often"}\NormalTok{,}
+      \StringTok{"Sometimes"}\NormalTok{,}
+      \StringTok{"Rarely"}\NormalTok{,}
+      \StringTok{"Never"}
+\NormalTok{    )}
+\NormalTok{  ),}
+  \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{),}
+    \AttributeTok{chars =} \FunctionTok{c}\NormalTok{(}
+      \StringTok{"No answer"}\NormalTok{,}
+      \StringTok{"Very important"}\NormalTok{,}
+      \StringTok{"Rather important"}\NormalTok{,}
+      \StringTok{"Not very important"}\NormalTok{,}
+      \StringTok{"Not at all important"}
+\NormalTok{    )}
+\NormalTok{  )}
+\NormalTok{)}
+
+\CommentTok{\# Combine data into a dataframe}
+\NormalTok{Question.key }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(categories), }\ControlFlowTok{function}\NormalTok{(i) \{}
+  \FunctionTok{data.frame}\NormalTok{(}
+    \AttributeTok{Categories =} \FunctionTok{rep}\NormalTok{(categories[i], }\FunctionTok{length}\NormalTok{(vectors[[i]]}\SpecialCharTok{$}\NormalTok{values)),}
+    \AttributeTok{Question.Number =} \FunctionTok{rep}\NormalTok{(questions[i], }\FunctionTok{length}\NormalTok{(vectors[[i]]}\SpecialCharTok{$}\NormalTok{values)),}
+    \AttributeTok{Codebook =} \FunctionTok{rep}\NormalTok{(key[i], }\FunctionTok{length}\NormalTok{(vectors[[i]]}\SpecialCharTok{$}\NormalTok{values)),}
+    \AttributeTok{Question.values =}\NormalTok{ vectors[[i]]}\SpecialCharTok{$}\NormalTok{values,}
+    \AttributeTok{Question.chars =}\NormalTok{ vectors[[i]]}\SpecialCharTok{$}\NormalTok{chars}
+\NormalTok{  )}
+\NormalTok{\}))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{survey.predictors }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{education =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{Q275,}
+  \AttributeTok{employment =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V249,}
+  \AttributeTok{security =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V170,}
+  \AttributeTok{rights =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V142,}
+  \AttributeTok{health =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V190,}
+  \AttributeTok{social =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V5}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{summary }\OtherTok{=} \FunctionTok{describe}\NormalTok{(survey.predictors)}
+\FunctionTok{print}\NormalTok{(summary)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##            vars    n mean   sd median trimmed  mad min max range  skew kurtosis
+## education     1 1813 5.36 2.25      5    5.56 2.97  -2   9    11 -1.14     2.17
+## employment    2 1813 2.71 1.91      2    2.59 1.48  -2   8    10  0.23     0.19
+## security      3 1813 1.98 0.72      2    1.98 0.00  -2   4     6 -0.97     6.58
+## rights        4 1813 1.88 0.80      2    1.85 0.00  -2   4     6 -0.35     3.51
+## health        5 1813 3.64 0.88      4    3.87 0.00  -2   4     6 -3.50    15.93
+## social        6 1813 1.39 0.80      1    1.40 0.00  -2   4     6 -1.44     6.31
+##              se
+## education  0.05
+## employment 0.04
+## security   0.02
+## rights     0.02
+## health     0.02
+## social     0.02
+\end{verbatim}
+
+\hypertarget{distribution-of-predictors}{%
+\subsubsection{Distribution of
+predictors}\label{distribution-of-predictors}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot\_barplots }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(column, name, values\_fill) \{}
+  \FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{factor}\NormalTok{(}\SpecialCharTok{!!}\NormalTok{column), }\AttributeTok{fill =} \FunctionTok{factor}\NormalTok{(}\SpecialCharTok{!!}\NormalTok{column))) }\SpecialCharTok{+}
+    \FunctionTok{geom\_bar}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Distribution"}\NormalTok{, }\AttributeTok{x =}\NormalTok{ name, }\AttributeTok{fill =}\NormalTok{ name, }\AttributeTok{y =} \StringTok{"Count"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_blank}\NormalTok{(), }\AttributeTok{axis.ticks.x =} \FunctionTok{element\_blank}\NormalTok{())}
+\NormalTok{\}}
+
+\CommentTok{\# Get unique codebooks}
+\NormalTok{unique\_codebooks }\OtherTok{\textless{}{-}} \FunctionTok{unique}\NormalTok{(Question.key}\SpecialCharTok{$}\NormalTok{Codebook)}
+\CommentTok{\# Loop through each unique codebook and plot bar plot}
+\ControlFlowTok{for}\NormalTok{ (codebook }\ControlFlowTok{in}\NormalTok{ unique\_codebooks) \{}
+\NormalTok{  subset\_data }\OtherTok{\textless{}{-}} \FunctionTok{filter}\NormalTok{(Question.key, Codebook }\SpecialCharTok{==}\NormalTok{ codebook)}
+  \FunctionTok{print}\NormalTok{(}\FunctionTok{plot\_barplots}\NormalTok{(}\AttributeTok{column =} \FunctionTok{sym}\NormalTok{(codebook), }\AttributeTok{name =} \FunctionTok{unique}\NormalTok{(subset\_data}\SpecialCharTok{$}\NormalTok{Categories), }\AttributeTok{values\_fill =} \FunctionTok{unique}\NormalTok{(subset\_data}\SpecialCharTok{$}\NormalTok{Question.chars)))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-6-2.pdf}
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-6-3.pdf}
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-6-4.pdf}
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-6-5.pdf}
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-6-6.pdf}
+
+!!TODO PLEASE ADD DESCRIPTIONS FOR ABOVE GRAPHS
+
+\hypertarget{employment}{%
+\subsection{Employment}\label{employment}}
+
+\hypertarget{descriptive-analysis}{%
+\subsubsection{Descriptive Analysis:}\label{descriptive-analysis}}
+
+\begin{itemize}
+\tightlist
+\item
+  Full-time employment is most common, suggesting stable work schedules
+  for many.
+\item
+  Significant numbers of students and part-time employees, indicating a
+  mix of work and study.
+\item
+  Fewer respondents in self-employed, retired, and home duties
+  categories, showing less representation of these demographics.
+\item
+  Positively skewed distribution with a majority as full-time employees
+  and diminishing counts towards `Unemployed' and `Other'.
+\end{itemize}
+
+\hypertarget{statistical-analysis}{%
+\subsubsection{Statistical Analysis:}\label{statistical-analysis}}
+
+\begin{itemize}
+\tightlist
+\item
+  Mean employment score around 2.709, indicating a skew towards
+  full-time employment.
+\item
+  Median of 2, reinforcing the prevalence of full-time employment.
+\end{itemize}
+
+\hypertarget{education}{%
+\subsection{Education}\label{education}}
+
+\hypertarget{descriptive-analysis-1}{%
+\subsubsection{Descriptive Analysis:}\label{descriptive-analysis-1}}
+
+\begin{itemize}
+\tightlist
+\item
+  Upper secondary education is most prevalent, indicating a common level
+  of educational attainment.
+\item
+  A considerable proportion of respondents with a bachelor's degree,
+  possibly reflecting the target demographic or societal education
+  trends.
+\item
+  Lesser counts of post-secondary non-tertiary education, master's, or
+  doctoral degrees.
+\item
+  A distribution with a primary mode at upper secondary education and a
+  secondary mode at the bachelor level, with tapering counts at the
+  lowest and highest education levels.
+\end{itemize}
+
+\hypertarget{statistical-analysis-1}{%
+\subsubsection{Statistical Analysis:}\label{statistical-analysis-1}}
+
+\begin{itemize}
+\tightlist
+\item
+  Mean education level approximately 5.36, showing a skew towards upper
+  secondary education.
+\item
+  Median value of 5, indicating over half of the respondents completed
+  at least upper secondary education.
+\end{itemize}
+
+\hypertarget{security-perception}{%
+\subsection{Security Perception}\label{security-perception}}
+
+\hypertarget{descriptive-analysis-2}{%
+\subsubsection{Descriptive Analysis:}\label{descriptive-analysis-2}}
+
+\begin{itemize}
+\tightlist
+\item
+  Majority of respondents feel quite secure, which might reflect
+  societal stability or personal circumstances.
+\item
+  Smaller proportions feel very secure or not secure, suggesting fewer
+  extremes in security perception.
+\item
+  Negatively skewed distribution where a large majority feels `Quite
+  secure', and fewer responses are on the `Not very secure' or `Not at
+  all secure' end.
+\end{itemize}
+
+\hypertarget{statistical-analysis-2}{%
+\subsubsection{Statistical Analysis:}\label{statistical-analysis-2}}
+
+\begin{itemize}
+\tightlist
+\item
+  Mean close to 2, leaning towards `Quite secure'.
+\item
+  Median of 2, confirming `Quite secure' as a common sentiment.
+\end{itemize}
+
+\hypertarget{human-rights-perception}{%
+\subsection{Human Rights Perception}\label{human-rights-perception}}
+
+\hypertarget{descriptive-analysis-3}{%
+\subsubsection{Descriptive Analysis:}\label{descriptive-analysis-3}}
+
+\begin{itemize}
+\tightlist
+\item
+  Most believe there is `some respect' for human rights, indicating
+  moderate views.
+\item
+  Significant perception of `a great deal of respect', suggesting a
+  positive outlook among many.
+\item
+  A distribution with a slight negative skew, indicating that most
+  respondents feel there is `Some respect' for human rights, with a
+  substantial number also feeling there is `A great deal of respect'.
+\end{itemize}
+
+\hypertarget{statistical-analysis-3}{%
+\subsubsection{Statistical Analysis:}\label{statistical-analysis-3}}
+
+\begin{itemize}
+\tightlist
+\item
+  Mean of approximately 1.882, hinting the average perception is close
+  to `some respect'.
+\item
+  Median of 2, aligning with the average perception towards human
+  rights.
+\end{itemize}
+
+\hypertarget{health-treatment-levels}{%
+\subsection{Health Treatment Levels}\label{health-treatment-levels}}
+
+\hypertarget{descriptive-analysis-4}{%
+\subsubsection{Descriptive Analysis:}\label{descriptive-analysis-4}}
+
+\begin{itemize}
+\tightlist
+\item
+  Predominant `never' category might suggest good health or barriers to
+  healthcare.
+\item
+  `Sometimes' as the next most common response, indicating occasional
+  health concerns.
+\item
+  A heavily positively skewed distribution, where most respondents
+  `Never' seek treatment, with progressively fewer responses for more
+  frequent healthcare utilisation.
+\end{itemize}
+
+\hypertarget{statistical-analysis-4}{%
+\subsubsection{Statistical Analysis:}\label{statistical-analysis-4}}
+
+\begin{itemize}
+\tightlist
+\item
+  Mean around 3.638, trending towards infrequently seeking treatment.
+\item
+  Median of 4, suggesting the middle ground of responses leans towards
+  `rarely'.
+\end{itemize}
+
+\hypertarget{friendship-importance}{%
+\subsection{Friendship Importance}\label{friendship-importance}}
+
+\hypertarget{descriptive-analysis-5}{%
+\subsubsection{Descriptive Analysis:}\label{descriptive-analysis-5}}
+
+\begin{itemize}
+\tightlist
+\item
+  Friendship considered `very important' by many, emphasizing the high
+  value on social relationships.
+\item
+  `A strongly negatively skewed distribution, showing that 'Very
+  important' is the predominant response, with `Not at all important'
+  being the least common.
+\end{itemize}
+
+\hypertarget{statistical-analysis-5}{%
+\subsubsection{Statistical Analysis:}\label{statistical-analysis-5}}
+
+\begin{itemize}
+\tightlist
+\item
+  Mean skewed towards `very important', with a mean value of around
+  1.839.
+\item
+  Median value of 1, indicating a majority view friendship as `very
+  important'.
+  \textgreater\textgreater\textgreater\textgreater\textgreater\textgreater\textgreater{}
+  sarah
+\end{itemize}
+
+\hypertarget{lab-2-relationship-of-independent-and-dependent-variables}{%
+\section{Lab 2: Relationship of independent and dependent
+variables}\label{lab-2-relationship-of-independent-and-dependent-variables}}
+
+Recode our variables to provide the variables with more intuitive names,
+to make our work easier and also recode our predictors to character
+variables to do descriptive statistics.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{survey.data }\OtherTok{\textless{}{-}}\NormalTok{ survey.data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{happiness =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{recode}\NormalTok{(V10, }
+                                   \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \DecValTok{4}\NormalTok{,}
+                                   \StringTok{\textquotesingle{}2\textquotesingle{}} \OtherTok{=} \DecValTok{3}\NormalTok{,}
+                                   \StringTok{\textquotesingle{}3\textquotesingle{}} \OtherTok{=} \DecValTok{2}\NormalTok{,}
+                                   \StringTok{\textquotesingle{}4\textquotesingle{}} \OtherTok{=} \DecValTok{1}\NormalTok{, }
+                                   \StringTok{\textquotesingle{}{-}2\textquotesingle{}} \OtherTok{=} \ConstantTok{NULL}\NormalTok{),}
+         
+         \AttributeTok{health =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{recode}\NormalTok{(V11,}
+                                \StringTok{\textquotesingle{}1\textquotesingle{}} \OtherTok{=} \DecValTok{5}\NormalTok{, }
+                                \StringTok{\textquotesingle{}2\textquotesingle{}} \OtherTok{=} \DecValTok{4}\NormalTok{, }
+                                \StringTok{\textquotesingle{}3\textquotesingle{}} \OtherTok{=} \DecValTok{3}\NormalTok{,}
+                                \StringTok{\textquotesingle{}4\textquotesingle{}} \OtherTok{=} \DecValTok{2}\NormalTok{,}
+                                \StringTok{\textquotesingle{}5\textquotesingle{}} \OtherTok{=} \DecValTok{1}\NormalTok{, }
+                                \StringTok{\textquotesingle{}{-}2\textquotesingle{}} \OtherTok{=} \ConstantTok{NULL}\NormalTok{),}
+         
+         \AttributeTok{finances =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{recode}\NormalTok{(V59, }
+                                  \StringTok{\textquotesingle{}{-}2\textquotesingle{}} \OtherTok{=} \ConstantTok{NULL}\NormalTok{,}
+                                  \AttributeTok{.default =}\NormalTok{ V59),}
+         \AttributeTok{satisfaction =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{recode}\NormalTok{(V23, }
+                                  \StringTok{\textquotesingle{}{-}2\textquotesingle{}} \OtherTok{=} \ConstantTok{NULL}\NormalTok{,}
+                                  \AttributeTok{.default =}\NormalTok{ V23),}
+         \AttributeTok{freedom =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{recode}\NormalTok{(V55, }
+                                  \StringTok{\textquotesingle{}{-}2\textquotesingle{}} \OtherTok{=} \ConstantTok{NULL}\NormalTok{,}
+                                  \AttributeTok{.default =}\NormalTok{ V55))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{factor-analysis}{%
+\subsubsection{Factor Analysis}\label{factor-analysis}}
+
+Factor Analysis is a measurement model of a latent\\
+variable. Latent variable cannot be directly measured. Instead, it is
+seen through\\
+relationships between 𝑌 variables. We\\
+assume latent factor 𝐹 drives responses to variables 𝑌 .\\
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fa.fit }\OtherTok{\textless{}{-}} \FunctionTok{fa}\NormalTok{(survey.data[,}\FunctionTok{c}\NormalTok{(}\StringTok{"happiness"}\NormalTok{,}
+                         \StringTok{"health"}\NormalTok{,}
+                         \StringTok{"finances"}\NormalTok{, }
+                         \StringTok{"satisfaction"}\NormalTok{,}
+                         \StringTok{"freedom"}\NormalTok{)], }
+             \AttributeTok{nfactors=}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{survey.data}\SpecialCharTok{$}\NormalTok{life.quality }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(fa.fit}\SpecialCharTok{$}\NormalTok{scores)}
+\end{Highlighting}
+\end{Shaded}
+
+Factor analysis using fa will calculate the optimal weights as seen
+below.
+
+\begin{verbatim}
+## Factor Analysis using method =  minres
+## Call: fa(r = survey.data[, c("happiness", "health", "finances", "satisfaction", 
+##     "freedom")], nfactors = 1)
+## Standardized loadings (pattern matrix) based upon correlation matrix
+##               MR1   h2   u2 com
+## happiness    0.64 0.41 0.59   1
+## health       0.52 0.28 0.72   1
+## finances     0.63 0.39 0.61   1
+## satisfaction 0.93 0.86 0.14   1
+## freedom      0.71 0.50 0.50   1
+## 
+##                 MR1
+## SS loadings    2.43
+## Proportion Var 0.49
+## 
+## Mean item complexity =  1
+## Test of the hypothesis that 1 factor is sufficient.
+## 
+## df null model =  10  with the objective function =  1.73 with Chi Square =  3136.16
+## df of  the model are 5  and the objective function was  0.02 
+## 
+## The root mean square of the residuals (RMSR) is  0.02 
+## The df corrected root mean square of the residuals is  0.04 
+## 
+## The harmonic n.obs is  1788 with the empirical chi square  22.35  with prob <  0.00045 
+## The total n.obs was  1813  with Likelihood Chi Square =  33.28  with prob <  3.3e-06 
+## 
+## Tucker Lewis Index of factoring reliability =  0.982
+## RMSEA index =  0.056  and the 90 % confidence intervals are  0.039 0.075
+## BIC =  -4.23
+## Fit based upon off diagonal values = 1
+## Measures of factor score adequacy             
+##                                                    MR1
+## Correlation of (regression) scores with factors   0.95
+## Multiple R square of scores with factors          0.90
+## Minimum correlation of possible factor scores     0.79
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{summary}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{life.quality)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA's 
+## -3.92679 -0.43932  0.17440 -0.00189  0.65102  1.50623       55
+\end{verbatim}
+
+As you can see, these are approximately standardised, with a mean of
+zero and standard deviation of (almost) one. We can then use this to
+analyse the association between quality of life and different individual
+characteristics that are also available in this dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(life.quality)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{fill =} \StringTok{\textquotesingle{}black\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{theme\_minimal}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{figure}
+
+{\centering \includegraphics{group-project-1_files/figure-latex/histogram_of_quality_of_life-1} 
+
+}
+
+\caption{Distribution of quality of life measure produced by factor analysis.}\label{fig:histogram_of_quality_of_life}
+\end{figure}
+
+\hypertarget{descriptive-statistics}{%
+\subsection{Descriptive Statistics}\label{descriptive-statistics}}
+
+As seen above, there are 55 NA values which will be difficult to plot.
+We will remove these.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{survey.data }\OtherTok{=} \FunctionTok{drop\_na}\NormalTok{(survey.data, life.quality)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{relationship-of-dependent-variable-quality-of-life-and-the-chosen-predictors}{%
+\paragraph{Relationship of dependent variable (quality of life) and the
+chosen
+predictors}\label{relationship-of-dependent-variable-quality-of-life-and-the-chosen-predictors}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{life.quality, }\AttributeTok{y=}\NormalTok{V249, }\AttributeTok{fill =}\NormalTok{ V249)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Life Quality"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Employment categories"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"None"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Continuous x aesthetic
+## i did you forget `aes(group = ...)`?
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: The following aesthetics were dropped during statistical transformation: fill.
+## i This can happen when ggplot fails to infer the correct grouping structure in
+##   the data.
+## i Did you forget to specify a `group` aesthetic or to convert a numerical
+##   variable into a factor?
+\end{verbatim}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+The relationship plotted in this bar plot demonstrates that those who
+are employed tend to have a higher life quality than those who are not
+(besides those who are retired). Interestingly, those who are full time
+employed and retried show both ends quality of life with outliers
+towards the negative life quality (suggesting people who may struggle to
+increase life quality even though they have fulltime income or pension).
+Unemployment shows the largest range of life quality while as
+self-employed is mainly skewed towards higher values of life quality.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{life.quality, }\AttributeTok{y=}\NormalTok{Q275, }\AttributeTok{fill =}\NormalTok{ Q275)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Life Quality"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Education categories"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"None"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Continuous x aesthetic
+## i did you forget `aes(group = ...)`?
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: The following aesthetics were dropped during statistical transformation: fill.
+## i This can happen when ggplot fails to infer the correct grouping structure in
+##   the data.
+## i Did you forget to specify a `group` aesthetic or to convert a numerical
+##   variable into a factor?
+\end{verbatim}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+Life quality in relation to education interestingly is always has a
+median above 0, showing positive median life qualities for all
+categories. However, the spread of life quality is diverse with those
+having a doctoral or masters tending to have a smaller IQR and
+positioned to have a higher life quality while as those with primary
+education only or no formal education, more prone to a larger IQR spread
+suggesting more people experiencing lower life qualities in those
+categories as well as high. Interestingly, there are outliers in
+individuals with bachelors or post secondary non-tertiary education
+suggesting that there could be people with degrees however unable to
+achieve higher life quality maybe due to of lack of access to jobs, not
+enough specialisation in their degrees.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{life.quality, }\AttributeTok{y=}\NormalTok{V170, }\AttributeTok{fill =}\NormalTok{ V170)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Life Quality"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Security categories"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"None"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Continuous x aesthetic
+## i did you forget `aes(group = ...)`?
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: The following aesthetics were dropped during statistical transformation: fill.
+## i This can happen when ggplot fails to infer the correct grouping structure in
+##   the data.
+## i Did you forget to specify a `group` aesthetic or to convert a numerical
+##   variable into a factor?
+\end{verbatim}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+Security demonstrates a strong positive relationship with life quality,
+those who are not feeling secure tend to have lower life quality while
+as those who are very secure tend to have higher life quality, aligning
+with our theory described in lab 1. Interestingly, those who are very
+secure, have a positive IQR, demonstrating a high proportion with
+positive life qualities while as those who are not at all secure have a
+large IQR below 0.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{life.quality, }\AttributeTok{y=}\NormalTok{V142, }\AttributeTok{fill =}\NormalTok{ V142)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Life Quality"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Human Rights categories"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"None"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Continuous x aesthetic
+## i did you forget `aes(group = ...)`?
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: The following aesthetics were dropped during statistical transformation: fill.
+## i This can happen when ggplot fails to infer the correct grouping structure in
+##   the data.
+## i Did you forget to specify a `group` aesthetic or to convert a numerical
+##   variable into a factor?
+\end{verbatim}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+Human rights shows an interesting relationship to life quality. Those
+with a great deal of respect tend to have higher life quality in
+comparison to no respect at all, aligning with our theory. It is
+interesting that with no human respect at all, there can still be values
+in the positive life quality with Q3 reaching positive life quality
+values and the whisker on the right still reaching high life quality
+values.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{life.quality, }\AttributeTok{y=}\NormalTok{V190, }\AttributeTok{fill =}\NormalTok{ V190)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Life Quality"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Health Treatment categories"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"None"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Continuous x aesthetic
+## i did you forget `aes(group = ...)`?
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: The following aesthetics were dropped during statistical transformation: fill.
+## i This can happen when ggplot fails to infer the correct grouping structure in
+##   the data.
+## i Did you forget to specify a `group` aesthetic or to convert a numerical
+##   variable into a factor?
+\end{verbatim}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+Those who never get health treatment show two ends of the spectrum of
+life quality, those who never get health treatment due to never being
+ill and those who never get health treatment due to lack of access. If
+we go with the first reasoning, the positive skew of the Never category
+makes sense as those with higher life quality will tend to not be
+ill.~This is further represented in the lowest box plot category of
+Often, suggesting that those who require regular health treatment and
+are often ill, have lower life qualities. Similarly, the category of
+Sometimes has a slightly higher IQR range and then Rarely has an even
+higher IQR range. This relationship represent that those with better
+health tend to have a higher life quality.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(survey.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x=}\NormalTok{life.quality, }\AttributeTok{y=}\NormalTok{V5, }\AttributeTok{fill =}\NormalTok{ V5)) }\SpecialCharTok{+} 
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Life Quality"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Friendship categories"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Spectral"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"None"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Continuous x aesthetic
+## i did you forget `aes(group = ...)`?
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: The following aesthetics were dropped during statistical transformation: fill.
+## i This can happen when ggplot fails to infer the correct grouping structure in
+##   the data.
+## i Did you forget to specify a `group` aesthetic or to convert a numerical
+##   variable into a factor?
+\end{verbatim}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+Friendship is obviously an important factor to life quality with those
+who deem friendship as Very Important having the greatest positive skew
+in the boxplot. Rarely Important has not much of a lower IQR but Not
+very important and Not at all important highlight the decrease on life
+quality and the significance of this social factor on an individuals
+life quality.
+
+\hypertarget{regression-model}{%
+\subsection{Regression Model}\label{regression-model}}
+
+In our dataset, certain variables fall into an ordinal category, which
+means they are ranked on a scale that assesses concepts, such as
+``perceived security.'' These ordinal variables are coded numerically to
+reflect a spectrum where lower numbers denote a higher sense of
+security, and higher numbers correspond to a lower sense of security. We
+can standardise these variables due to their sequential nature, allowing
+us to treat them as continuous predictors in our regression analysis.
+
+In contrast, variables that capture education and employment status lack
+a natural, hierarchical structure; for instance, being self-employed
+isn't qualitatively superior to being employed full-time. Given their
+nominal characteristics, these variables will be incorporated into our
+regression model as categorical factors, acknowledging the absence of a
+rank order among the categories.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# creating a new data frame that will store the independant variables we are testing. }
+\NormalTok{survey.predictors }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{education =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{Q275,}
+  \AttributeTok{employment =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V249,}
+  \AttributeTok{security =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V170,}
+  \AttributeTok{rights =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V142,}
+  \AttributeTok{health =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V190,}
+  \AttributeTok{social =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{V5,}
+  \AttributeTok{life.qual =}\NormalTok{ survey.data}\SpecialCharTok{$}\NormalTok{life.qual}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\# including the categorical answers}
+
+\DocumentationTok{\#\#\#\# Employment Q279: Are you employed now or not? If yes, about how many hours a week do you work? If you have more than one job, please tell us about your main job only. }
+\NormalTok{survey.predictors}\SpecialCharTok{$}\NormalTok{emp\_cat }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{V249, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{{-}2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No answer"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Full time employee (30 hours a week or more)"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Part time employee (less than 30 hours a week)"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Self{-}employed"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Retired / On a pension"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{5}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Home duties, not otherwise employed"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{6}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Student"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{7}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Unemployed"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{8}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Other (please specify)"}\NormalTok{)}
+
+\DocumentationTok{\#\#\#\# Education {-} Q275: What is your highest educational level that you have attained?}
+\NormalTok{survey.predictors}\SpecialCharTok{$}\NormalTok{edu\_cat }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{Q275, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{{-}2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No answer"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No formal education"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Primary education only"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Lower secondary education (i.e. Year 9 or less)"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Upper secondary education (i.e. between Year 10 and Year 12)"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{5}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Post{-}secondary non{-}tertiary education (e.g. apprenticeship or certificate)"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{7}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Bachelor or equivalent"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{8}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Master or equivalent"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{9}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Doctoral or equivalent"}\NormalTok{)}
+
+
+\DocumentationTok{\#\#\#\# Security {-} Q131: how secure do you feel these days?}
+\NormalTok{survey.predictors}\SpecialCharTok{$}\NormalTok{secure\_cat }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{V170, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{{-}2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No answer"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Very secure"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Quite secure"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Not very secure"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Not at all secure"}\NormalTok{)}
+
+\DocumentationTok{\#\#\#\# Human Rights {-} Q253: How much respect is there for individual human rights nowadays in this country? Do you feel there is...}
+\NormalTok{survey.predictors}\SpecialCharTok{$}\NormalTok{rights\_cat }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{V142, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{{-}2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No answer"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"A great deal of respect"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Some respect"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Not much respect"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No respect at all"}\NormalTok{)}
+
+\DocumentationTok{\#\#\#\# Health Levels {-} Q53: "In the last 12 months, how often have you or your family gone without medicine or medical treatment that you needed?}
+\NormalTok{survey.predictors}\SpecialCharTok{$}\NormalTok{health\_cat }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{V190, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{{-}2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No answer"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Often"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Sometimes"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Rarely"}\NormalTok{, }
+                           \StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Never"}\NormalTok{)}
+
+\DocumentationTok{\#\#\#\# Social \& Personal Connectivity {-} Q2. For each of the following, indicate how important it is in your life. How important is... Family, Friends}
+\NormalTok{survey.predictors}\SpecialCharTok{$}\NormalTok{social\_cat }\OtherTok{\textless{}{-}} \FunctionTok{recode}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{V5, }
+                         \StringTok{\textasciigrave{}}\AttributeTok{{-}2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"No answer"}\NormalTok{, }
+                         \StringTok{\textasciigrave{}}\AttributeTok{1}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Very important"}\NormalTok{, }
+                         \StringTok{\textasciigrave{}}\AttributeTok{2}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Rather important"}\NormalTok{, }
+                         \StringTok{\textasciigrave{}}\AttributeTok{3}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Not very important"}\NormalTok{, }
+                         \StringTok{\textasciigrave{}}\AttributeTok{4}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"Not at all important"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DocumentationTok{\#\#Dropping the non answers as this will no help our regression model as it provides no information. }
+\NormalTok{survey.predictors2 }\OtherTok{=} \FunctionTok{drop\_na}\NormalTok{(survey.predictors, life.qual)}
+\NormalTok{survey.predictors2 }\OtherTok{\textless{}{-}}\NormalTok{ survey.predictors2[}\SpecialCharTok{!}\NormalTok{(survey.predictors2}\SpecialCharTok{$}\NormalTok{education }\SpecialCharTok{==} \SpecialCharTok{{-}}\DecValTok{2} \SpecialCharTok{|}
+\NormalTok{                           survey.predictors2}\SpecialCharTok{$}\NormalTok{employment }\SpecialCharTok{==} \SpecialCharTok{{-}}\DecValTok{2} \SpecialCharTok{|}
+\NormalTok{                           survey.predictors2}\SpecialCharTok{$}\NormalTok{security }\SpecialCharTok{==} \SpecialCharTok{{-}}\DecValTok{2} \SpecialCharTok{|}
+\NormalTok{                           survey.predictors2}\SpecialCharTok{$}\NormalTok{rights }\SpecialCharTok{==} \SpecialCharTok{{-}}\DecValTok{2} \SpecialCharTok{|}
+\NormalTok{                           survey.predictors2}\SpecialCharTok{$}\NormalTok{health }\SpecialCharTok{==} \SpecialCharTok{{-}}\DecValTok{2} \SpecialCharTok{|}
+\NormalTok{                            survey.predictors2}\SpecialCharTok{$}\NormalTok{social }\SpecialCharTok{==} \SpecialCharTok{{-}}\DecValTok{2}\NormalTok{ )  ,]}
+ 
+
+\NormalTok{scaled\_df }\OtherTok{\textless{}{-}}\NormalTok{ survey.predictors2 }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{scaled\_education =} \FunctionTok{scale}\NormalTok{(education),}
+    \AttributeTok{scaled\_employment =} \FunctionTok{scale}\NormalTok{(employment),}
+    \AttributeTok{scaled\_security =} \FunctionTok{scale}\NormalTok{(security),}
+    \AttributeTok{scaled\_rights =} \FunctionTok{scale}\NormalTok{(rights),}
+    \AttributeTok{scaled\_health =} \FunctionTok{scale}\NormalTok{(health) ,}
+    \AttributeTok{scaled\_social =} \FunctionTok{scale}\NormalTok{(social) , }
+    \AttributeTok{scaled\_life =} \FunctionTok{scale}\NormalTok{(life.qual)}
+\NormalTok{  )}
+\CommentTok{\# Then run the regression model on the new dataframe:}
+\NormalTok{regmodel }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(life.qual }\SpecialCharTok{\textasciitilde{}}\NormalTok{ emp\_cat }\SpecialCharTok{+}\NormalTok{ edu\_cat }\SpecialCharTok{+}\NormalTok{ scaled\_security }\SpecialCharTok{+}\NormalTok{ scaled\_rights }\SpecialCharTok{+}\NormalTok{ scaled\_health }\SpecialCharTok{+}\NormalTok{ scaled\_social , }\AttributeTok{data =}\NormalTok{ scaled\_df)}
+
+\CommentTok{\# Summarise the regression model}
+\FunctionTok{summary}\NormalTok{(regmodel)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = life.qual ~ emp_cat + edu_cat + scaled_security + 
+##     scaled_rights + scaled_health + scaled_social, data = scaled_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.4911 -0.3882  0.0831  0.5410  2.4398 
+## 
+## Coefficients:
+##                                                                                    Estimate
+## (Intercept)                                                                       -0.055001
+## emp_catHome duties, not otherwise employed                                         0.058519
+## emp_catOther (please specify)                                                     -0.397207
+## emp_catPart time employee (less than 30 hours a week)                              0.076899
+## emp_catRetired / On a pension                                                      0.199020
+## emp_catSelf-employed                                                               0.184175
+## emp_catStudent                                                                    -0.300322
+## emp_catUnemployed                                                                 -0.535204
+## edu_catDoctoral or equivalent                                                      0.051841
+## edu_catLower secondary education (i.e. Year 9 or less)                             0.077258
+## edu_catMaster or equivalent                                                        0.050261
+## edu_catNo formal education                                                         0.168186
+## edu_catPost-secondary non-tertiary education (e.g. apprenticeship or certificate) -0.002792
+## edu_catPrimary education only                                                     -0.160930
+## edu_catUpper secondary education (i.e. between Year 10 and Year 12)               -0.056069
+## scaled_security                                                                   -0.175845
+## scaled_rights                                                                     -0.118356
+## scaled_health                                                                      0.236538
+## scaled_social                                                                     -0.080459
+##                                                                                   Std. Error
+## (Intercept)                                                                         0.044376
+## emp_catHome duties, not otherwise employed                                          0.098363
+## emp_catOther (please specify)                                                       0.181176
+## emp_catPart time employee (less than 30 hours a week)                               0.062766
+## emp_catRetired / On a pension                                                       0.052391
+## emp_catSelf-employed                                                                0.082495
+## emp_catStudent                                                                      0.132031
+## emp_catUnemployed                                                                   0.121466
+## edu_catDoctoral or equivalent                                                       0.120766
+## edu_catLower secondary education (i.e. Year 9 or less)                              0.096018
+## edu_catMaster or equivalent                                                         0.069853
+## edu_catNo formal education                                                          0.409225
+## edu_catPost-secondary non-tertiary education (e.g. apprenticeship or certificate)   0.054922
+## edu_catPrimary education only                                                       0.180245
+## edu_catUpper secondary education (i.e. between Year 10 and Year 12)                 0.057674
+## scaled_security                                                                     0.022054
+## scaled_rights                                                                       0.021113
+## scaled_health                                                                       0.021507
+## scaled_social                                                                       0.020465
+##                                                                                   t value
+## (Intercept)                                                                        -1.239
+## emp_catHome duties, not otherwise employed                                          0.595
+## emp_catOther (please specify)                                                      -2.192
+## emp_catPart time employee (less than 30 hours a week)                               1.225
+## emp_catRetired / On a pension                                                       3.799
+## emp_catSelf-employed                                                                2.233
+## emp_catStudent                                                                     -2.275
+## emp_catUnemployed                                                                  -4.406
+## edu_catDoctoral or equivalent                                                       0.429
+## edu_catLower secondary education (i.e. Year 9 or less)                              0.805
+## edu_catMaster or equivalent                                                         0.720
+## edu_catNo formal education                                                          0.411
+## edu_catPost-secondary non-tertiary education (e.g. apprenticeship or certificate)  -0.051
+## edu_catPrimary education only                                                      -0.893
+## edu_catUpper secondary education (i.e. between Year 10 and Year 12)                -0.972
+## scaled_security                                                                    -7.974
+## scaled_rights                                                                      -5.606
+## scaled_health                                                                      10.998
+## scaled_social                                                                      -3.932
+##                                                                                   Pr(>|t|)
+## (Intercept)                                                                       0.215367
+## emp_catHome duties, not otherwise employed                                        0.551978
+## emp_catOther (please specify)                                                     0.028496
+## emp_catPart time employee (less than 30 hours a week)                             0.220694
+## emp_catRetired / On a pension                                                     0.000151
+## emp_catSelf-employed                                                              0.025716
+## emp_catStudent                                                                    0.023060
+## emp_catUnemployed                                                                 1.12e-05
+## edu_catDoctoral or equivalent                                                     0.667785
+## edu_catLower secondary education (i.e. Year 9 or less)                            0.421157
+## edu_catMaster or equivalent                                                       0.471927
+## edu_catNo formal education                                                        0.681137
+## edu_catPost-secondary non-tertiary education (e.g. apprenticeship or certificate) 0.959456
+## edu_catPrimary education only                                                     0.372078
+## edu_catUpper secondary education (i.e. between Year 10 and Year 12)               0.331107
+## scaled_security                                                                   2.91e-15
+## scaled_rights                                                                     2.44e-08
+## scaled_health                                                                      < 2e-16
+## scaled_social                                                                     8.80e-05
+##                                                                                      
+## (Intercept)                                                                          
+## emp_catHome duties, not otherwise employed                                           
+## emp_catOther (please specify)                                                     *  
+## emp_catPart time employee (less than 30 hours a week)                                
+## emp_catRetired / On a pension                                                     ***
+## emp_catSelf-employed                                                              *  
+## emp_catStudent                                                                    *  
+## emp_catUnemployed                                                                 ***
+## edu_catDoctoral or equivalent                                                        
+## edu_catLower secondary education (i.e. Year 9 or less)                               
+## edu_catMaster or equivalent                                                          
+## edu_catNo formal education                                                           
+## edu_catPost-secondary non-tertiary education (e.g. apprenticeship or certificate)    
+## edu_catPrimary education only                                                        
+## edu_catUpper secondary education (i.e. between Year 10 and Year 12)                  
+## scaled_security                                                                   ***
+## scaled_rights                                                                     ***
+## scaled_health                                                                     ***
+## scaled_social                                                                     ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.812 on 1597 degrees of freedom
+## Multiple R-squared:  0.2381, Adjusted R-squared:  0.2295 
+## F-statistic: 27.72 on 18 and 1597 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\hypertarget{regression-results}{%
+\subsection{Regression Results}\label{regression-results}}
+
+\#\#\#\#Employment: Employment status appears to have a varied impact on
+quality of life. Individuals who are retired or on a pension report a
+higher quality of life, with a coefficient of 0.19920 and a highly
+significant p-value of 0.000151, implying that retirement may be
+associated with increased satisfaction, possibly due to more leisure
+time and less work-related stress. Part-time workers also report a
+better quality of life (coefficient: 0.076989) with a significant
+p-value (0.026904), which might suggest a balance between work and
+personal time that contributes positively to their overall well-being.
+
+Conversely, unemployment is associated with a lower quality of life, as
+indicated by a negative coefficient of -0.353024 and a very significant
+p-value (1.12e-05). This is understandable as unemployment can lead to
+financial strain, social stigma, and psychological distress, all of
+which can detract from one's quality of life.
+
+The coefficient for students is negative (-0.300322) with a significant
+p-value (0.023060). This suggests that being a student is associated
+with a lower quality of life in the survey population. This finding can
+open up a discussion about the potential stressors associated with
+student life, such as academic pressure, financial difficulties due to
+tuition fees and living expenses, and perhaps a lack of work-life
+balance. It might also reflect a transitional life stage where students
+are still establishing their careers and social identities, which could
+impact their perceived quality of life.
+
+The self-employed category also presents a negative coefficient
+(-0.184175) with a significant p-value (0.025716). This indicates that
+self-employment correlates with a somewhat lower quality of life. This
+result can be discussed in light of the challenges that self-employed
+individuals often face, such as income variability, lack of employment
+benefits, and the demands of managing one's own business. While
+self-employment can offer autonomy and flexibility, it can also come
+with increased responsibilities and uncertainty, which may adversely
+affect one's quality of life.
+
+\#\#\#\#Education: The impact of education on quality of life, as per
+the dataset, does not reach statistical significance. This result is
+intriguing and could be a subject of further discussion. It might point
+to a potential ceiling effect where, beyond a certain level, additional
+education does not translate to improved quality of life. Alternatively,
+it could indicate that in the UK context, other factors may play more
+pivotal roles in influencing quality of life than educational attainment
+alone.
+
+\#\#\#\#Security: Feeling secure is critically linked to quality of
+life. The dataset shows a strong negative relationship between the lack
+of security and quality of life, with a coefficient of -0.178545 and a
+very significant p-value (2.94e-15). As the survey produced results
+where the lower the number of the response - the more secure they are,
+hence represented in the negative coefficient.
+
+\#\#\#\#Human Rights (Respect): Respect for human rights is
+significantly associated with a better quality of life (coefficient:
+-0.118356, p-value: 5.56e-06) the survey produced results where the
+lower the number in the response indicates a greater amount of respect
+for human rights. This association could be discussed in terms of
+societal factors where individuals who perceive their rights as
+well-respected may feel more valued and supported within their
+community, which can enhance their perceived quality of life.
+
+\hypertarget{health-access}{%
+\paragraph{Health Access:}\label{health-access}}
+
+Access to healthcare is a major determinant of quality of life, as
+indicated by the positive coefficient of 0.236538 and a highly
+significant p-value (2e-16). The ability to obtain necessary medical
+treatment without undue hardship is clearly a key component of overall
+well-being. This indicated through the higher coefficient, as the survey
+produced results where the higher the number reported for health care
+access, the less likely they have been denied or unable to access needed
+medicine.
+
+\hypertarget{social---value-of-friendships}{%
+\paragraph{Social - Value of
+friendships}\label{social---value-of-friendships}}
+
+The dataset reveals a relationship between the value placed on social
+connections and the quality of life with a coefficient of -0.080459 and
+p-value of 8.80e-05, as in the response the lower the number reported -
+the higher value placed on friendships. A high value on social
+connections, such as relationships with family and friends, is
+correlated with an individual's quality of life. This is reflective of
+the well-documented view that robust social ties are essential for
+psychological well-being, providing support, a sense of belonging, and
+contributing to an individual's identity and purpose.
+
+\hypertarget{validating-factor-analysis}{%
+\subsubsection{Validating Factor
+analysis}\label{validating-factor-analysis}}
+
+Factor analysis has assumptions including:
+
+\begin{itemize}
+\item
+  Underlying latent trait
+\item
+  Items are continuous measures (or conceptualised as continuous)
+\item
+  Correlations are linear
+\item
+  There are no outliers
+\item
+  There is adequate data
+\end{itemize}
+
+To validate this dependent variable, it is assessed using validity and
+reliability where reliability is the measure of the latent trait with
+the least measurement error and validity is whether the measure actually
+represent what its supposed to.
+
+To measure reliabilty, we examine the proportion of the variance of the
+predictor that is account for by variance in the latent variable. In
+World Values survey data, there is other variables expected to be
+associated with the latent variable. For example, Q56. Comparing your
+standard of living with your parent's standard of living when they were
+about your age, would you say that you are better off, worse off, or
+about the same?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{result }\OtherTok{\textless{}{-}} \FunctionTok{polr}\NormalTok{(}\AttributeTok{formula =}\NormalTok{ Q56 }\SpecialCharTok{\textasciitilde{}}\NormalTok{life.quality, }\AttributeTok{data =}\NormalTok{ survey.data }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Q56 =} \FunctionTok{factor}\NormalTok{(Q56, }\AttributeTok{levels =} \FunctionTok{c}\NormalTok{(}\StringTok{"2"}\NormalTok{, }\StringTok{"3"}\NormalTok{, }\StringTok{"1"}\NormalTok{ ))))}
+\NormalTok{result}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Call:
+## polr(formula = Q56 ~ life.quality, data = survey.data %>% mutate(Q56 = factor(Q56, 
+##     levels = c("2", "3", "1"))))
+## 
+## Coefficients:
+## life.quality 
+##    0.5678809 
+## 
+## Intercepts:
+##        2|3        3|1 
+## -2.0269912 -0.3135848 
+## 
+## Residual Deviance: 3166.618 
+## AIC: 3172.618 
+## (5 observations deleted due to missingness)
+\end{verbatim}
+
+The results of the fitted proportional odds log regression model is
+presented above. The coefficient of 0.5679 is positive and indicates
+higher values of life quality associated with higher odds of moving to
+higher categories in Q56.
+
+!! TODO fix this model lol its so ugly
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 1. Generate a sequence of values for life.quality}
+\NormalTok{life\_quality\_seq }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\FunctionTok{min}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{life.quality), }\FunctionTok{max}\NormalTok{(survey.data}\SpecialCharTok{$}\NormalTok{life.quality), }\AttributeTok{length.out =} \DecValTok{100}\NormalTok{)}
+
+\CommentTok{\# 2. Compute predicted probabilities for each level of Q56 at each value of life.quality}
+\NormalTok{predicted\_probs }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(result, }\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{life.quality =}\NormalTok{ life\_quality\_seq), }\AttributeTok{type =} \StringTok{"probs"}\NormalTok{)}
+
+\CommentTok{\# 3. Plot the predicted probabilities against life.quality for each level of Q56}
+\FunctionTok{plot}\NormalTok{(life\_quality\_seq, predicted\_probs[, }\DecValTok{1}\NormalTok{], }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{), }\AttributeTok{xlab =} \StringTok{"Life Quality"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Predicted Probability"}\NormalTok{, }\AttributeTok{col =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{, }\AttributeTok{main =} \StringTok{"Predicted Probability of Q56"}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(life\_quality\_seq, predicted\_probs[, }\DecValTok{2}\NormalTok{], }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\FunctionTok{lines}\NormalTok{(life\_quality\_seq, predicted\_probs[, }\DecValTok{3}\NormalTok{], }\AttributeTok{type =} \StringTok{"l"}\NormalTok{, }\AttributeTok{col =} \StringTok{"green"}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\CommentTok{\# Add more lines if you have additional levels of Q56}
+\FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Better off"}\NormalTok{, }\StringTok{"Worse off"}\NormalTok{, }\StringTok{"About the same"}\NormalTok{), }\AttributeTok{col =} \FunctionTok{c}\NormalTok{(}\StringTok{"blue"}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"green"}\NormalTok{), }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-1_files/figure-latex/unnamed-chunk-18-1.pdf}
+
+\hfill\break
+We'd assume people with people with high quality of life, they should be
+the same or higher quality than their parents. This relationship can be
+seen in the graph as the quality of life is better than parents
+increases dramatically with quality of life. Those with lower life
+quality demonstrate low predicted probabilities below 20\% to say they
+are living off better than their parents. This strong relationship is a
+good demonstration of reliability
+
+Inter-item reliability: the consistency between multiple items measuring
+the same construct, measured using Cronbach's alpha.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{alpha}\NormalTok{(survey.data[,}\FunctionTok{c}\NormalTok{(}\StringTok{"happiness"}\NormalTok{,}
+                         \StringTok{"health"}\NormalTok{,}
+                         \StringTok{"finances"}\NormalTok{, }
+                         \StringTok{"satisfaction"}\NormalTok{,}
+                         \StringTok{"freedom"}\NormalTok{)])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Reliability analysis   
+## Call: alpha(x = survey.data[, c("happiness", "health", "finances", 
+##     "satisfaction", "freedom")])
+## 
+##   raw_alpha std.alpha G6(smc) average_r S/N    ase mean  sd median_r
+##       0.77      0.81    0.79      0.46 4.3 0.0069  5.8 1.2     0.44
+## 
+##     95% confidence boundaries 
+##          lower alpha upper
+## Feldt     0.75  0.77  0.78
+## Duhachek  0.75  0.77  0.78
+## 
+##  Reliability if an item is dropped:
+##              raw_alpha std.alpha G6(smc) average_r S/N alpha se  var.r med.r
+## happiness         0.76      0.78    0.75      0.47 3.6   0.0079 0.0175  0.46
+## health            0.76      0.81    0.78      0.52 4.3   0.0075 0.0122  0.53
+## finances          0.74      0.79    0.76      0.48 3.7   0.0074 0.0138  0.44
+## satisfaction      0.63      0.72    0.66      0.39 2.5   0.0111 0.0027  0.39
+## freedom           0.69      0.77    0.74      0.46 3.3   0.0088 0.0138  0.43
+## 
+##  Item statistics 
+##                 n raw.r std.r r.cor r.drop mean   sd
+## happiness    1758  0.63  0.74  0.65   0.56  3.2 0.61
+## health       1758  0.57  0.67  0.53   0.46  3.9 0.85
+## finances     1758  0.81  0.73  0.62   0.58  6.7 2.26
+## satisfaction 1758  0.88  0.87  0.87   0.78  7.5 1.74
+## freedom      1758  0.81  0.77  0.70   0.63  7.7 1.92
+## 
+## Non missing response frequency for each item
+##                 1    2    3    4    5    6    7    8    9   10 miss
+## happiness    0.01 0.07 0.61 0.31 0.00 0.00 0.00 0.00 0.00 0.00    0
+## health       0.01 0.04 0.20 0.49 0.26 0.00 0.00 0.00 0.00 0.00    0
+## finances     0.03 0.03 0.05 0.06 0.11 0.12 0.18 0.21 0.13 0.09    0
+## satisfaction 0.01 0.01 0.02 0.02 0.08 0.08 0.17 0.32 0.19 0.10    0
+## freedom      0.01 0.01 0.02 0.02 0.08 0.07 0.16 0.28 0.15 0.19    0
+\end{verbatim}
+
+Cronbach's alpha coefficient indicates the reliability with a value
+closer to 1 indicating higher reliability. Here the raw cronbach alpha
+is 0.77 (2dp) and the individiual raw alphas are all about 0.7 or higher
+suggesting that there is consistency of each item.
+
+\hypertarget{conclusion}{%
+\subsubsection{Conclusion}\label{conclusion}}
+
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+\begin{quote}
+sarah
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+\end{quote}
+
+\end{document}
