@@ -20,6 +20,7 @@ library(dplyr)
 library(ggplot2)
 library(psych)
 library(tidyr)
+library(foreign)
 ```
 
 # Lab 1: Creating Predictors
@@ -272,8 +273,7 @@ survey.predictors <- data.frame(
   security = survey.data$V170,
   rights = survey.data$V142,
   health = survey.data$V190,
-  social = survey.data$V5,
-  satisfaction = survey.data$V23
+  social = survey.data$V5
 )
 ```
 
@@ -396,11 +396,9 @@ survey.data <- survey.data %>%
          finances = dplyr::recode(V59, 
                                   '-2' = NULL,
                                   .default = V59),
-         
          satisfaction = dplyr::recode(V23, 
                                   '-2' = NULL,
                                   .default = V23),
-         
          freedom = dplyr::recode(V55, 
                                   '-2' = NULL,
                                   .default = V55))
@@ -439,49 +437,31 @@ ggplot(survey.data, aes(life.quality)) +
 
 
 ```{r}
-
+## creating a new data frame that will store the independant variables we are testing. 
 survey.data$life.quality <- as.numeric(fa.fit$scores)
 
-survey.predictors2 <- data.frame(
+survey.predictors <- data.frame(
   education = survey.data$Q275,
   employment = survey.data$V249,
   security = survey.data$V170,
   rights = survey.data$V142,
   health = survey.data$V190,
   social = survey.data$V5,
-  satisfaction = survey.data$V23,
   life.qual = survey.data$life.quality
 )
-
-
-survey.predictors2 = drop_na(survey.predictors2, life.qual)
-
-
-
-
-# Creating a new dataframe with variables scaled and then divided by 2
-scaled_df <- survey.predictors2 %>%
-  mutate(
-    scaled_education = scale(education)[, 1] / 2,
-    scaled_employment = scale(employment)[, 1] / 2,
-    scaled_security = scale(security)[, 1] / 2,
-    scaled_rights = scale(rights)[, 1] / 2,
-    scaled_health = scale(health)[, 1] / 2,
-    scaled_social = scale(social)[, 1] / 2,
-    scaled_satisfaction = scale(satisfaction)[, 1] / 2
-  )
-
-# Then run the regression model on the new dataframe:
-regmodel <- lm(life.qual ~ scaled_education + scaled_employment + scaled_security + scaled_rights + scaled_health + scaled_social + scaled_satisfaction, data = scaled_df)
-
-# Summarise the regression model
-summary(regmodel)
-
 ```
 
+## Linear Regression
+
+In our dataset, certain variables fall into an ordinal category, which means they are ranked on a scale that assesses concepts, such as "perceived security." These ordinal variables are coded numerically to reflect a spectrum where lower numbers denote a higher sense of security, and higher numbers correspond to a lower sense of security. We can standardise these variables due to their sequential nature,  allowing us to treat them as continuous predictors in our regression analysis.
+
+In contrast, variables that capture education and employment status lack a natural, hierarchical structure; for instance, being self-employed isn't qualitatively superior to being employed full-time. Given their nominal characteristics, these variables will be incorporated into our regression model as categorical factors, acknowledging the absence of a rank order among the categories.
 
 ```{r}
-survey.predictors$V249 <- recode(survey.data$V249, 
+## including the categorical answers
+
+#### Employment Q279: Are you employed now or not? If yes, about how many hours a week do you work? If you have more than one job, please tell us about your main job only. 
+survey.predictors$emp_cat <- recode(survey.data$V249, 
                            `-2` = "No answer", 
                            `1` = "Full time employee (30 hours a week or more)", 
                            `2` = "Part time employee (less than 30 hours a week)", 
@@ -492,7 +472,8 @@ survey.predictors$V249 <- recode(survey.data$V249,
                            `7` = "Unemployed", 
                            `8` = "Other (please specify)")
 
-survey.predictors$Q275 <- recode(survey.data$Q275, 
+#### Education - Q275: What is your highest educational level that you have attained?
+survey.predictors$edu_cat <- recode(survey.data$Q275, 
                            `-2` = "No answer", 
                            `1` = "No formal education", 
                            `2` = "Primary education only", 
@@ -503,34 +484,100 @@ survey.predictors$Q275 <- recode(survey.data$Q275,
                            `8` = "Master or equivalent", 
                            `9` = "Doctoral or equivalent")
 
-survey.predictors$V170 <- recode(survey.data$V170, 
+
+#### Security - Q131: how secure do you feel these days?
+survey.predictors$secure_cat <- recode(survey.data$V170, 
                            `-2` = "No answer", 
                            `1` = "Very secure", 
                            `2` = "Quite secure", 
                            `3` = "Not very secure", 
                            `4` = "Not at all secure")
 
-survey.predictors$V142 <- recode(survey.data$V142, 
+#### Human Rights - Q253: How much respect is there for individual human rights nowadays in this country? Do you feel there is...
+survey.predictors$rights_cat <- recode(survey.data$V142, 
                            `-2` = "No answer", 
                            `1` = "A great deal of respect", 
                            `2` = "Some respect", 
                            `3` = "Not much respect", 
                            `4` = "No respect at all")
 
-survey.predictors$V190 <- recode(survey.data$V190, 
+#### Health Levels - Q53: "In the last 12 months, how often have you or your family gone without medicine or medical treatment that you needed?
+survey.predictors$health_cat <- recode(survey.data$V190, 
                            `-2` = "No answer", 
                            `1` = "Often", 
                            `2` = "Sometimes", 
                            `3` = "Rarely", 
                            `4` = "Never")
 
-survey.predictors$V5 <- recode(survey.data$V5, 
+#### Social & Personal Connectivity - Q2. For each of the following, indicate how important it is in your life. How important is... Family, Friends
+survey.predictors$social_cat <- recode(survey.data$V5, 
                          `-2` = "No answer", 
                          `1` = "Very important", 
                          `2` = "Rather important", 
                          `3` = "Not very important", 
                          `4` = "Not at all important")
-
-# The survey_data data frame should now have the updated values as per the provided mappings.
-
 ```
+
+
+
+```{r}
+##Dropping the non answers as this will no help our regression model as it provides no information. 
+survey.predictors2 = drop_na(survey.predictors, life.qual)
+survey.predictors2 <- survey.predictors2[!(survey.predictors2$education == -2 |
+                           survey.predictors2$employment == -2 |
+                           survey.predictors2$security == -2 |
+                           survey.predictors2$rights == -2 |
+                           survey.predictors2$health == -2 |
+                            survey.predictors2$social == -2 )  ,]
+ 
+
+scaled_df <- survey.predictors2 %>%
+  mutate(
+    scaled_education = scale(education),
+    scaled_employment = scale(employment),
+    scaled_security = scale(security),
+    scaled_rights = scale(rights),
+    scaled_health = scale(health) ,
+    scaled_social = scale(social) , 
+    scaled_life = scale(life.qual)
+  )
+# Then run the regression model on the new dataframe:
+regmodel <- lm(life.qual ~ emp_cat + edu_cat + scaled_security + scaled_rights + scaled_health + scaled_social , data = scaled_df)
+
+# Summarise the regression model
+summary(regmodel)
+```
+## Regression Results
+
+####Employment:
+Employment status appears to have a varied impact on quality of life. Individuals who are retired or on a pension report a higher quality of life, with a coefficient of 0.19920 and a highly significant p-value of 0.000151, implying that retirement may be associated with increased satisfaction, possibly due to more leisure time and less work-related stress. Part-time workers also report a better quality of life (coefficient: 0.076989) with a significant p-value (0.026904), which might suggest a balance between work and personal time that contributes positively to their overall well-being.
+
+Conversely, unemployment is associated with a lower quality of life, as indicated by a negative coefficient of -0.353024 and a very significant p-value (1.12e-05). This is understandable as unemployment can lead to financial strain, social stigma, and psychological distress, all of which can detract from one's quality of life.
+
+The coefficient for students is negative (-0.300322) with a significant p-value (0.023060). This suggests that being a student is associated with a lower quality of life in the survey population. This finding can open up a discussion about the potential stressors associated with student life, such as academic pressure, financial difficulties due to tuition fees and living expenses, and perhaps a lack of work-life balance. It might also reflect a transitional life stage where students are still establishing their careers and social identities, which could impact their perceived quality of life.
+
+The self-employed category also presents a negative coefficient (-0.184175) with a significant p-value (0.025716). This indicates that self-employment correlates with a somewhat lower quality of life. This result can be discussed in light of the challenges that self-employed individuals often face, such as income variability, lack of employment benefits, and the demands of managing one's own business. While self-employment can offer autonomy and flexibility, it can also come with increased responsibilities and uncertainty, which may adversely affect one's quality of life.
+
+
+####Education:
+The impact of education on quality of life, as per the dataset, does not reach statistical significance. This result is intriguing and could be a subject of further discussion. It might point to a potential ceiling effect where, beyond a certain level, additional education does not translate to improved quality of life. Alternatively, it could indicate that in the UK context, other factors may play more pivotal roles in influencing quality of life than educational attainment alone.
+
+####Security:
+Feeling secure is critically linked to quality of life. The dataset shows a strong negative relationship between the lack of security and quality of life, with a coefficient of -0.178545 and a very significant p-value (2.94e-15). As the survey produced results where the lower the number of the response - the more secure they are, hence represented in the negative coefficient. 
+
+####Human Rights (Respect):
+Respect for human rights is significantly associated with a better quality of life (coefficient: -0.118356, p-value: 5.56e-06)  the survey produced results where the lower the number in the response indicates a greater amount of respect for human rights. This association could be discussed in terms of societal factors where individuals who perceive their rights as well-respected may feel more valued and supported within their community, which can enhance their perceived quality of life.
+
+#### Health Access:
+Access to healthcare is a major determinant of quality of life, as indicated by the positive coefficient of 0.236538 and a highly significant p-value (2e-16). The ability to obtain necessary medical treatment without undue hardship is clearly a key component of overall well-being. This indicated through the higher coefficient, as the survey produced results where the higher the number reported for health care access, the less likely they have been denied or unable to access needed medicine. 
+
+#### Social - Value of friendships 
+
+The dataset reveals a relationship between the value placed on social connections and the quality of life with a coefficient of -0.080459 and p-value of 8.80e-05, as in the response the lower the number reported - the higher value placed on friendships.  A high value on social connections, such as relationships with family and friends, is correlated with an individual's quality of life. This is reflective of the well-documented view that robust social ties are essential for psychological well-being, providing support, a sense of belonging, and contributing to an individual's identity and purpose.
+
+
+
+
+
+
+
