@@ -1,0 +1,44 @@
+---
+title: "Group exercise 2: Analysing spatial data"
+subtitle: "DATA5207: Data Analysis in the Social Sciences"
+author: Emily and Sarah
+output:
+  pdf_document:
+    toc: no
+    latex_engine: xelatex
+header-includes:
+   - \usepackage{caption}
+   - \captionsetup[figure]{font=scriptsize}
+mainfont: Avenir Book
+urlcolor: blue
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+We will be examining the relationship between opiate drug prescriptions and poverty (your independent variables), and mortality caused by drugs and alcohol using the methods covered in this lab, and previously in this unit. The spatial aspect of this is that we are going to use county-level data sourced from the \*US Census Bureau\* and the \*Centers for Disease Control and Prevention (CDC)\*.
+
+## Data cleaning
+
+## Descriptive Analysis
+
+1\. Conduct some descriptive analyses of these data. You can examine this using scatter plots and correlation coefficients. Do you need to transform any of the variables?
+
+## Relationship of dependent and independent variables
+
+How does poverty and opiate prescriptions predict mortality rates associated with drugs and alcohol? Some other data is provided in the data folder, and you should take a few variables or controls from this.
+
+2\. Fit regressions to your data. What is the appropriate type of regression and why have you chosen it?
+
+## Map
+
+3\. Create at least one map that helps explain your findings (we will show you how to do this in the next session).
+
+## Discussion
+
+4\. Write up your key results.
+
+You will be marked on the quality of your \$R\$ code (including whether it runs for us without errors), how well you have justified your variable selection, the proper use of appropriate methods.

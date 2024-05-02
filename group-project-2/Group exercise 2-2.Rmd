@@ -100,7 +100,7 @@ We want the file *poverty data - ACS_16_5YR_S1702_with_ann.csv* in the folder *p
 ```{r load poverty data, warning=FALSE}
 
 poverty.data <- read.csv(
-  "Data/US data for group task/poverty/poverty data - ACS_16_5YR_S1702_with_ann.csv", 
+  "US data for group task/poverty/poverty data - ACS_16_5YR_S1702_with_ann.csv", 
   skip = 1, header = T)
 
 ```
@@ -113,6 +113,12 @@ With this syntax we have specified that $R$ should skip the first row of the fil
 Of course, your code will vary slightly depending on the file path you need to use to access the data. 
 
 This dataset contains `r dim(poverty.data)[2]` columns (or variables) and `r dim(poverty.data)[1]` rows, which you can observe yourself with the `dim()` function.
+```{r}
+dim(poverty.data)[2]
+
+dim(poverty.data)[1]
+```
+
 
 We then want to load the file *Drugs and alcohol Cause of Death, 1999-2016.csv* from the *mortality* folder. These data were obtained from **[the Centers for Disease Control (CDC)](https://wonder.cdc.gov)** As this is a .txt file, we use the `read.table()` function to do this:
 
