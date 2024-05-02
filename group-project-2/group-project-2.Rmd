@@ -32,7 +32,6 @@ poverty.data <- read.csv(
   "US data for group task/poverty/poverty data - ACS_16_5YR_S1702_with_ann.csv", 
   skip = 1, header = T)
 
-
 ```
 
 
@@ -53,13 +52,12 @@ opioids.data <- read.csv("US data for group task/opioids/opioids prescribing rat
 
 ```{r link us data with shape files, message=FALSE, warning=FALSE}
 
-library(sf)
-
 us.shape.1 <- 
   st_read("US data for group task/US shapefiles/cb_2016_us_county_20m.shp")
 
 
 ```
+
 ```{r load fip concordance file}
 
 fip.concordance <- read.csv("US data for group task/fips concordance.csv")
@@ -78,7 +76,6 @@ names(drugs.mort.data)[2]
 
 ```
 When two datasets have a variable named and structured identically, it is simple to combine them. However, in this instance, the names of our ID variables don't match, even though their structure does:
-
 
 \vspace{6mm}
 
@@ -113,7 +110,6 @@ county.data <- merge(
 ```
 
 We now have a new dataset with `r dim(county.data)[2]` variables and `r dim(county.data)[1]` rows. Viewing the first six rows of our new data frame, we can see the structure of these data:
-
 \vspace{6mm}
 
 ```{r view structure of new dataset, echo=FALSE,  warning=FALSE, message=FALSE}
@@ -121,6 +117,9 @@ We now have a new dataset with `r dim(county.data)[2]` variables and `r dim(coun
 head(county.data)
 
 ```
+The first row is the ID variable we used to merge our data frames. The second, the percentage of each county's families with incomes below the poverty rate. Third, the names of each country (and the state within which they sit). Finally, the mortality rate associated with drug and alcohol use (per 100,000 people).
+
+There is one last edit to make to these data before we examine them. If you run the code
 
 ```{r}
 levels(as.factor(county.data$mortality.rate))
@@ -212,18 +211,27 @@ us.shape.2 <- full_join(us.shape.2,
 
 \vspace{6mm}
 
+TODO:
+- clean out unreliable mortality data??
+
 
 You are now ready to map these data. Good luck with the rest of the exercise! 
 
 ## Descriptive Analysis
 
-1\. Conduct some descriptive analyses of these data. You can examine this using scatter plots and correlation coefficients. Do you need to transform any of the variables?
+1\. Conduct some descriptive analyses of these data. You can examine this using scatter plots and correlation coefficients. Do you need to transform any of the variables
+
+
+
 
 ## Relationship of dependent and independent variables
 
 How does poverty and opiate prescriptions predict mortality rates associated with drugs and alcohol? Some other data is provided in the data folder, and you should take a few variables or controls from this.
 
 2\. Fit regressions to your data. What is the appropriate type of regression and why have you chosen it?
+
+
+
 
 ## Map
 
