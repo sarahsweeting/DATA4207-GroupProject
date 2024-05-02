@@ -15,6 +15,9 @@ urlcolor: blue
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(sf)
 ```
 
 # Introduction
@@ -22,6 +25,195 @@ knitr::opts_chunk$set(echo = TRUE)
 We will be examining the relationship between opiate drug prescriptions and poverty (your independent variables), and mortality caused by drugs and alcohol using the methods covered in this lab, and previously in this unit. The spatial aspect of this is that we are going to use county-level data sourced from the \*US Census Bureau\* and the \*Centers for Disease Control and Prevention (CDC)\*.
 
 ## Data cleaning
+
+```{r load poverty data, warning=FALSE}
+
+poverty.data <- read.csv(
+  "US data for group task/poverty/poverty data - ACS_16_5YR_S1702_with_ann.csv", 
+  skip = 1, header = T)
+
+
+```
+
+
+```{r load mortality data, warning=FALSE}
+
+drugs.mort.data <- read.table(
+  "US data for group task/mortality/Drugs and alcohol Cause of Death, 1999-2016.txt", 
+    sep = '\t', header = T)
+
+```
+
+
+```{r load data on opioid prescription rates}
+
+opioids.data <- read.csv("US data for group task/opioids/opioids prescribing rates.csv")
+
+```
+
+```{r link us data with shape files, message=FALSE, warning=FALSE}
+
+library(sf)
+
+us.shape.1 <- 
+  st_read("US data for group task/US shapefiles/cb_2016_us_county_20m.shp")
+
+
+```
+```{r load fip concordance file}
+
+fip.concordance <- read.csv("US data for group task/fips concordance.csv")
+
+```
+
+
+\vspace{6mm}
+
+```{r compare names of ID vars, warning=FALSE}
+
+names(poverty.data)[3]
+
+names(drugs.mort.data)[2]
+
+
+```
+When two datasets have a variable named and structured identically, it is simple to combine them. However, in this instance, the names of our ID variables don't match, even though their structure does:
+
+
+\vspace{6mm}
+
+```{r compare structure of ID vars, warning=FALSE}
+
+head(poverty.data$Id2)
+
+head(drugs.mort.data$County.Code)
+
+```
+
+
+\vspace{6mm}
+
+```{r merge poverty and death data, warning=FALSE, message=FALSE}
+
+
+patterns <- c(' County| Parish| city| Borough| Census Area')
+
+county.data <- merge(
+  poverty.data %>% 
+    dplyr::rename(below.poverty.rate = 
+             All.families....Percent.below.poverty.level..Estimate..Families)  %>% 
+    dplyr::select(Id2, below.poverty.rate),
+  drugs.mort.data %>% 
+    dplyr::rename(Id2 = County.Code,
+                mortality.rate = Crude.Rate) %>% 
+    mutate(county = gsub(patterns, "", County))  %>%
+    dplyr::select(Id2, county, mortality.rate))
+
+
+```
+
+We now have a new dataset with `r dim(county.data)[2]` variables and `r dim(county.data)[1]` rows. Viewing the first six rows of our new data frame, we can see the structure of these data:
+
+\vspace{6mm}
+
+```{r view structure of new dataset, echo=FALSE,  warning=FALSE, message=FALSE}
+
+head(county.data)
+
+```
+
+```{r}
+levels(as.factor(county.data$mortality.rate))
+```
+
+you will see that some of the observations for the variable `mortality.rate` are coded as 'Unreliable'. This creates two issues for us. Those observations are effectively missing for our purposes, and this converts the variable to a string when we want it to be a number.
+
+
+\vspace{6mm}
+
+```{r editing mortality rate, warning=FALSE, message=FALSE}
+
+county.data <- county.data %>% 
+  mutate(mortality.rate = ifelse(mortality.rate == 'Unreliable', 
+                                 NA, as.numeric(as.character(mortality.rate))))
+
+           
+```
+
+We then use the same steps as above to merge this data with our `county.data` frame:
+
+\vspace{6mm}
+
+```{r merge opioids data with county data}
+
+
+county.data <- merge(
+  county.data  %>%
+  mutate(z.poverty = (below.poverty.rate - mean(below.poverty.rate, na.rm=T)) / 
+           sd(below.poverty.rate, na.rm=T)), 
+  opioids.data %>%
+  dplyr::rename(Id2 = FIPS.County.Code) %>% 
+  mutate(z.opiates = (X2016.Prescribing.Rate - mean(X2016.Prescribing.Rate, na.rm=T)) /
+           sd(X2016.Prescribing.Rate, na.rm=T)) %>%
+    dplyr::select(Id2, z.opiates, X2016.Prescribing.Rate))
+
+```
+
+In this code, we also standardise the poverty prescription rates in the same line of block of code that we use to merge the data.
+
+We then want to link these shapefiles to the county results.
+This file, which we were required to modify a little above, can be matched to the shapefile data using similar syntax to above:  
+
+\vspace{6mm}
+
+```{r link shapefiles with fip concordance file}
+
+
+us.shape.2 <- us.shape.1 %>% 
+  merge(fip.concordance %>%
+          mutate(STATEFP =  ifelse(Numeric.code >= 0 & Numeric.code <= 9, 
+                             paste0(0 , Numeric.code), Numeric.code)) %>%
+          dplyr::rename(state = Alpha.code))
+
+        
+```
+
+We edit the variable containing county names in shapefile using the `paste0()` function, which combines the county name with the state abbreviation (from the fip concordance file). We then modify county names with some different spelling in the shapefiles and our county level data:
+
+\vspace{6mm}
+
+```{r edit county name in shapefile}
+
+us.shape.2$county <- paste0(us.shape.2$NAME, ", ", us.shape.2$state)
+
+us.shape.2$county <- gsub("Doña Ana, NM", "Dona Ana, NM", us.shape.2$county)
+us.shape.2$county <- gsub("LaSalle, LA", "La Salle, LA", us.shape.2$county)
+us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
+
+```
+
+\vspace{6mm}
+
+
+And then we merge the shapefile and the county-level data:
+
+
+\vspace{6mm}
+
+
+```{r link us data with shape files2}
+
+us.shape.2 <- full_join(us.shape.2,
+  county.data %>%
+    dplyr::select(county, below.poverty.rate, mortality.rate, X2016.Prescribing.Rate))
+
+
+```
+
+\vspace{6mm}
+
+
+You are now ready to map these data. Good luck with the rest of the exercise! 
 
 ## Descriptive Analysis
 
