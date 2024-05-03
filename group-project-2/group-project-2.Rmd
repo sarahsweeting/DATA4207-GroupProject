@@ -24,7 +24,21 @@ library(sf)
 
 We will be examining the relationship between opiate drug prescriptions and poverty (your independent variables), and mortality caused by drugs and alcohol using the methods covered in this lab, and previously in this unit. The spatial aspect of this is that we are going to use county-level data sourced from the \*US Census Bureau\* and the \*Centers for Disease Control and Prevention (CDC)\*.
 
+We have included two additional variables to 
+
+State of each county
+
+Education - Percent of adults with a high school diploma only 2014-18
+
+
 ## Data cleaning
+
+```{r load other census data, warning=FALSE}
+load(
+  "US data for group task/Other census data/county.data.RData")
+
+```
+
 
 ```{r load poverty data, warning=FALSE}
 
@@ -88,6 +102,10 @@ head(drugs.mort.data$County.Code)
 ```
 
 
+```{r}
+county.data$Sta
+```
+
 \vspace{6mm}
 
 ```{r merge poverty and death data, warning=FALSE, message=FALSE}
@@ -95,7 +113,7 @@ head(drugs.mort.data$County.Code)
 
 patterns <- c(' County| Parish| city| Borough| Census Area')
 
-county.data <- merge(
+main.data <- merge(
   poverty.data %>% 
     dplyr::rename(below.poverty.rate = 
              All.families....Percent.below.poverty.level..Estimate..Families)  %>% 
@@ -106,7 +124,18 @@ county.data <- merge(
     mutate(county = gsub(patterns, "", County))  %>%
     dplyr::select(Id2, county, mortality.rate))
 
+```
 
+```{r}
+main.data <- merge(
+  main.data %>%
+    dplyr::select(Id2, county, mortality.rate, below.poverty.rate),
+  county.data %>%
+    dplyr::rename(Id2 = FIPS,
+                 county.state = State,
+                 education.highschool = Percent.of.adults.with.a.high.school.diploma.only.2014.18) %>%
+    dplyr::select(Id2, county.state, education.highschool)
+)
 ```
 
 We now have a new dataset with `r dim(county.data)[2]` variables and `r dim(county.data)[1]` rows. Viewing the first six rows of our new data frame, we can see the structure of these data:
@@ -114,7 +143,7 @@ We now have a new dataset with `r dim(county.data)[2]` variables and `r dim(coun
 
 ```{r view structure of new dataset, echo=FALSE,  warning=FALSE, message=FALSE}
 
-head(county.data)
+head(main.data)
 
 ```
 The first row is the ID variable we used to merge our data frames. The second, the percentage of each county's families with incomes below the poverty rate. Third, the names of each country (and the state within which they sit). Finally, the mortality rate associated with drug and alcohol use (per 100,000 people).
@@ -122,7 +151,7 @@ The first row is the ID variable we used to merge our data frames. The second, t
 There is one last edit to make to these data before we examine them. If you run the code
 
 ```{r}
-levels(as.factor(county.data$mortality.rate))
+levels(as.factor(main.data$mortality.rate))
 ```
 
 you will see that some of the observations for the variable `mortality.rate` are coded as 'Unreliable'. This creates two issues for us. Those observations are effectively missing for our purposes, and this converts the variable to a string when we want it to be a number.
@@ -132,7 +161,7 @@ you will see that some of the observations for the variable `mortality.rate` are
 
 ```{r editing mortality rate, warning=FALSE, message=FALSE}
 
-county.data <- county.data %>% 
+main.data <- main.data %>% 
   mutate(mortality.rate = ifelse(mortality.rate == 'Unreliable', 
                                  NA, as.numeric(as.character(mortality.rate))))
 
@@ -146,8 +175,8 @@ We then use the same steps as above to merge this data with our `county.data` fr
 ```{r merge opioids data with county data}
 
 
-county.data <- merge(
-  county.data  %>%
+main.data <- merge(
+  main.data  %>%
   mutate(z.poverty = (below.poverty.rate - mean(below.poverty.rate, na.rm=T)) / 
            sd(below.poverty.rate, na.rm=T)), 
   opioids.data %>%
@@ -203,7 +232,7 @@ And then we merge the shapefile and the county-level data:
 ```{r link us data with shape files2}
 
 us.shape.2 <- full_join(us.shape.2,
-  county.data %>%
+  main.data %>%
     dplyr::select(county, below.poverty.rate, mortality.rate, X2016.Prescribing.Rate))
 
 
@@ -229,8 +258,22 @@ You are now ready to map these data. Good luck with the rest of the exercise!
 How does poverty and opiate prescriptions predict mortality rates associated with drugs and alcohol? Some other data is provided in the data folder, and you should take a few variables or controls from this.
 
 2\. Fit regressions to your data. What is the appropriate type of regression and why have you chosen it?
+```{r}
 
 
+```
+
+
+```{r}
+main.data = drop_na(main.data, mortality.rate)
+```
+
+```{r}
+regmodel <- lm(mortality.rate ~ z.poverty + z.opiates, data = county.data)
+
+# Summarise the regression model
+summary(regmodel)
+```
 
 
 ## Map
