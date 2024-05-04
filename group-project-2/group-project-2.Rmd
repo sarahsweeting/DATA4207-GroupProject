@@ -274,13 +274,69 @@ tabyl(main.data, county.state)
 levels(as.factor(main.data$county.state))
 ```
 
+
+```{r}
+# Create a data frame for Cannabis Legality in U.S. States
+# Create a data frame for Cannabis Legality in U.S. States using abbreviations
+cannabis_legality <- data.frame(
+  county.state = c("AL", "AK", "AZ", "AR", "CA", 
+            "CO", "CT", "DE", "FL", "GA", 
+            "HI", "ID", "IL", "IN", "IA", 
+            "KS", "KY", "LA", "ME", "MD", 
+            "MA", "MI", "MN", "MS", 
+            "MO", "MT", "NE", "NV", "NH", 
+            "NJ", "NM", "NY", "NC", 
+            "ND", "OH", "OK", "OR", "PA", 
+            "RI", "SC", "SD", "TN", 
+            "TX", "UT", "VT", "VA", "WA", 
+            "WV", "WI", "WY"),
+  Legality_Status = c("Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Illegal", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Decriminalized", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical Only", "Illegal")
+)
+
+# Print the table
+print(cannabis_legality)
+
+
+legalplus.main.data = merge(main.data, cannabis_legality, by = "county.state", all = TRUE)
+```
+
+
 Model includes the standardised numerical variables and state.
 
 ```{r}
-regmodel <- lm(mortality.rate ~ z.poverty + z.opiates + z.highschool + county.state, data = main.data)
+regmodel <- lm(mortality.rate ~ z.poverty + z.opiates + z.highschool  + Legality_Status, data = legalplus.main.data)
 
 summary(regmodel)
 ```
+```{r}
+print(legalplus.main.data)
+```
+
+
+
 ### Interpretations
 For this model, the baseline is State AK or Alaska, thus the intercept represents the mortality rate holding all other predictors at 0.
 
