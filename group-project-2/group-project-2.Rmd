@@ -373,7 +373,8 @@ tabyl(main.data, county.state)
 ```
 
 ```{r}
-levels(as.factor(main.data$county.state))
+# levels(as.factor(main.data$county.state))
+main.data$county.state <- relevel(as.factor(main.data$county.state), ref = "TX")
 ```
 
 
