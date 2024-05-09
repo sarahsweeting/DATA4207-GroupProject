@@ -26,6 +26,7 @@ library(scales) # adds percentage marks to legend
 library(patchwork) #to combin plots
 library(ggplot2)
 library(rmapshaper)
+library(tigris)
 ```
 
 # Introduction
@@ -245,7 +246,7 @@ us.shape.2 <- full_join(us.shape.2,
 
 ```
 ```{r}
-us.shape.2
+shift_geometry(us.shape.2, position="below")
 ```
 
 \vspace{6mm}
@@ -453,11 +454,17 @@ plot <- ggplot(us.shape.2) +
 options(repr.plot.width = 12, repr.plot.height = 10)  # Adjust width and height as needed
 plot  # Display the plot
 ```
+
+```{r}
+us.shape.2 <- us.shape.2 %>%
+  shift_geometry()
+```
+
 ```{r}
 # Create the ggplot object
 plot <- ggplot(us.shape.2) +
   geom_sf(mapping = aes(fill = X2016.Prescribing.Rate), colour = NA, inherit.aes = FALSE) +
-  coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
+  # coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
   scale_fill_gradient2(low = "dark blue",
                        high = "dark green",
                        midpoint = mean(us.shape.2$X2016.Prescribing.Rate, na.rm = TRUE),
