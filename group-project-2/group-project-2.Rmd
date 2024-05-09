@@ -243,9 +243,111 @@ TODO:
 
 You are now ready to map these data. Good luck with the rest of the exercise! 
 
+```{r}
+main.data = drop_na(main.data, mortality.rate, z.poverty, z.opiates, z.highschool)
+
+cannabis_legality <- data.frame(
+  county.state = c("AL", "AK", "AZ", "AR", "CA", 
+            "CO", "CT", "DE", "FL", "GA", 
+            "HI", "ID", "IL", "IN", "IA", 
+            "KS", "KY", "LA", "ME", "MD", 
+            "MA", "MI", "MN", "MS", 
+            "MO", "MT", "NE", "NV", "NH", 
+            "NJ", "NM", "NY", "NC", 
+            "ND", "OH", "OK", "OR", "PA", 
+            "RI", "SC", "SD", "TN", 
+            "TX", "UT", "VT", "VA", "WA", 
+            "WV", "WI", "WY", "DC"),
+  Legality_Status = c("Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Illegal", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Decriminalized", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical Only", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical Only", "Illegal", 
+                      "Legal for Medical and Recreational")
+)
+
+legalplus.main.data = merge(main.data, cannabis_legality, by = "county.state", all = TRUE)
+```
+
+
+
 ## Descriptive Analysis
 
 1\. Conduct some descriptive analyses of these data. You can examine this using scatter plots and correlation coefficients. Do you need to transform any of the variables
+
+```{r}
+library(ggplot2)
+
+
+ggplot(main.data, aes(x = mortality.rate)) +
+  geom_histogram(bins = 30, fill = "blue", color = "black") +
+  ggtitle("Distribution of Mortality Rates") +
+  xlab("Mortality Rate") +
+  ylab("Frequency")
+
+
+ggplot(legalplus.main.data, aes(x = Legality_Status, y = mortality.rate, fill = Legality_Status)) +
+  geom_boxplot() +
+  ggtitle("Mortality Rate by Cannabis Legality Status") +
+  xlab("Cannabis Legality Status") +
+  ylab("Mortality Rate")
+
+
+ggplot(main.data, aes(x = z.poverty, y = mortality.rate)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  ggtitle("Mortality Rate vs. Poverty Rate") +
+  xlab("Below Poverty Rate") +
+  ylab("Mortality Rate")
+
+ggplot(main.data, aes(x = z.highschool, y = mortality.rate)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  ggtitle("High School Rates vs. Mortality Rate") +
+  xlab("High School Rates") +
+  ylab("Mortality Rate")
+
+ggplot(main.data, aes(x = z.opiates, y = mortality.rate)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "green") +
+  ggtitle("Mortality Rate vs. Opiate use") +
+  xlab("Opiate use") +
+  ylab("Mortality Rate")
+
+
+ggplot(legalplus.main.data, aes(x = Legality_Status, fill = Legality_Status)) +
+  geom_bar() +
+  ggtitle("Number of Counties by Cannabis Legality Status") +
+  xlab("Cannabis Legality Status") +
+  ylab("Count")
+
+ggplot(legalplus.main.data, aes(x = X2016.Prescribing.Rate, y = mortality.rate)) +
+  geom_point(aes(color = Legality_Status), alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~Legality_Status) +
+  ggtitle("Perscription Rates vs. Mortality Rate by Cannabis Legality Status") +
+  xlab("Perscription Rate") +
+  ylab("Mortality Rate")
+```
 
 
 
@@ -275,13 +377,18 @@ tabyl(main.data, county.state)
 main.data$county.state <- relevel(as.factor(main.data$county.state), ref = "TX")
 ```
 
+
 Model includes the standardised numerical variables and state.
 
 ```{r}
-regmodel <- lm(mortality.rate ~ z.poverty + z.opiates + z.highschool + county.state, data = main.data)
+regmodel <- lm(mortality.rate ~ z.poverty + z.opiates + z.highschool  + Legality_Status, data = legalplus.main.data)
 
 summary(regmodel)
 ```
+
+
+
+
 ### Interpretations
 For this model, the baseline is State AK or Alaska, thus the intercept represents the mortality rate holding all other predictors at 0.
 
