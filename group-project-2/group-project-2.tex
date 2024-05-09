@@ -1,0 +1,993 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Avenir Book}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{caption}
+\captionsetup[figure]{font=scriptsize}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Group exercise 2: Analysing spatial data},
+  pdfauthor={Emily and Sarah},
+  colorlinks=true,
+  linkcolor={Maroon},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Group exercise 2: Analysing spatial data}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{DATA5207: Data Analysis in the Social Sciences}
+\author{Emily and Sarah}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+We will be examining the relationship between opiate drug prescriptions
+and poverty (your independent variables), and mortality caused by drugs
+and alcohol using the methods covered in this lab, and previously in
+this unit. The spatial aspect of this is that we are going to use
+county-level data sourced from the *US Census Bureau* and the *Centers
+for Disease Control and Prevention (CDC)*.
+
+We have included two additional variables from county.data:
+
+\begin{itemize}
+\item
+  State of each county: Because different states in the US have
+  different laws which may affect access to drugs and alcohol
+\item
+  Education - Percent of adults with a high school diploma only 2014-18:
+  We believe this is a confounding factor of poverty and mortality from
+  drugs since education will affect the jobs you are able to obtain
+  (leading to poverty if unobtainable) and educated drug usage (which we
+  are assuming gets taught in high school in the US). If they haven't
+  been to high school, there is a more likely abuse of drugs since they
+  are uneducated on the effects on their drug usage. Similarly, with
+  poverty, if they are uneducated, they are less likely to have the
+  skills to get a job and be able to obtain an income and then are more
+  likely to enter poverty.
+\end{itemize}
+
+\hypertarget{data-cleaning}{%
+\subsection{Data cleaning}\label{data-cleaning}}
+
+Firstly, we shall load all the data files.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{load}\NormalTok{(}
+  \StringTok{"US data for group task/Other census data/county.data.RData"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poverty.data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}
+  \StringTok{"US data for group task/poverty/poverty data {-} ACS\_16\_5YR\_S1702\_with\_ann.csv"}\NormalTok{, }
+  \AttributeTok{skip =} \DecValTok{1}\NormalTok{, }\AttributeTok{header =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{drugs.mort.data }\OtherTok{\textless{}{-}} \FunctionTok{read.table}\NormalTok{(}
+  \StringTok{"US data for group task/mortality/Drugs and alcohol Cause of Death, 1999{-}2016.txt"}\NormalTok{, }
+    \AttributeTok{sep =} \StringTok{\textquotesingle{}}\SpecialCharTok{\textbackslash{}t}\StringTok{\textquotesingle{}}\NormalTok{, }\AttributeTok{header =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{opioids.data }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"US data for group task/opioids/opioids prescribing rates.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{us.shape}\FloatTok{.1} \OtherTok{\textless{}{-}} 
+  \FunctionTok{st\_read}\NormalTok{(}\StringTok{"US data for group task/US shapefiles/cb\_2016\_us\_county\_20m.shp"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading layer `cb_2016_us_county_20m' from data source 
+##   `C:\Users\emily\Documents\GitHub\DATA4207-GroupProject\group-project-2\US data for group task\US shapefiles\cb_2016_us_county_20m.shp' 
+##   using driver `ESRI Shapefile'
+## Simple feature collection with 3220 features and 9 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -179.1743 ymin: 17.91377 xmax: 179.7739 ymax: 71.35256
+## Geodetic CRS:  NAD83
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fip.concordance }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"US data for group task/fips concordance.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\vspace{6mm}
+
+We will join datasets on their similar column - the FIPs code for the
+county:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(poverty.data}\SpecialCharTok{$}\NormalTok{Id2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1001 1003 1005 1007 1009 1011
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(drugs.mort.data}\SpecialCharTok{$}\NormalTok{County.Code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1001 1003 1005 1007 1009 1011
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(county.data}\SpecialCharTok{$}\NormalTok{FIPS)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]    0 1000 1001 1003 1005 1007
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(opioids.data}\SpecialCharTok{$}\NormalTok{FIPS.County.Code)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 2013 2016 2020 2050 2060 2068
+\end{verbatim}
+
+\vspace{6mm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{patterns }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{} County| Parish| city| Borough| Census Area\textquotesingle{}}\NormalTok{)}
+
+\NormalTok{main.data }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(}
+\NormalTok{  poverty.data }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{below.poverty.rate =} 
+\NormalTok{             All.families....Percent.below.poverty.level..Estimate..Families)  }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(Id2, below.poverty.rate),}
+\NormalTok{  drugs.mort.data }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{Id2 =}\NormalTok{ County.Code,}
+                \AttributeTok{mortality.rate =}\NormalTok{ Crude.Rate) }\SpecialCharTok{\%\textgreater{}\%} 
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{county =} \FunctionTok{gsub}\NormalTok{(patterns, }\StringTok{""}\NormalTok{, County))  }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(Id2, county, mortality.rate))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{main.data }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(}
+\NormalTok{  main.data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(Id2, county, mortality.rate, below.poverty.rate),}
+\NormalTok{  county.data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{Id2 =}\NormalTok{ FIPS,}
+                 \AttributeTok{county.state =}\NormalTok{ State,}
+                 \AttributeTok{education.highschool =}\NormalTok{ Percent.of.adults.with.less.than.a.high.school.diploma.}\FloatTok{2014.18}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{z.highschool =}\NormalTok{ (education.highschool }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(education.highschool, }\AttributeTok{na.rm=}\NormalTok{T)) }\SpecialCharTok{/}
+           \FunctionTok{sd}\NormalTok{(education.highschool, }\AttributeTok{na.rm=}\NormalTok{T)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(Id2, county.state, education.highschool, z.highschool)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{main.data }\OtherTok{\textless{}{-}} \FunctionTok{merge}\NormalTok{(}
+\NormalTok{  main.data  }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{z.poverty =}\NormalTok{ (below.poverty.rate }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(below.poverty.rate, }\AttributeTok{na.rm=}\NormalTok{T)) }\SpecialCharTok{/} 
+           \FunctionTok{sd}\NormalTok{(below.poverty.rate, }\AttributeTok{na.rm=}\NormalTok{T)), }
+\NormalTok{  opioids.data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{Id2 =}\NormalTok{ FIPS.County.Code) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{z.opiates =}\NormalTok{ (X2016.Prescribing.Rate }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(X2016.Prescribing.Rate, }\AttributeTok{na.rm=}\NormalTok{T)) }\SpecialCharTok{/}
+           \FunctionTok{sd}\NormalTok{(X2016.Prescribing.Rate, }\AttributeTok{na.rm=}\NormalTok{T)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(Id2, z.opiates, X2016.Prescribing.Rate))}
+\end{Highlighting}
+\end{Shaded}
+
+Viewing the first six rows of our new data frame, we can see the
+structure of these data: \vspace{6mm}
+
+\begin{verbatim}
+##    Id2      county mortality.rate below.poverty.rate county.state
+## 1 1001 Autauga, AL           12.5                9.4           AL
+## 2 1003 Baldwin, AL           22.6                9.3           AL
+## 3 1005 Barbour, AL            9.0               20.0           AL
+## 4 1007    Bibb, AL           14.1               11.7           AL
+## 5 1009  Blount, AL           18.1               12.2           AL
+## 6 1011 Bullock, AL           11.1               25.3           AL
+##   education.highschool z.highschool     z.poverty  z.opiates
+## 1                 11.3   -0.3612033 -0.4937185239  1.2662069
+## 2                  9.7   -0.6019626 -0.5113760968  1.1283754
+## 3                 27.0    2.0012473  1.3779842063  0.3893133
+## 4                 16.8    0.4664068 -0.0875943466  0.4962515
+## 5                 19.8    0.9178304  0.0006935181 -0.4614399
+## 6                 24.8    1.6702032  2.3138355714 -1.3430863
+##   X2016.Prescribing.Rate
+## 1                  129.6
+## 2                  123.8
+## 3                   92.7
+## 4                   97.2
+## 5                   56.9
+## 6                   19.8
+\end{verbatim}
+
+The first row is the ID variable we used to merge our data frames. The
+below.poverty.rate is the percentage of each county's families with
+incomes below the poverty rate. county, the name of each country (and
+the state within which they sit) while as county.state is the state
+code. X2016.Prescribing.Rate is the rate of opiod prescriptions.
+education.highschool is the percentage that completed highschool only.
+Finally, the mortality rate associated with drug and alcohol use (per
+100,000 people).
+
+In this code, we also standardise the education, poverty and
+prescription rates in the same line of block of code that we use to
+merge the data.
+
+There is one last edit to make to these data before we examine them. If
+you run the code
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{levels}\NormalTok{(}\FunctionTok{as.factor}\NormalTok{(main.data}\SpecialCharTok{$}\NormalTok{mortality.rate))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1] "10.0"       "10.1"       "10.2"       "10.3"       "10.4"      
+##   [6] "10.5"       "10.6"       "10.7"       "10.8"       "10.9"      
+##  [11] "11.0"       "11.1"       "11.2"       "11.3"       "11.4"      
+##  [16] "11.5"       "11.6"       "11.7"       "11.8"       "11.9"      
+##  [21] "113.4"      "12.0"       "12.1"       "12.2"       "12.3"      
+##  [26] "12.4"       "12.5"       "12.6"       "12.7"       "12.8"      
+##  [31] "12.9"       "13.0"       "13.1"       "13.2"       "13.3"      
+##  [36] "13.4"       "13.5"       "13.6"       "13.7"       "13.8"      
+##  [41] "13.9"       "14.0"       "14.1"       "14.2"       "14.3"      
+##  [46] "14.4"       "14.5"       "14.6"       "14.7"       "14.8"      
+##  [51] "14.9"       "15.0"       "15.1"       "15.2"       "15.3"      
+##  [56] "15.4"       "15.5"       "15.6"       "15.7"       "15.8"      
+##  [61] "15.9"       "16.0"       "16.1"       "16.2"       "16.3"      
+##  [66] "16.4"       "16.5"       "16.6"       "16.7"       "16.8"      
+##  [71] "16.9"       "17.0"       "17.1"       "17.2"       "17.3"      
+##  [76] "17.4"       "17.5"       "17.6"       "17.7"       "17.8"      
+##  [81] "17.9"       "18.0"       "18.1"       "18.2"       "18.3"      
+##  [86] "18.4"       "18.5"       "18.6"       "18.7"       "18.8"      
+##  [91] "18.9"       "19.0"       "19.1"       "19.2"       "19.3"      
+##  [96] "19.4"       "19.5"       "19.6"       "19.7"       "19.8"      
+## [101] "19.9"       "20.0"       "20.1"       "20.2"       "20.3"      
+## [106] "20.4"       "20.5"       "20.6"       "20.7"       "20.8"      
+## [111] "20.9"       "21.0"       "21.1"       "21.2"       "21.3"      
+## [116] "21.4"       "21.5"       "21.6"       "21.7"       "21.8"      
+## [121] "21.9"       "22.0"       "22.1"       "22.2"       "22.3"      
+## [126] "22.4"       "22.5"       "22.6"       "22.7"       "22.8"      
+## [131] "22.9"       "23.0"       "23.1"       "23.2"       "23.3"      
+## [136] "23.4"       "23.5"       "23.6"       "23.7"       "23.8"      
+## [141] "23.9"       "24.0"       "24.1"       "24.2"       "24.3"      
+## [146] "24.4"       "24.5"       "24.6"       "24.7"       "24.8"      
+## [151] "24.9"       "25.0"       "25.1"       "25.2"       "25.3"      
+## [156] "25.4"       "25.5"       "25.6"       "25.7"       "25.8"      
+## [161] "25.9"       "26.0"       "26.1"       "26.2"       "26.3"      
+## [166] "26.4"       "26.5"       "26.6"       "26.7"       "26.8"      
+## [171] "26.9"       "27.0"       "27.1"       "27.2"       "27.3"      
+## [176] "27.4"       "27.5"       "27.6"       "27.7"       "27.8"      
+## [181] "27.9"       "28.0"       "28.1"       "28.2"       "28.3"      
+## [186] "28.4"       "28.5"       "28.6"       "28.7"       "28.8"      
+## [191] "28.9"       "29.0"       "29.1"       "29.2"       "29.4"      
+## [196] "29.5"       "29.6"       "29.7"       "29.8"       "29.9"      
+## [201] "30.0"       "30.1"       "30.2"       "30.3"       "30.5"      
+## [206] "30.6"       "30.7"       "30.8"       "30.9"       "31.0"      
+## [211] "31.1"       "31.2"       "31.3"       "31.4"       "31.5"      
+## [216] "31.6"       "31.7"       "31.8"       "31.9"       "32.3"      
+## [221] "32.4"       "32.5"       "32.6"       "32.7"       "32.8"      
+## [226] "32.9"       "33.0"       "33.1"       "33.2"       "33.3"      
+## [231] "33.4"       "33.5"       "33.6"       "33.7"       "33.8"      
+## [236] "33.9"       "34.0"       "34.1"       "34.2"       "34.3"      
+## [241] "34.4"       "34.5"       "34.6"       "34.8"       "34.9"      
+## [246] "35.0"       "35.1"       "35.3"       "35.4"       "35.6"      
+## [251] "35.7"       "35.9"       "36.0"       "36.1"       "36.2"      
+## [256] "36.3"       "36.4"       "36.5"       "36.7"       "36.8"      
+## [261] "36.9"       "37.0"       "37.2"       "37.3"       "37.4"      
+## [266] "37.5"       "37.7"       "37.9"       "38.0"       "38.1"      
+## [271] "38.2"       "38.3"       "38.4"       "38.5"       "38.6"      
+## [276] "38.7"       "38.8"       "38.9"       "39.1"       "39.2"      
+## [281] "39.4"       "39.5"       "39.6"       "39.7"       "39.9"      
+## [286] "4.2"        "4.6"        "4.9"        "40.0"       "40.4"      
+## [291] "40.5"       "40.6"       "40.7"       "40.8"       "41.0"      
+## [296] "41.2"       "41.5"       "41.7"       "41.8"       "41.9"      
+## [301] "42.1"       "42.2"       "42.3"       "42.4"       "42.5"      
+## [306] "42.9"       "43.2"       "43.3"       "43.5"       "43.6"      
+## [311] "43.9"       "44.1"       "44.2"       "44.5"       "44.6"      
+## [316] "44.7"       "44.9"       "45.0"       "45.1"       "45.4"      
+## [321] "45.5"       "45.7"       "45.8"       "45.9"       "46.2"      
+## [326] "46.7"       "46.9"       "47.0"       "47.5"       "47.9"      
+## [331] "48.2"       "48.5"       "49.0"       "49.1"       "49.7"      
+## [336] "49.9"       "5.3"        "5.8"        "5.9"        "50.0"      
+## [341] "50.1"       "50.2"       "50.3"       "51.0"       "51.4"      
+## [346] "51.5"       "51.8"       "51.9"       "52.2"       "52.7"      
+## [351] "52.9"       "53.0"       "53.1"       "53.4"       "53.8"      
+## [356] "54.5"       "54.6"       "55.0"       "55.7"       "55.8"      
+## [361] "56.0"       "58.4"       "59.2"       "6.2"        "6.3"       
+## [366] "6.5"        "6.7"        "6.8"        "60.3"       "61.6"      
+## [371] "61.8"       "64.3"       "66.8"       "67.2"       "67.3"      
+## [376] "67.4"       "68.9"       "7.1"        "7.2"        "7.3"       
+## [381] "7.4"        "7.5"        "7.6"        "7.7"        "7.8"       
+## [386] "7.9"        "70.1"       "74.5"       "78.9"       "8.0"       
+## [391] "8.1"        "8.2"        "8.3"        "8.4"        "8.5"       
+## [396] "8.6"        "8.7"        "8.8"        "8.9"        "80.2"      
+## [401] "83.7"       "86.3"       "87.1"       "9.0"        "9.1"       
+## [406] "9.2"        "9.3"        "9.4"        "9.5"        "9.6"       
+## [411] "9.7"        "9.8"        "9.9"        "90.8"       "97.6"      
+## [416] "Unreliable"
+\end{verbatim}
+
+you will see that some of the observations for the variable
+\texttt{mortality.rate} are coded as `Unreliable'. This creates two
+issues for us. Those observations are effectively missing for our
+purposes, and this converts the variable to a string when we want it to
+be a number.
+
+\vspace{6mm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{main.data }\OtherTok{\textless{}{-}}\NormalTok{ main.data }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{mortality.rate =} \FunctionTok{ifelse}\NormalTok{(mortality.rate }\SpecialCharTok{==} \StringTok{\textquotesingle{}Unreliable\textquotesingle{}}\NormalTok{, }
+                                 \ConstantTok{NA}\NormalTok{, }\FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(mortality.rate))))}
+\end{Highlighting}
+\end{Shaded}
+
+We then want to link these shapefiles to the county results. This file,
+which we were required to modify a little above, can be matched to the
+shapefile data using similar syntax to above:
+
+\vspace{6mm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{us.shape}\FloatTok{.2} \OtherTok{\textless{}{-}}\NormalTok{ us.shape}\FloatTok{.1} \SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{merge}\NormalTok{(fip.concordance }\SpecialCharTok{\%\textgreater{}\%}
+          \FunctionTok{mutate}\NormalTok{(}\AttributeTok{STATEFP =}  \FunctionTok{ifelse}\NormalTok{(Numeric.code }\SpecialCharTok{\textgreater{}=} \DecValTok{0} \SpecialCharTok{\&}\NormalTok{ Numeric.code }\SpecialCharTok{\textless{}=} \DecValTok{9}\NormalTok{, }
+                             \FunctionTok{paste0}\NormalTok{(}\DecValTok{0}\NormalTok{ , Numeric.code), Numeric.code)) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{          dplyr}\SpecialCharTok{::}\FunctionTok{rename}\NormalTok{(}\AttributeTok{state =}\NormalTok{ Alpha.code))}
+\end{Highlighting}
+\end{Shaded}
+
+We edit the variable containing county names in shapefile using the
+\texttt{paste0()} function, which combines the county name with the
+state abbreviation (from the fip concordance file). We then modify
+county names with some different spelling in the shapefiles and our
+county level data:
+
+\vspace{6mm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{county }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{NAME, }\StringTok{", "}\NormalTok{, us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{state)}
+
+\NormalTok{us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{county }\OtherTok{\textless{}{-}} \FunctionTok{gsub}\NormalTok{(}\StringTok{"Doña Ana, NM"}\NormalTok{, }\StringTok{"Dona Ana, NM"}\NormalTok{, us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{county)}
+\NormalTok{us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{county }\OtherTok{\textless{}{-}} \FunctionTok{gsub}\NormalTok{(}\StringTok{"LaSalle, LA"}\NormalTok{, }\StringTok{"La Salle, LA"}\NormalTok{, us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{county)}
+\NormalTok{us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{county }\OtherTok{\textless{}{-}} \FunctionTok{gsub}\NormalTok{(}\StringTok{"Oglala Lakota, SD"}\NormalTok{, }\StringTok{"Oglala, SD"}\NormalTok{, us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{county)}
+\end{Highlighting}
+\end{Shaded}
+
+\vspace{6mm}
+
+And then we merge the shapefile and the county-level data:
+
+\vspace{6mm}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{us.shape}\FloatTok{.2} \OtherTok{\textless{}{-}} \FunctionTok{full\_join}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{,}
+\NormalTok{  main.data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(county, below.poverty.rate, mortality.rate, X2016.Prescribing.Rate)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{st\_as\_sf}\NormalTok{() }\CommentTok{\# To acknolwedge its a shape file}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining with `by = join_by(county)`
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in sf_column %in% names(g): Detected an unexpected many-to-many relationship between `x` and `y`.
+## i Row 1205 of `x` matches multiple rows in `y`.
+## i Row 1138 of `y` matches multiple rows in `x`.
+## i If a many-to-many relationship is expected, set `relationship =
+##   "many-to-many"` to silence this warning.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{us.shape}\FloatTok{.2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Simple feature collection with 3237 features and 17 fields (with 5 geometries empty)
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -179.1743 ymin: 17.91377 xmax: 179.7739 ymax: 71.35256
+## Geodetic CRS:  NAD83
+## First 10 features:
+##    STATEFP COUNTYFP COUNTYNS       AFFGEOID GEOID       NAME LSAD      ALAND
+## 1       01      017 00161534 0500000US01017 01017   Chambers   06 1545009121
+## 2       01      029 00161540 0500000US01029 01029   Cleburne   06 1450663941
+## 3       01      043 00161547 0500000US01043 01043    Cullman   06 1903376541
+## 4       01      105 00161579 0500000US01105 01105      Perry   06 1863919953
+## 5       01      097 00161575 0500000US01097 01097     Mobile   06 3184131335
+## 6       01      009 00161530 0500000US01009 01009     Blount   06 1670041875
+## 7       01      073 00161562 0500000US01073 01073  Jefferson   06 2878224117
+## 8       01      023 00161537 0500000US01023 01023    Choctaw   06 2365955057
+## 9       01      033 00161542 0500000US01033 01033    Colbert   06 1534878514
+## 10      01      077 00161564 0500000US01077 01077 Lauderdale   06 1729334080
+##        AWATER    Name state Numeric.code          Status         county
+## 1    17048126 Alabama    AL            1 State; counties   Chambers, AL
+## 2     2354898 Alabama    AL            1 State; counties   Cleburne, AL
+## 3    52118974 Alabama    AL            1 State; counties    Cullman, AL
+## 4    10918482 Alabama    AL            1 State; counties      Perry, AL
+## 5  1073840930 Alabama    AL            1 State; counties     Mobile, AL
+## 6    15077458 Alabama    AL            1 State; counties     Blount, AL
+## 7    32446239 Alabama    AL            1 State; counties  Jefferson, AL
+## 8    19059247 Alabama    AL            1 State; counties    Choctaw, AL
+## 9    80030048 Alabama    AL            1 State; counties    Colbert, AL
+## 10  134420924 Alabama    AL            1 State; counties Lauderdale, AL
+##    below.poverty.rate mortality.rate X2016.Prescribing.Rate
+## 1                15.3           15.7                  140.6
+## 2                12.2           11.4                   44.2
+## 3                12.0           16.9                  166.2
+## 4                29.8             NA                    3.6
+## 5                15.6           19.2                  133.5
+## 6                12.2           18.1                   56.9
+## 7                14.3           24.0                  116.7
+## 8                16.2           10.1                   97.8
+## 9                13.1            9.9                  208.1
+## 10               13.4           14.8                  127.5
+##                          geometry
+## 1  MULTIPOLYGON (((-85.59318 3...
+## 2  MULTIPOLYGON (((-85.85189 3...
+## 3  MULTIPOLYGON (((-87.11199 3...
+## 4  MULTIPOLYGON (((-87.5252 32...
+## 5  MULTIPOLYGON (((-88.43201 3...
+## 6  MULTIPOLYGON (((-86.96336 3...
+## 7  MULTIPOLYGON (((-87.26692 3...
+## 8  MULTIPOLYGON (((-88.46866 3...
+## 9  MULTIPOLYGON (((-88.13426 3...
+## 10 MULTIPOLYGON (((-88.20296 3...
+\end{verbatim}
+
+\vspace{6mm}
+
+You are now ready to map these data. Good luck with the rest of the
+exercise!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{main.data }\OtherTok{=} \FunctionTok{drop\_na}\NormalTok{(main.data, mortality.rate, z.poverty, z.opiates, z.highschool)}
+
+\NormalTok{cannabis\_legality }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{county.state =} \FunctionTok{c}\NormalTok{(}\StringTok{"AL"}\NormalTok{, }\StringTok{"AK"}\NormalTok{, }\StringTok{"AZ"}\NormalTok{, }\StringTok{"AR"}\NormalTok{, }\StringTok{"CA"}\NormalTok{, }
+            \StringTok{"CO"}\NormalTok{, }\StringTok{"CT"}\NormalTok{, }\StringTok{"DE"}\NormalTok{, }\StringTok{"FL"}\NormalTok{, }\StringTok{"GA"}\NormalTok{, }
+            \StringTok{"HI"}\NormalTok{, }\StringTok{"ID"}\NormalTok{, }\StringTok{"IL"}\NormalTok{, }\StringTok{"IN"}\NormalTok{, }\StringTok{"IA"}\NormalTok{, }
+            \StringTok{"KS"}\NormalTok{, }\StringTok{"KY"}\NormalTok{, }\StringTok{"LA"}\NormalTok{, }\StringTok{"ME"}\NormalTok{, }\StringTok{"MD"}\NormalTok{, }
+            \StringTok{"MA"}\NormalTok{, }\StringTok{"MI"}\NormalTok{, }\StringTok{"MN"}\NormalTok{, }\StringTok{"MS"}\NormalTok{, }
+            \StringTok{"MO"}\NormalTok{, }\StringTok{"MT"}\NormalTok{, }\StringTok{"NE"}\NormalTok{, }\StringTok{"NV"}\NormalTok{, }\StringTok{"NH"}\NormalTok{, }
+            \StringTok{"NJ"}\NormalTok{, }\StringTok{"NM"}\NormalTok{, }\StringTok{"NY"}\NormalTok{, }\StringTok{"NC"}\NormalTok{, }
+            \StringTok{"ND"}\NormalTok{, }\StringTok{"OH"}\NormalTok{, }\StringTok{"OK"}\NormalTok{, }\StringTok{"OR"}\NormalTok{, }\StringTok{"PA"}\NormalTok{, }
+            \StringTok{"RI"}\NormalTok{, }\StringTok{"SC"}\NormalTok{, }\StringTok{"SD"}\NormalTok{, }\StringTok{"TN"}\NormalTok{, }
+            \StringTok{"TX"}\NormalTok{, }\StringTok{"UT"}\NormalTok{, }\StringTok{"VT"}\NormalTok{, }\StringTok{"VA"}\NormalTok{, }\StringTok{"WA"}\NormalTok{, }
+            \StringTok{"WV"}\NormalTok{, }\StringTok{"WI"}\NormalTok{, }\StringTok{"WY"}\NormalTok{, }\StringTok{"DC"}\NormalTok{),}
+  \AttributeTok{Legality\_Status =} \FunctionTok{c}\NormalTok{(}\StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Illegal"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Decriminalized"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{, }\StringTok{"Legal for Medical and Recreational"}\NormalTok{, }
+                      \StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Legal for Medical Only"}\NormalTok{, }\StringTok{"Illegal"}\NormalTok{, }
+                      \StringTok{"Legal for Medical and Recreational"}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{legalplus.main.data }\OtherTok{=} \FunctionTok{merge}\NormalTok{(main.data, cannabis\_legality, }\AttributeTok{by =} \StringTok{"county.state"}\NormalTok{, }\AttributeTok{all =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{descriptive-analysis}{%
+\subsection{Descriptive Analysis}\label{descriptive-analysis}}
+
+1. Conduct some descriptive analyses of these data. You can examine this
+using scatter plots and correlation coefficients. Do you need to
+transform any of the variables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(ggplot2)}
+
+
+\FunctionTok{ggplot}\NormalTok{(main.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ mortality.rate)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{bins =} \DecValTok{30}\NormalTok{, }\AttributeTok{fill =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Distribution of Mortality Rates"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Mortality Rate"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Frequency"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(legalplus.main.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Legality\_Status, }\AttributeTok{y =}\NormalTok{ mortality.rate, }\AttributeTok{fill =}\NormalTok{ Legality\_Status)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Mortality Rate by Cannabis Legality Status"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Cannabis Legality Status"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Mortality Rate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(main.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ z.poverty, }\AttributeTok{y =}\NormalTok{ mortality.rate)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Mortality Rate vs. Poverty Rate"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Below Poverty Rate"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Mortality Rate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(main.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ z.highschool, }\AttributeTok{y =}\NormalTok{ mortality.rate)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color =} \StringTok{"blue"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"High School Rates vs. Mortality Rate"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"High School Rates"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Mortality Rate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(main.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ z.opiates, }\AttributeTok{y =}\NormalTok{ mortality.rate)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{color =} \StringTok{"green"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Mortality Rate vs. Opiate use"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Opiate use"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Mortality Rate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(legalplus.main.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ Legality\_Status, }\AttributeTok{fill =}\NormalTok{ Legality\_Status)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Number of Counties by Cannabis Legality Status"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Cannabis Legality Status"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Count"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-6.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(legalplus.main.data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ X2016.Prescribing.Rate, }\AttributeTok{y =}\NormalTok{ mortality.rate)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ Legality\_Status), }\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"lm"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{Legality\_Status) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{"Perscription Rates vs. Mortality Rate by Cannabis Legality Status"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{xlab}\NormalTok{(}\StringTok{"Perscription Rate"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{"Mortality Rate"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-7.pdf}
+
+\hypertarget{relationship-of-dependent-and-independent-variables}{%
+\subsection{Relationship of dependent and independent
+variables}\label{relationship-of-dependent-and-independent-variables}}
+
+How does poverty and opiate prescriptions predict mortality rates
+associated with drugs and alcohol? Some other data is provided in the
+data folder, and you should take a few variables or controls from this.
+
+2. Fit regressions to your data. What is the appropriate type of
+regression and why have you chosen it?
+
+Since our dependent variable mortality.rate is a numerical value, it is
+appropriate the model this using a linear regression model.
+
+Make sure to drop the NA values for all the other columns:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{legalplus.main.data }\OtherTok{=} \FunctionTok{drop\_na}\NormalTok{(legalplus.main.data, mortality.rate, z.poverty, z.opiates, z.highschool, Legality\_Status)}
+\end{Highlighting}
+\end{Shaded}
+
+Ensure that the county states are coded for each State
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tabyl}\NormalTok{(main.data, county.state)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  county.state   n      percent
+##            AK   9 0.0034456355
+##            AL  62 0.0237366003
+##            AR  65 0.0248851455
+##            AZ  15 0.0057427259
+##            CA  57 0.0218223583
+##            CO  45 0.0172281776
+##            CT   8 0.0030627871
+##            DC   1 0.0003828484
+##            DE   3 0.0011485452
+##            FL  66 0.0252679939
+##            GA 136 0.0520673813
+##            HI   4 0.0015313936
+##            IA  76 0.0290964778
+##            ID  35 0.0133996937
+##            IL  88 0.0336906585
+##            IN  90 0.0344563553
+##            KS  49 0.0187595712
+##            KY 116 0.0444104135
+##            LA  60 0.0229709035
+##            MA  14 0.0053598775
+##            MD  24 0.0091883614
+##            ME  16 0.0061255743
+##            MI  82 0.0313935681
+##            MN  71 0.0271822358
+##            MO  94 0.0359877489
+##            MS  70 0.0267993874
+##            MT  33 0.0126339969
+##            NC  97 0.0371362940
+##            ND  20 0.0076569678
+##            NE  34 0.0130168453
+##            NH  10 0.0038284839
+##            NJ  21 0.0080398162
+##            NM  28 0.0107197550
+##            NV  14 0.0053598775
+##            NY  61 0.0233537519
+##            OH  88 0.0336906585
+##            OK  68 0.0260336907
+##            OR  33 0.0126339969
+##            PA  66 0.0252679939
+##            RI   5 0.0019142420
+##            SC  45 0.0172281776
+##            SD  26 0.0099540582
+##            TN  93 0.0356049005
+##            TX 183 0.0700612557
+##            UT  24 0.0091883614
+##            VA 117 0.0447932619
+##            VT  14 0.0053598775
+##            WA  37 0.0141653905
+##            WI  69 0.0264165391
+##            WV  51 0.0195252680
+##            WY  19 0.0072741194
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# levels(as.factor(main.data$county.state))}
+\NormalTok{legalplus.main.data}\SpecialCharTok{$}\NormalTok{county.state }\OtherTok{\textless{}{-}} \FunctionTok{relevel}\NormalTok{(}\FunctionTok{as.factor}\NormalTok{(legalplus.main.data}\SpecialCharTok{$}\NormalTok{county.state), }\AttributeTok{ref =} \StringTok{"TX"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Model includes the standardised numerical variables and state.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{regmodel }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(mortality.rate }\SpecialCharTok{\textasciitilde{}}\NormalTok{ z.poverty }\SpecialCharTok{+}\NormalTok{ z.opiates }\SpecialCharTok{+}\NormalTok{ z.highschool  }\SpecialCharTok{+}\NormalTok{ Legality\_Status, }\AttributeTok{data =}\NormalTok{ legalplus.main.data)}
+
+\FunctionTok{summary}\NormalTok{(regmodel)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = mortality.rate ~ z.poverty + z.opiates + z.highschool + 
+##     Legality_Status, data = legalplus.main.data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -27.215  -5.681  -1.396   3.782  88.084 
+## 
+## Coefficients:
+##                                                   Estimate Std. Error t value
+## (Intercept)                                        17.0504     1.4964  11.394
+## z.poverty                                           2.6969     0.2679  10.065
+## z.opiates                                           1.9514     0.1871  10.428
+## z.highschool                                       -1.1065     0.2757  -4.014
+## Legality_StatusIllegal                              7.3634     1.9039   3.868
+## Legality_StatusLegal for Medical and Recreational   5.9229     1.5222   3.891
+## Legality_StatusLegal for Medical Only               2.0645     1.5142   1.363
+##                                                   Pr(>|t|)    
+## (Intercept)                                        < 2e-16 ***
+## z.poverty                                          < 2e-16 ***
+## z.opiates                                          < 2e-16 ***
+## z.highschool                                      6.14e-05 ***
+## Legality_StatusIllegal                            0.000113 ***
+## Legality_StatusLegal for Medical and Recreational 0.000102 ***
+## Legality_StatusLegal for Medical Only             0.172873    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 8.692 on 2605 degrees of freedom
+## Multiple R-squared:  0.1337, Adjusted R-squared:  0.1317 
+## F-statistic:    67 on 6 and 2605 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\hypertarget{interpretations}{%
+\subsubsection{Interpretations}\label{interpretations}}
+
+For this model, the baseline is State AK or Alaska, thus the intercept
+represents the mortality rate holding all other predictors at 0.
+
+\hypertarget{model-fit}{%
+\subsubsection{Model Fit}\label{model-fit}}
+
+\hypertarget{map}{%
+\subsection{Map}\label{map}}
+
+3. Create at least one map that helps explain your findings (we will
+show you how to do this in the next session).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the ggplot object}
+\NormalTok{plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ mortality.rate), }\AttributeTok{colour =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_sf}\NormalTok{(}\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{180}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{65}\NormalTok{), }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{24}\NormalTok{, }\DecValTok{72}\NormalTok{), }\AttributeTok{expand =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"dark blue"}\NormalTok{,}
+                       \AttributeTok{high =} \StringTok{"dark green"}\NormalTok{,}
+                       \AttributeTok{midpoint =} \FunctionTok{mean}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{mortality.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+                       \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{mortality.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+                                  \FunctionTok{max}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{mortality.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+                       \AttributeTok{label =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{comma,}
+                       \AttributeTok{na.value =} \StringTok{"grey"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{\textquotesingle{}Mortality Rate distribution\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{fill =} \FunctionTok{guide\_legend}\NormalTok{(}\AttributeTok{keyheight =} \FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+        \AttributeTok{legend.position =} \StringTok{\textquotesingle{}bottom\textquotesingle{}}\NormalTok{,}
+        \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{())}
+
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repr.plot.width =} \DecValTok{12}\NormalTok{, }\AttributeTok{repr.plot.height =} \DecValTok{10}\NormalTok{)  }\CommentTok{\# Adjust width and height as needed}
+\NormalTok{plot  }\CommentTok{\# Display the plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the ggplot object}
+\NormalTok{plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ below.poverty.rate), }\AttributeTok{colour =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_sf}\NormalTok{(}\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{180}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{65}\NormalTok{), }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{24}\NormalTok{, }\DecValTok{72}\NormalTok{), }\AttributeTok{expand =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"dark blue"}\NormalTok{,}
+                       \AttributeTok{high =} \StringTok{"dark green"}\NormalTok{,}
+                       \AttributeTok{midpoint =} \FunctionTok{mean}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{below.poverty.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+                       \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{below.poverty.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+                                  \FunctionTok{max}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{below.poverty.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+                       \AttributeTok{label =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{comma,}
+                       \AttributeTok{na.value =} \StringTok{"grey"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{\textquotesingle{}Mortality Rate distribution\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{fill =} \FunctionTok{guide\_legend}\NormalTok{(}\AttributeTok{keyheight =} \FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+        \AttributeTok{legend.position =} \StringTok{\textquotesingle{}bottom\textquotesingle{}}\NormalTok{,}
+        \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{())}
+
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repr.plot.width =} \DecValTok{12}\NormalTok{, }\AttributeTok{repr.plot.height =} \DecValTok{10}\NormalTok{)  }\CommentTok{\# Adjust width and height as needed}
+\NormalTok{plot  }\CommentTok{\# Display the plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the ggplot object}
+\NormalTok{plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ X2016.Prescribing.Rate), }\AttributeTok{colour =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_sf}\NormalTok{(}\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{180}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{65}\NormalTok{), }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{24}\NormalTok{, }\DecValTok{72}\NormalTok{), }\AttributeTok{expand =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"dark blue"}\NormalTok{,}
+                       \AttributeTok{high =} \StringTok{"dark green"}\NormalTok{,}
+                       \AttributeTok{midpoint =} \FunctionTok{mean}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{X2016.Prescribing.Rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+                       \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{X2016.Prescribing.Rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+                                  \FunctionTok{max}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{X2016.Prescribing.Rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+                       \AttributeTok{label =}\NormalTok{ scales}\SpecialCharTok{::}\NormalTok{comma,}
+                       \AttributeTok{na.value =} \StringTok{"grey"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{\textquotesingle{}Mortality Rate distribution\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{fill =} \FunctionTok{guide\_legend}\NormalTok{(}\AttributeTok{keyheight =} \FloatTok{0.3}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+        \AttributeTok{legend.position =} \StringTok{\textquotesingle{}bottom\textquotesingle{}}\NormalTok{,}
+        \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{())}
+
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repr.plot.width =} \DecValTok{12}\NormalTok{, }\AttributeTok{repr.plot.height =} \DecValTok{10}\NormalTok{)  }\CommentTok{\# Adjust width and height as needed}
+\NormalTok{plot  }\CommentTok{\# Display the plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\hypertarget{discussion}{%
+\subsection{Discussion}\label{discussion}}
+
+4. Write up your key results.
+
+You will be marked on the quality of your \$R\$ code (including whether
+it runs for us without errors), how well you have justified your
+variable selection, the proper use of appropriate methods.
+
+\end{document}
