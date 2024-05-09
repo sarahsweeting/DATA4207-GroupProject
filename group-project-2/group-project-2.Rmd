@@ -19,6 +19,13 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(sf)
 library(janitor)
+library(sf)
+# install.packages("fuzzyjoin")
+library(fuzzyjoin) # to join on inexact matches 
+library(scales) # adds percentage marks to legend
+library(patchwork) #to combin plots
+library(ggplot2)
+library(rmapshaper)
 ```
 
 # Introduction
@@ -120,6 +127,7 @@ main.data <- merge(
 
 ```
 
+
 ```{r}
 main.data <- merge(
   main.data %>%
@@ -127,11 +135,12 @@ main.data <- merge(
   county.data %>%
     dplyr::rename(Id2 = FIPS,
                  county.state = State,
-                 education.highschool = Percent.of.adults.with.a.high.school.diploma.only.2014.18) %>%
-    mutate(z.highschool = (education.highschool - mean(education.highschool, na.rm=T)) / 
+                 education.highschool = Percent.of.adults.with.less.than.a.high.school.diploma.2014.18) %>%
+    mutate(z.highschool = (education.highschool - mean(education.highschool, na.rm=T)) /
            sd(education.highschool, na.rm=T)) %>%
     dplyr::select(Id2, county.state, education.highschool, z.highschool)
 )
+
 ```
 
 ```{r merge opioids data with county data}
@@ -230,15 +239,16 @@ And then we merge the shapefile and the county-level data:
 
 us.shape.2 <- full_join(us.shape.2,
   main.data %>%
-    dplyr::select(county, below.poverty.rate, mortality.rate, X2016.Prescribing.Rate))
+    dplyr::select(county, below.poverty.rate, mortality.rate, X2016.Prescribing.Rate)) %>%
+  st_as_sf() # To acknolwedge its a shape file
 
 
 ```
+```{r}
+us.shape.2
+```
 
 \vspace{6mm}
-
-TODO:
-- clean out unreliable mortality data??
 
 
 You are now ready to map these data. Good luck with the rest of the exercise! 
@@ -363,7 +373,7 @@ Since our dependent variable mortality.rate is a numerical value, it is appropri
 Make sure to drop the NA values for all the other columns:
 
 ```{r}
-main.data = drop_na(main.data, mortality.rate, z.poverty, z.opiates, z.highschool)
+legalplus.main.data = drop_na(legalplus.main.data, mortality.rate, z.poverty, z.opiates, z.highschool, Legality_Status)
 ```
 
 Ensure that the county states are coded for each State
@@ -374,7 +384,9 @@ tabyl(main.data, county.state)
 
 ```{r}
 # levels(as.factor(main.data$county.state))
+
 main.data$county.state <- relevel(as.factor(main.data$county.state), ref = "TX")
+
 ```
 
 
@@ -397,6 +409,74 @@ For this model, the baseline is State AK or Alaska, thus the intercept represent
 ## Map
 
 3\. Create at least one map that helps explain your findings (we will show you how to do this in the next session).
+
+```{r}
+# Create the ggplot object
+plot <- ggplot(us.shape.2) +
+  geom_sf(mapping = aes(fill = mortality.rate), colour = NA, inherit.aes = FALSE) +
+  coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
+  scale_fill_gradient2(low = "dark blue",
+                       high = "dark green",
+                       midpoint = mean(us.shape.2$mortality.rate, na.rm = TRUE),
+                       limits = c(min(us.shape.2$mortality.rate, na.rm = TRUE),
+                                  max(us.shape.2$mortality.rate, na.rm = TRUE)),
+                       label = scales::comma,
+                       na.value = "grey") +
+  labs(title = 'Mortality Rate distribution') +
+  guides(fill = guide_legend(keyheight = 0.3)) +
+  theme_void() +
+  theme(plot.title = element_text(size = 12),
+        legend.position = 'bottom',
+        legend.title = element_blank())
+
+options(repr.plot.width = 12, repr.plot.height = 10)  # Adjust width and height as needed
+plot  # Display the plot
+```
+
+```{r}
+# Create the ggplot object
+plot <- ggplot(us.shape.2) +
+  geom_sf(mapping = aes(fill = below.poverty.rate), colour = NA, inherit.aes = FALSE) +
+  coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
+  scale_fill_gradient2(low = "dark blue",
+                       high = "dark green",
+                       midpoint = mean(us.shape.2$below.poverty.rate, na.rm = TRUE),
+                       limits = c(min(us.shape.2$below.poverty.rate, na.rm = TRUE),
+                                  max(us.shape.2$below.poverty.rate, na.rm = TRUE)),
+                       label = scales::comma,
+                       na.value = "grey") +
+  labs(title = 'Mortality Rate distribution') +
+  guides(fill = guide_legend(keyheight = 0.3)) +
+  theme_void() +
+  theme(plot.title = element_text(size = 12),
+        legend.position = 'bottom',
+        legend.title = element_blank())
+
+options(repr.plot.width = 12, repr.plot.height = 10)  # Adjust width and height as needed
+plot  # Display the plot
+```
+```{r}
+# Create the ggplot object
+plot <- ggplot(us.shape.2) +
+  geom_sf(mapping = aes(fill = X2016.Prescribing.Rate), colour = NA, inherit.aes = FALSE) +
+  coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
+  scale_fill_gradient2(low = "dark blue",
+                       high = "dark green",
+                       midpoint = mean(us.shape.2$X2016.Prescribing.Rate, na.rm = TRUE),
+                       limits = c(min(us.shape.2$X2016.Prescribing.Rate, na.rm = TRUE),
+                                  max(us.shape.2$X2016.Prescribing.Rate, na.rm = TRUE)),
+                       label = scales::comma,
+                       na.value = "grey") +
+  labs(title = 'Mortality Rate distribution') +
+  guides(fill = guide_legend(keyheight = 0.3)) +
+  theme_void() +
+  theme(plot.title = element_text(size = 12),
+        legend.position = 'bottom',
+        legend.title = element_blank())
+
+options(repr.plot.width = 12, repr.plot.height = 10)  # Adjust width and height as needed
+plot  # Display the plot
+```
 
 ## Discussion
 
