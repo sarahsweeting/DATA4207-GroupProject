@@ -524,16 +524,16 @@ And then we merge the shapefile and the county-level data:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{us.shape}\FloatTok{.2}
+\FunctionTok{shift\_geometry}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{, }\AttributeTok{position=}\StringTok{"below"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ## Simple feature collection with 3237 features and 17 fields (with 5 geometries empty)
-## Geometry type: MULTIPOLYGON
+## Geometry type: GEOMETRY
 ## Dimension:     XY
-## Bounding box:  xmin: -179.1743 ymin: 17.91377 xmax: 179.7739 ymax: 71.35256
-## Geodetic CRS:  NAD83
+## Bounding box:  xmin: -3112200 ymin: -1697728 xmax: 2258154 ymax: 1558935
+## Projected CRS: USA_Contiguous_Albers_Equal_Area_Conic
 ## First 10 features:
 ##    STATEFP COUNTYFP COUNTYNS       AFFGEOID GEOID       NAME LSAD      ALAND
 ## 1       01      017 00161534 0500000US01017 01017   Chambers   06 1545009121
@@ -569,16 +569,16 @@ And then we merge the shapefile and the county-level data:
 ## 9                13.1            9.9                  208.1
 ## 10               13.4           14.8                  127.5
 ##                          geometry
-## 1  MULTIPOLYGON (((-85.59318 3...
-## 2  MULTIPOLYGON (((-85.85189 3...
-## 3  MULTIPOLYGON (((-87.11199 3...
-## 4  MULTIPOLYGON (((-87.5252 32...
-## 5  MULTIPOLYGON (((-88.43201 3...
-## 6  MULTIPOLYGON (((-86.96336 3...
-## 7  MULTIPOLYGON (((-87.26692 3...
-## 8  MULTIPOLYGON (((-88.46866 3...
-## 9  MULTIPOLYGON (((-88.13426 3...
-## 10 MULTIPOLYGON (((-88.20296 3...
+## 1  MULTIPOLYGON (((963232 -438...
+## 2  MULTIPOLYGON (((934720.6 -3...
+## 3  MULTIPOLYGON (((813867.6 -3...
+## 4  MULTIPOLYGON (((789425.1 -5...
+## 5  MULTIPOLYGON (((718804.6 -6...
+## 6  MULTIPOLYGON (((828860.7 -3...
+## 7  MULTIPOLYGON (((804636.5 -4...
+## 8  MULTIPOLYGON (((708460.5 -5...
+## 9  MULTIPOLYGON (((714661.3 -2...
+## 10 MULTIPOLYGON (((704900.9 -2...
 \end{verbatim}
 
 \vspace{6mm}
@@ -956,10 +956,17 @@ show you how to do this in the next session).
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{us.shape}\FloatTok{.2} \OtherTok{\textless{}{-}}\NormalTok{ us.shape}\FloatTok{.2} \SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{shift\_geometry}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{\# Create the ggplot object}
 \NormalTok{plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ X2016.Prescribing.Rate), }\AttributeTok{colour =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{coord\_sf}\NormalTok{(}\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{180}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{65}\NormalTok{), }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{24}\NormalTok{, }\DecValTok{72}\NormalTok{), }\AttributeTok{expand =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \CommentTok{\# coord\_sf(xlim = c({-}180, {-}65), ylim = c(24, 72), expand = FALSE) +}
   \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"dark blue"}\NormalTok{,}
                        \AttributeTok{high =} \StringTok{"dark green"}\NormalTok{,}
                        \AttributeTok{midpoint =} \FunctionTok{mean}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{X2016.Prescribing.Rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
@@ -979,7 +986,7 @@ show you how to do this in the next session).
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-12-1.pdf}
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-13-1.pdf}
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
