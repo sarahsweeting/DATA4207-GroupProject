@@ -524,16 +524,16 @@ And then we merge the shapefile and the county-level data:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{us.shape}\FloatTok{.2}
+\FunctionTok{shift\_geometry}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{, }\AttributeTok{position=}\StringTok{"below"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
 ## Simple feature collection with 3237 features and 17 fields (with 5 geometries empty)
-## Geometry type: MULTIPOLYGON
+## Geometry type: GEOMETRY
 ## Dimension:     XY
-## Bounding box:  xmin: -179.1743 ymin: 17.91377 xmax: 179.7739 ymax: 71.35256
-## Geodetic CRS:  NAD83
+## Bounding box:  xmin: -3112200 ymin: -1697728 xmax: 2258154 ymax: 1558935
+## Projected CRS: USA_Contiguous_Albers_Equal_Area_Conic
 ## First 10 features:
 ##    STATEFP COUNTYFP COUNTYNS       AFFGEOID GEOID       NAME LSAD      ALAND
 ## 1       01      017 00161534 0500000US01017 01017   Chambers   06 1545009121
@@ -569,16 +569,16 @@ And then we merge the shapefile and the county-level data:
 ## 9                13.1            9.9                  208.1
 ## 10               13.4           14.8                  127.5
 ##                          geometry
-## 1  MULTIPOLYGON (((-85.59318 3...
-## 2  MULTIPOLYGON (((-85.85189 3...
-## 3  MULTIPOLYGON (((-87.11199 3...
-## 4  MULTIPOLYGON (((-87.5252 32...
-## 5  MULTIPOLYGON (((-88.43201 3...
-## 6  MULTIPOLYGON (((-86.96336 3...
-## 7  MULTIPOLYGON (((-87.26692 3...
-## 8  MULTIPOLYGON (((-88.46866 3...
-## 9  MULTIPOLYGON (((-88.13426 3...
-## 10 MULTIPOLYGON (((-88.20296 3...
+## 1  MULTIPOLYGON (((963232 -438...
+## 2  MULTIPOLYGON (((934720.6 -3...
+## 3  MULTIPOLYGON (((813867.6 -3...
+## 4  MULTIPOLYGON (((789425.1 -5...
+## 5  MULTIPOLYGON (((718804.6 -6...
+## 6  MULTIPOLYGON (((828860.7 -3...
+## 7  MULTIPOLYGON (((804636.5 -4...
+## 8  MULTIPOLYGON (((708460.5 -5...
+## 9  MULTIPOLYGON (((714661.3 -2...
+## 10 MULTIPOLYGON (((704900.9 -2...
 \end{verbatim}
 
 \vspace{6mm}
@@ -748,19 +748,108 @@ transform any of the variables
 
 \includegraphics{group-project-2_files/figure-latex/unnamed-chunk-5-7.pdf}
 
+\hypertarget{correlation-heatmap}{%
+\paragraph{Correlation heatmap}\label{correlation-heatmap}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{numeric.data }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(main.data}\SpecialCharTok{$}\NormalTok{z.poverty, main.data}\SpecialCharTok{$}\NormalTok{z.opiates, main.data}\SpecialCharTok{$}\NormalTok{mortality.rate, main.data}\SpecialCharTok{$}\NormalTok{z.highschool)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cormat }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(}\FunctionTok{cor}\NormalTok{(numeric.data),}\DecValTok{2}\NormalTok{)}
+\FunctionTok{head}\NormalTok{(cormat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                          main.data.z.poverty main.data.z.opiates
+## main.data.z.poverty                     1.00                0.32
+## main.data.z.opiates                     0.32                1.00
+## main.data.mortality.rate                0.22                0.24
+## main.data.z.highschool                  0.72                0.20
+##                          main.data.mortality.rate main.data.z.highschool
+## main.data.z.poverty                          0.22                   0.72
+## main.data.z.opiates                          0.24                   0.20
+## main.data.mortality.rate                     1.00                   0.09
+## main.data.z.highschool                       0.09                   1.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(reshape2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'reshape2' was built under R version 4.3.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'reshape2'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:tidyr':
+## 
+##     smiths
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{melted\_cormat }\OtherTok{\textless{}{-}} \FunctionTok{melt}\NormalTok{(cormat)}
+
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ melted\_cormat, }\FunctionTok{aes}\NormalTok{(Var2, Var1, }\AttributeTok{fill =}\NormalTok{ value))}\SpecialCharTok{+}
+ \FunctionTok{geom\_tile}\NormalTok{(}\AttributeTok{color =} \StringTok{"white"}\NormalTok{)}\SpecialCharTok{+}
+ \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{high =} \StringTok{"red"}\NormalTok{, }\AttributeTok{mid =} \StringTok{"white"}\NormalTok{, }
+   \AttributeTok{midpoint =} \DecValTok{0}\NormalTok{, }\AttributeTok{limit =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{), }\AttributeTok{space =} \StringTok{"Lab"}\NormalTok{, }
+   \AttributeTok{name=}\StringTok{"Pearson}\SpecialCharTok{\textbackslash{}n}\StringTok{Correlation"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{()}\SpecialCharTok{+} 
+ \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{vjust =} \DecValTok{1}\NormalTok{, }
+    \AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{))}\SpecialCharTok{+}
+ \FunctionTok{coord\_fixed}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-8-1.pdf}
+
 \hypertarget{relationship-of-dependent-and-independent-variables}{%
 \subsection{Relationship of dependent and independent
 variables}\label{relationship-of-dependent-and-independent-variables}}
 
-How does poverty and opiate prescriptions predict mortality rates
-associated with drugs and alcohol? Some other data is provided in the
-data folder, and you should take a few variables or controls from this.
+To explore the question `How does poverty and opiate prescriptions
+predict mortality rates associated with drugs and alcohol?' we have
+explored potential variables including poverty rates, opiate
+prescription rates, education levels and state laws for drug use. With a
+numerical dependent variable, mortality rate, a linear regression type
+may be suitable to model the relationship.
 
-2. Fit regressions to your data. What is the appropriate type of
-regression and why have you chosen it?
+A few assumptions need to be made in order to use this model:
 
-Since our dependent variable mortality.rate is a numerical value, it is
-appropriate the model this using a linear regression model.
+Linearity: The relationship between the predictor variables (poverty,
+opioid prescriptions) and the response variable (mortality rates
+associated with drugs and alcohol) should be approximately linear. This
+assumption is assessed through our descriptive analysis scatter plots.
+
+Independence: The observations should be independent of each other. In
+other words, the mortality rates for one county should not influence the
+mortality rates for another county.
+
+Homoscedasticity: The variance of the residuals should be constant
+across all levels of the predictors. This can be checked by examining a
+plot of residuals versus fitted values.
+
+Normality of Residuals: The residuals should follow a normal
+distribution. This assumption can be assessed by examining a histogram
+or a Q-Q plot of the residuals.
+
+No Multicollinearity: The predictor variables should not be highly
+correlated with each other. Multicollinearity can inflate standard
+errors and make interpretation of coefficients difficult. This is seen
+in the correlation matrix and it can be assumed this assumption is met.
 
 Make sure to drop the NA values for all the other columns:
 
@@ -770,77 +859,38 @@ Make sure to drop the NA values for all the other columns:
 \end{Highlighting}
 \end{Shaded}
 
-Ensure that the county states are coded for each State
+Model including just the standardised poverty and opiate variables.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{tabyl}\NormalTok{(main.data, county.state)}
+\NormalTok{model1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(mortality.rate }\SpecialCharTok{\textasciitilde{}}\NormalTok{ z.poverty }\SpecialCharTok{+}\NormalTok{ z.opiates, }\AttributeTok{data =}\NormalTok{ main.data)}
+\FunctionTok{summary}\NormalTok{(model1)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##  county.state   n      percent
-##            AK   9 0.0034456355
-##            AL  62 0.0237366003
-##            AR  65 0.0248851455
-##            AZ  15 0.0057427259
-##            CA  57 0.0218223583
-##            CO  45 0.0172281776
-##            CT   8 0.0030627871
-##            DC   1 0.0003828484
-##            DE   3 0.0011485452
-##            FL  66 0.0252679939
-##            GA 136 0.0520673813
-##            HI   4 0.0015313936
-##            IA  76 0.0290964778
-##            ID  35 0.0133996937
-##            IL  88 0.0336906585
-##            IN  90 0.0344563553
-##            KS  49 0.0187595712
-##            KY 116 0.0444104135
-##            LA  60 0.0229709035
-##            MA  14 0.0053598775
-##            MD  24 0.0091883614
-##            ME  16 0.0061255743
-##            MI  82 0.0313935681
-##            MN  71 0.0271822358
-##            MO  94 0.0359877489
-##            MS  70 0.0267993874
-##            MT  33 0.0126339969
-##            NC  97 0.0371362940
-##            ND  20 0.0076569678
-##            NE  34 0.0130168453
-##            NH  10 0.0038284839
-##            NJ  21 0.0080398162
-##            NM  28 0.0107197550
-##            NV  14 0.0053598775
-##            NY  61 0.0233537519
-##            OH  88 0.0336906585
-##            OK  68 0.0260336907
-##            OR  33 0.0126339969
-##            PA  66 0.0252679939
-##            RI   5 0.0019142420
-##            SC  45 0.0172281776
-##            SD  26 0.0099540582
-##            TN  93 0.0356049005
-##            TX 183 0.0700612557
-##            UT  24 0.0091883614
-##            VA 117 0.0447932619
-##            VT  14 0.0053598775
-##            WA  37 0.0141653905
-##            WI  69 0.0264165391
-##            WV  51 0.0195252680
-##            WY  19 0.0072741194
+## 
+## Call:
+## lm(formula = mortality.rate ~ z.poverty + z.opiates, data = main.data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -20.983  -5.824  -1.562   3.963  91.399 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  20.4864     0.1757 116.591   <2e-16 ***
+## z.poverty     1.6040     0.1941   8.265   <2e-16 ***
+## z.opiates     1.8630     0.1916   9.724   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 8.934 on 2609 degrees of freedom
+## Multiple R-squared:  0.08339,    Adjusted R-squared:  0.08269 
+## F-statistic: 118.7 on 2 and 2609 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{\# levels(as.factor(main.data$county.state))}
-\NormalTok{legalplus.main.data}\SpecialCharTok{$}\NormalTok{county.state }\OtherTok{\textless{}{-}} \FunctionTok{relevel}\NormalTok{(}\FunctionTok{as.factor}\NormalTok{(legalplus.main.data}\SpecialCharTok{$}\NormalTok{county.state), }\AttributeTok{ref =} \StringTok{"TX"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-Model includes the standardised numerical variables and state.
+Model includes the standardised numerical variables and state law types.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -885,11 +935,42 @@ Model includes the standardised numerical variables and state.
 ## F-statistic:    67 on 6 and 2605 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
+Testing Homoscedasticity: There is no real pattern in the plot which is
+good for homoscedasticity. The spread is quite random.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{residuals }\OtherTok{\textless{}{-}} \FunctionTok{resid}\NormalTok{(model1)}
+\NormalTok{fitted\_values }\OtherTok{\textless{}{-}} \FunctionTok{fitted}\NormalTok{(model1)}
+\FunctionTok{plot}\NormalTok{(fitted\_values, residuals, }\AttributeTok{main =} \StringTok{"Residuals vs Fitted Values"}\NormalTok{, }
+     \AttributeTok{xlab =} \StringTok{"Fitted Values"}\NormalTok{, }\AttributeTok{ylab =} \StringTok{"Residuals"}\NormalTok{)}
+\FunctionTok{abline}\NormalTok{(}\AttributeTok{h =} \DecValTok{0}\NormalTok{, }\AttributeTok{col =} \StringTok{"red"}\NormalTok{)  }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-12-1.pdf}
+Testing for Normality of Residuals: the plotted points don't form a
+straight line and indicate that the residuals deviate slightly and the
+tail ends suggest a skewness.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{qqnorm}\NormalTok{(residuals)}
+\FunctionTok{qqline}\NormalTok{(residuals)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-13-1.pdf}
+
 \hypertarget{interpretations}{%
 \subsubsection{Interpretations}\label{interpretations}}
 
-For this model, the baseline is State AK or Alaska, thus the intercept
-represents the mortality rate holding all other predictors at 0.
+We have made two models to identify if the inclusion of confounding
+factors better explains the mortality rate variable.
+
+Model 1 identifies that the linear regression model can be suitable for
+predicting mortality rates with the assumptions holding. The
+coefficients in this model are all statistically significant.
 
 \hypertarget{model-fit}{%
 \subsubsection{Model Fit}\label{model-fit}}
@@ -902,10 +983,16 @@ show you how to do this in the next session).
 
 \begin{Shaded}
 \begin{Highlighting}[]
+\NormalTok{us.shape}\FloatTok{.2} \OtherTok{\textless{}{-}}\NormalTok{ us.shape}\FloatTok{.2} \SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{shift\_geometry}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{\# Create the ggplot object}
-\NormalTok{plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
+\NormalTok{p1 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ mortality.rate), }\AttributeTok{colour =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{coord\_sf}\NormalTok{(}\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{180}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{65}\NormalTok{), }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{24}\NormalTok{, }\DecValTok{72}\NormalTok{), }\AttributeTok{expand =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"dark blue"}\NormalTok{,}
                        \AttributeTok{high =} \StringTok{"dark green"}\NormalTok{,}
                        \AttributeTok{midpoint =} \FunctionTok{mean}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{mortality.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
@@ -920,19 +1007,16 @@ show you how to do this in the next session).
         \AttributeTok{legend.position =} \StringTok{\textquotesingle{}bottom\textquotesingle{}}\NormalTok{,}
         \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{())}
 
-\FunctionTok{options}\NormalTok{(}\AttributeTok{repr.plot.width =} \DecValTok{12}\NormalTok{, }\AttributeTok{repr.plot.height =} \DecValTok{10}\NormalTok{)  }\CommentTok{\# Adjust width and height as needed}
-\NormalTok{plot  }\CommentTok{\# Display the plot}
+\CommentTok{\# options(repr.plot.width = 12, repr.plot.height = 10)  \# Adjust width and height as needed}
+\CommentTok{\# p1  \# Display the plot}
 \end{Highlighting}
 \end{Shaded}
-
-\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-10-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Create the ggplot object}
-\NormalTok{plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
+\NormalTok{p2 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ below.poverty.rate), }\AttributeTok{colour =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{coord\_sf}\NormalTok{(}\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{180}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{65}\NormalTok{), }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{24}\NormalTok{, }\DecValTok{72}\NormalTok{), }\AttributeTok{expand =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"dark blue"}\NormalTok{,}
                        \AttributeTok{high =} \StringTok{"dark green"}\NormalTok{,}
                        \AttributeTok{midpoint =} \FunctionTok{mean}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{below.poverty.rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
@@ -947,19 +1031,17 @@ show you how to do this in the next session).
         \AttributeTok{legend.position =} \StringTok{\textquotesingle{}bottom\textquotesingle{}}\NormalTok{,}
         \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{())}
 
-\FunctionTok{options}\NormalTok{(}\AttributeTok{repr.plot.width =} \DecValTok{12}\NormalTok{, }\AttributeTok{repr.plot.height =} \DecValTok{10}\NormalTok{)  }\CommentTok{\# Adjust width and height as needed}
-\NormalTok{plot  }\CommentTok{\# Display the plot}
+\CommentTok{\# options(repr.plot.width = 12, repr.plot.height = 10)  \# Adjust width and height as needed}
+\CommentTok{\# p2  \# Display the plot}
 \end{Highlighting}
 \end{Shaded}
-
-\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-11-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Create the ggplot object}
-\NormalTok{plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
+\NormalTok{p3 }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(us.shape}\FloatTok{.2}\NormalTok{) }\SpecialCharTok{+}
   \FunctionTok{geom\_sf}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{fill =}\NormalTok{ X2016.Prescribing.Rate), }\AttributeTok{colour =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
-  \FunctionTok{coord\_sf}\NormalTok{(}\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{180}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{65}\NormalTok{), }\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{24}\NormalTok{, }\DecValTok{72}\NormalTok{), }\AttributeTok{expand =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \CommentTok{\# coord\_sf(xlim = c({-}180, {-}65), ylim = c(24, 72), expand = FALSE) +}
   \FunctionTok{scale\_fill\_gradient2}\NormalTok{(}\AttributeTok{low =} \StringTok{"dark blue"}\NormalTok{,}
                        \AttributeTok{high =} \StringTok{"dark green"}\NormalTok{,}
                        \AttributeTok{midpoint =} \FunctionTok{mean}\NormalTok{(us.shape}\FloatTok{.2}\SpecialCharTok{$}\NormalTok{X2016.Prescribing.Rate, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
@@ -974,12 +1056,20 @@ show you how to do this in the next session).
         \AttributeTok{legend.position =} \StringTok{\textquotesingle{}bottom\textquotesingle{}}\NormalTok{,}
         \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{())}
 
-\FunctionTok{options}\NormalTok{(}\AttributeTok{repr.plot.width =} \DecValTok{12}\NormalTok{, }\AttributeTok{repr.plot.height =} \DecValTok{10}\NormalTok{)  }\CommentTok{\# Adjust width and height as needed}
-\NormalTok{plot  }\CommentTok{\# Display the plot}
+\CommentTok{\# options(repr.plot.width = 12, repr.plot.height = 10)  \# Adjust width and height as needed}
+\CommentTok{\# p3  \# Display the plot}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-12-1.pdf}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p1 }\SpecialCharTok{+}\NormalTok{p2 }\SpecialCharTok{+}\NormalTok{ p3 }\SpecialCharTok{+}
+  \FunctionTok{plot\_annotation}\NormalTok{(}\AttributeTok{title =} \StringTok{\textquotesingle{}Demographic distribution in America\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{plot\_layout}\NormalTok{(}\AttributeTok{ncol =} \DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{group-project-2_files/figure-latex/unnamed-chunk-18-1.pdf}
 
 \hypertarget{discussion}{%
 \subsection{Discussion}\label{discussion}}
