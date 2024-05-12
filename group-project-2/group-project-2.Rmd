@@ -158,7 +158,16 @@ main.data <- merge(
     dplyr::select(Id2, z.opiates, X2016.Prescribing.Rate))
 
 ```
+## Transformation of data
 
+1. Standardisation of Geographical Identifiers: 
+To ensure consistent merging across datasets, geographical identifiers such as county names were standardised. The gsub function was utilised to remove specific terms like 'County', 'Parish', 'City', 'Borough', and 'Census Area'. This step was crucial to prevent mismatches during the data merging process due to different naming conventions across datasets.
+
+2. Calculation of Z-Scores: 
+To facilitate direct comparisons across regions with different scales and units, critical variables such as the percentage of adults without a high school diploma, poverty rates, and opiate prescribing rates were transformed into z-scores. This standardisation adjusted each variable to have a mean of zero and a standard deviation of one, highlighting deviations from the national average.
+
+3. Merging of Datasets: 
+After cleaning and transforming the relevant variables, the datasets were merged based on FIPS codes. This integration created a unified dataset that combined socio-economic and health-related data, enabling a more robust analysis of the factors influencing opioid mortality rates.
 
 
 Viewing the first six rows of our new data frame, we can see the structure of these data:
@@ -254,6 +263,9 @@ shift_geometry(us.shape.2, position="below")
 
 You are now ready to map these data. Good luck with the rest of the exercise! 
 
+### Extra Data set - Drug laws by state
+In the context of opioid-related mortality rates, categorising states by marijuana laws into “Legal for Medical Only,” “Legal for Medical and Recreational,” “Illegal,” and “Decriminalised” provides a nuanced framework for analysis. States where marijuana is legally available, either medically or recreationally, may experience a substitution effect, where individuals seeking pain relief opt for marijuana over opioids, potentially reducing opioid misuse and overdoses. Moreover, legalisation can reflect a broader, more progressive attitude towards healthcare and substance use treatment, increasing access to various addiction services. In states where marijuana remains illegal, strict law enforcement may perpetuate stigma around substance use, discouraging individuals from seeking treatment. Conversely, states that have decriminalised marijuana might allocate fewer resources to punitive measures and more towards harm reduction strategies, which could indirectly influence opioid mortality rates. This categorical analysis can reveal correlations between marijuana policies and opioid fatalities, offering crucial insights for future legislative decisions.
+
 ```{r}
 main.data = drop_na(main.data, mortality.rate, z.poverty, z.opiates, z.highschool)
 
@@ -269,31 +281,31 @@ cannabis_legality <- data.frame(
             "RI", "SC", "SD", "TN", 
             "TX", "UT", "VT", "VA", "WA", 
             "WV", "WI", "WY", "DC"),
-  Legality_Status = c("Legal for Medical Only", "Legal for Medical and Recreational", 
+Legality_Status = c("Legal for Medical Only", "Legal for Medical and Recreational", 
                       "Legal for Medical and Recreational", "Legal for Medical Only", 
                       "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
-                      "Legal for Medical and Recreational", "Legal for Medical Only", 
+                      "Legal for Medical and Recreational", "Decriminalized", 
                       "Legal for Medical Only", "Legal for Medical Only", 
                       "Legal for Medical Only", "Illegal", "Legal for Medical and Recreational", 
-                      "Legal for Medical Only", "Legal for Medical Only", 
-                      "Legal for Medical Only", "Legal for Medical Only", 
-                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Decriminalized", "Legal for Medical Only", 
+                      "Decriminalized", "Decriminalized", "Decriminalized", 
                       "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
-                      "Legal for Medical and Recreational", "Legal for Medical Only", 
-                      "Legal for Medical Only", "Legal for Medical and Recreational", 
-                      "Legal for Medical and Recreational", "Decriminalized", 
-                      "Legal for Medical and Recreational", "Legal for Medical Only", 
                       "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
-                      "Legal for Medical and Recreational", "Legal for Medical Only", 
                       "Legal for Medical Only", "Legal for Medical Only", 
-                      "Legal for Medical Only", "Legal for Medical and Recreational", 
-                      "Legal for Medical Only", "Legal for Medical and Recreational", 
-                      "Legal for Medical Only", "Legal for Medical and Recreational", 
-                      "Legal for Medical Only", "Legal for Medical Only", 
-                      "Legal for Medical Only", "Legal for Medical and Recreational", 
                       "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
-                      "Legal for Medical Only", "Legal for Medical Only", "Illegal", 
-                      "Legal for Medical and Recreational")
+                      "Decriminalized", "Legal for Medical and Recreational", 
+                      "Decriminalized", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Decriminalized", "Illegal", "Legal for Medical Only", 
+                      "Decriminalized", "Legal for Medical and Recreational", 
+                      "Decriminalized", "Legal for Medical and Recreational", 
+                      "Legal for Medical Only", "Legal for Medical and Recreational", 
+                      "Decriminalized", "Legal for Medical Only", 
+                      "Decriminalized", "Legal for Medical and Recreational", 
+                      "Legal for Medical and Recreational", "Legal for Medical and Recreational", 
+                      "Decriminalized", "Decriminalized", "Illegal", 
+                      "Legal for Medical and Recreational") 
+
 )
 
 legalplus.main.data = merge(main.data, cannabis_legality, by = "county.state", all = TRUE)
@@ -305,24 +317,33 @@ legalplus.main.data = merge(main.data, cannabis_legality, by = "county.state", a
 
 1\. Conduct some descriptive analyses of these data. You can examine this using scatter plots and correlation coefficients. Do you need to transform any of the variables
 
-```{r}
-library(ggplot2)
-
-
+```{r ECH0 = FALSE}
 ggplot(main.data, aes(x = mortality.rate)) +
   geom_histogram(bins = 30, fill = "blue", color = "black") +
   ggtitle("Distribution of Mortality Rates") +
   xlab("Mortality Rate") +
   ylab("Frequency")
 
+```
+This histogram illustrates the distribution of opioid-related mortality rates, predominantly clustered between 0 and 30 deaths per 100,000 population. The data is positively skewed towards lower rates, peaking between 10-20 deaths, indicating this is the most common range. The frequency of occurrences drops sharply for higher rates, with a long tail extending up to 120 deaths, highlighting a few regions with significantly higher mortality rates. Overall, the distribution shows that high opioid mortality rates are relatively rare, with most areas experiencing lower rates.
 
+
+```{r ECH0 = FALSE}
 ggplot(legalplus.main.data, aes(x = Legality_Status, y = mortality.rate, fill = Legality_Status)) +
   geom_boxplot() +
-  ggtitle("Mortality Rate by Cannabis Legality Status") +
+  ggtitle("Mortality Rate vs Cannabis Legality Status") +
   xlab("Cannabis Legality Status") +
   ylab("Mortality Rate")
 
+```
+Decriminalised (Red): Shows lower and more consistent mortality rates with few outliers.
+Illegal (Green): Features a wider spread and higher median, indicating generally higher rates.
+Legal for Medical and Recreational (Blue): Displays a broad range but a lower median than illegal states, suggesting a moderating effect of more liberal cannabis policies.
+Legal for Medical Only (Purple): Similar range to the recreational category but with a slightly lower median, indicating moderately lower mortality rates.
+The plot highlights significant variability within each category, particularly in regions with higher rates, demonstrating the potential impact of cannabis legality on opioid mortality. Overall, this visualisation underscores the potential link between cannabis legality and opioid mortality, suggesting that where cannabis is more accessible, it might serve as a viable alternative to opioids, potentially leading to lower opioid death rates.
 
+
+```{r ECH0 = FALSE}
 ggplot(main.data, aes(x = z.poverty, y = mortality.rate)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
@@ -330,6 +351,10 @@ ggplot(main.data, aes(x = z.poverty, y = mortality.rate)) +
   xlab("Below Poverty Rate") +
   ylab("Mortality Rate")
 
+```
+The red trend line shows a positive correlation, indicating that as poverty rates increase, there is a general rise in opioid mortality rates. This suggests that higher poverty levels are associated with increased opioid-related deaths. However, the spread of mortality rates at lower poverty rates indicates that poverty is a significant but not the only factor influencing opioid mortality, highlighting the complex interplay between socioeconomic factors and health outcomes.
+
+```{r ECH0 = FALSE}
 ggplot(main.data, aes(x = z.highschool, y = mortality.rate)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
@@ -337,20 +362,26 @@ ggplot(main.data, aes(x = z.highschool, y = mortality.rate)) +
   xlab("High School Rates") +
   ylab("Mortality Rate")
 
+```
+The trend line suggests a weak positive correlation, indicating that regions with higher percentages of adults lacking a high school diploma tend to have slightly higher opioid mortality rates. However, the data points are widely dispersed, suggesting that while educational attainment may influence opioid mortality rates, it is one of several factors contributing to these outcomes.
+
+The clustering of many data points at lower percentages of adults without high school diplomas with a broad range of mortality rates further highlights the complexity of this relationship. This visualisation suggests that while lower educational attainment may be associated with higher opioid mortality, the impact is not uniformly strong across all regions.
+
+```{r ECH0 = FALSE}
+
 ggplot(main.data, aes(x = z.opiates, y = mortality.rate)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "green") +
   ggtitle("Mortality Rate vs. Opiate use") +
   xlab("Opiate use") +
   ylab("Mortality Rate")
+```
+The green trend line indicates a clear positive correlation, suggesting that as opiate use increases, there is a corresponding rise in opioid mortality rates. The dense clustering of data points around lower opiate use rates with varied mortality outcomes highlights that while higher opiate use is associated with higher mortality, there is also significant variability in mortality rates at lower levels of opiate use.
+
+This plot demonstrates that higher opiate use is unsurprisingly strong predictor of opioid mortality, underscoring the need for targeted interventions in regions with higher opiate consumption to potentially mitigate the associated risks.
 
 
-ggplot(legalplus.main.data, aes(x = Legality_Status, fill = Legality_Status)) +
-  geom_bar() +
-  ggtitle("Number of Counties by Cannabis Legality Status") +
-  xlab("Cannabis Legality Status") +
-  ylab("Count")
-
+```{r ECH0 = FALSE}
 ggplot(legalplus.main.data, aes(x = X2016.Prescribing.Rate, y = mortality.rate)) +
   geom_point(aes(color = Legality_Status), alpha = 0.6) +
   geom_smooth(method = "lm", se = FALSE) +
@@ -359,6 +390,7 @@ ggplot(legalplus.main.data, aes(x = X2016.Prescribing.Rate, y = mortality.rate))
   xlab("Perscription Rate") +
   ylab("Mortality Rate")
 ```
+
 
 
 
@@ -455,7 +487,11 @@ This positive relationship could be explained by our hypothesis on the social an
 
 Model 2 includes high school attainment and the laws associated with weed access to further explain the relationship of mortality rates from drug and alcohol. Interestingly, all the variables are statistically significant except for legal status of 'legal for medical use only'. The positive relationships between mortality rate and poverty and opiate prescriptions hold true in this model as well. The educational status demonstrates a negative relationship with an increase of one standard deviation associated with high school rates causing approximately a 1.1 standard deviation decrease in mortality rates. Since the variable is associated with the rate of individuals in a county that have attained less than high school education, this relationship explains the social aspect of this problem with individuals that are more educated, making better decisions with drugs and alcohol leading to decreases in mortality rates.
 
-The baseline of the legal variable is 'decriminalised' and the coefficients represent the estimated difference between the baseline and the categories in the predictor variable. Specifically, areas where weed is illegal is estimated to have a 7.4 unit higher mortality rate compared to where weed is decriminalised. Furthermore, where weed is legal for medical and recreational use leads to a 5.9 unit higher mortality rate in comparison. This relationship highlights political and social factors related to mortality rates associated with drugs and alcohol. Even though this only explains the access individuals have to one particular drug (marijuana), it can explain the stigma and criminalisation of drug use in general as well. The biggest increase in mortality rates were associated with legal status of 'illegal' suggesting that there may be a lack of access to proper state approved drugs. The illegality of marijuana can create economic incentives for illegal drug markets, these economic factors can contribute to higher mortality rates through factors such as drug-related violence, accidental overdose, and lack of quality control in illicit drug production.
+The baseline of the legal variable is 'decriminalised' and the coefficients represent the estimated difference between the baseline and the categories in the predictor variable. Specifically, areas where weed is illegal is estimated to have a 7.4 unit higher mortality rate compared to where weed is decriminalised. Furthermore, where weed is legal for medical and recreational use leads to a 5.9 unit higher mortality rate in comparison. This relationship highlights political and social factors related to mortality rates associated with drugs and alcohol. Even though this only explains the access individuals have to one particular drug (marijuana), it can explain the stigma and criminalisation of drug use in general as well. The biggest increase in mortality rates were associated with legal status of 'illegal' there is two possible suggestions that can be made from this. 
+
+One being  there may be a lack of access to proper state approved drugs. The illegality of marijuana can create economic incentives for illegal drug markets, these economic factors can contribute to higher mortality rates through factors such as drug-related violence, accidental overdose, and lack of quality control in illicit drug production. 
+
+A second response may be the fact that those who do not have access to medical marijuana would instead be prescribed and opiod. Therefore, increase the probability of misuse. Whilst states that allow recreational or medical marijuana way find pain relief through this avenue rather than opiod prescriptions. 
 
 
 ### Model Fit
