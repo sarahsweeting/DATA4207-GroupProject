@@ -390,8 +390,15 @@ ggplot(legalplus.main.data, aes(x = X2016.Prescribing.Rate, y = mortality.rate))
   xlab("Perscription Rate") +
   ylab("Mortality Rate")
 ```
+Decriminalised (Red): Shows a strong positive correlation, with higher prescription rates correlating significantly with higher mortality rates.
 
+Illegal (Green): Displays fewer data points, with a moderate positive correlation indicating a slight increase in mortality rates as prescription rates rise.
 
+Legal for Medical and Recreational (Cyan): Exhibits a wide spread of prescription rates with a very gentle upward trend in mortality rates, suggesting a minimal impact of increased prescriptions on mortality.
+
+Legal for Medical Only (Purple): Features a low to moderate positive correlation, with a gradual increase in mortality rates as prescription rates increase.
+
+The plot highlights varying relationships between opioid prescriptions and mortality rates, influenced by the cannabis legality in different regions. More liberal cannabis laws appear to be associated with less pronounced increases in opioid mortality rates against rising prescription rates, suggesting potential differences in prescribing practices.
 
 
 #### Correlation heatmap
