@@ -362,14 +362,49 @@ ggplot(legalplus.main.data, aes(x = X2016.Prescribing.Rate, y = mortality.rate))
 
 
 
+#### Correlation heatmap
+
+```{r}
+numeric.data <- data.frame(main.data$z.poverty, main.data$z.opiates, main.data$mortality.rate, main.data$z.highschool)
+```
+
+
+```{r}
+cormat <- round(cor(numeric.data),2)
+head(cormat)
+```
+```{r}
+library(reshape2)
+melted_cormat <- melt(cormat)
+
+ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
+ geom_tile(color = "white")+
+ scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+   midpoint = 0, limit = c(-1,1), space = "Lab", 
+   name="Pearson\nCorrelation") +
+  theme_minimal()+ 
+ theme(axis.text.x = element_text(angle = 45, vjust = 1, 
+    size = 12, hjust = 1))+
+ coord_fixed()
+```
+
 
 ## Relationship of dependent and independent variables
 
-How does poverty and opiate prescriptions predict mortality rates associated with drugs and alcohol? Some other data is provided in the data folder, and you should take a few variables or controls from this.
+To explore the question 'How does poverty and opiate prescriptions predict mortality rates associated with drugs and alcohol?' we have explored potential variables including poverty rates, opiate prescription rates, education levels and state laws for drug use. With a numerical dependent variable, mortality rate, a linear regression type may be suitable to model the relationship. 
 
-2\. Fit regressions to your data. What is the appropriate type of regression and why have you chosen it?
+A few assumptions need to be made in order to use this model:
 
-Since our dependent variable mortality.rate is a numerical value, it is appropriate the model this using a linear regression model.
+Linearity: The relationship between the predictor variables (poverty, opioid prescriptions) and the response variable (mortality rates associated with drugs and alcohol) should be approximately linear. This assumption is  assessed through our descriptive analysis scatter plots.
+
+Independence: The observations should be independent of each other. In other words, the mortality rates for one county should not influence the mortality rates for another county.
+
+Homoscedasticity: The variance of the residuals should be constant across all levels of the predictors. This can be checked by examining a plot of residuals versus fitted values.
+
+Normality of Residuals: The residuals should follow a normal distribution. This assumption can be assessed by examining a histogram or a Q-Q plot of the residuals.
+
+No Multicollinearity: The predictor variables should not be highly correlated with each other. Multicollinearity can inflate standard errors and make interpretation of coefficients difficult. This is seen in the correlation matrix and it can be assumed this assumption is met. 
+
 
 Make sure to drop the NA values for all the other columns:
 
@@ -377,45 +412,68 @@ Make sure to drop the NA values for all the other columns:
 legalplus.main.data = drop_na(legalplus.main.data, mortality.rate, z.poverty, z.opiates, z.highschool, Legality_Status)
 ```
 
-Ensure that the county states are coded for each State
+
+Model including just the standardised poverty and opiate variables.
 
 ```{r}
-tabyl(main.data, county.state)
+model1 <- lm(mortality.rate ~ z.poverty + z.opiates, data = main.data)
+summary(model1)
 ```
 
-```{r}
-# levels(as.factor(main.data$county.state))
-
-main.data$county.state <- relevel(as.factor(main.data$county.state), ref = "TX")
-
-```
-
-
-Model includes the standardised numerical variables and state.
+Model includes the standardised numerical variables and state law types.
 
 ```{r}
 regmodel <- lm(mortality.rate ~ z.poverty + z.opiates + z.highschool  + Legality_Status, data = legalplus.main.data)
 
 summary(regmodel)
 ```
-
+Testing Homoscedasticity: There is no real pattern in the plot which is good for homoscedasticity. The spread is quite random. 
+```{r}
+residuals <- resid(model1)
+fitted_values <- fitted(model1)
+plot(fitted_values, residuals, main = "Residuals vs Fitted Values", 
+     xlab = "Fitted Values", ylab = "Residuals")
+abline(h = 0, col = "red")  
+```
+Testing for Normality of Residuals: the plotted points don't form a straight line and indicate that the residuals deviate slightly and the tail ends suggest a skewness. 
+```{r}
+qqnorm(residuals)
+qqline(residuals)
+```
 
 
 
 ### Interpretations
-For this model, the baseline is State AK or Alaska, thus the intercept represents the mortality rate holding all other predictors at 0.
+We have made two models to identify if the inclusion of confounding factors better explains the mortality rate variable. 
+
+Model 1 identifies that the linear regression model can be suitable for predicting mortality rates with the assumptions holding. The coefficients in this model are all statistically significant. The intercept coefficient is the estimated value of the response variable when all predictor variables are set to zero. In this case, it represents the mortality rate is 20.49 (2dp) when both poverty rates and opiod prescriptions are 0. 
+
+Furthermore, the poverty coefficient and opiate coefficient are 1.6 and 1.9 respectively. Since the coefficients  were standardised, the interpretation of this is one standard deviation increase in poverty is associated with an estimated increase of 1.6 standard deviation units in mortality rate, holding other variables constant. Similarly, one standard deivation increase in opiod prescription rates is associated with an estimated increase of 1.9 standard deviation units in mortality rate, holding other variables constant.
+
+This positive relationship could be explained by our hypothesis on the social and economical aspects to mortality rate from drug and alcohol. Increases in poverty could relate to limited access to healthcare resources including mental health services and substance abuse treatment programs, increasing risk-taking behaviours associated with drugs and alcohol, increasing mortality rate. Furthermore, people with higher poverty rates could experience higher stress and social isolation due to financial instability, inadequate housing and could contribute to self-medication through substance use, leading to possibilities of addiction and again, higher mortality rates. With an increase in opiate prescriptions, there is an increase of availability and accessibility of opiates which can increase the risk of misuse, addiction and overdose deaths. The increase in prescriptions could also reflect counties that have less regulated prescribing practices. 
+
+
+Model 2 includes high school attainment and the laws associated with weed access to further explain the relationship of mortality rates from drug and alcohol. Interestingly, all the variables are statistically significant except for legal status of 'legal for medical use only'. The positive relationships between mortality rate and poverty and opiate prescriptions hold true in this model as well. The educational status demonstrates a negative relationship with an increase of one standard deviation associated with high school rates causing approximately a 1.1 standard deviation decrease in mortality rates. Since the variable is associated with the rate of individuals in a county that have attained less than high school education, this relationship explains the social aspect of this problem with individuals that are more educated, making better decisions with drugs and alcohol leading to decreases in mortality rates.
+
+The baseline of the legal variable is 'decriminalised' and the coefficients represent the estimated difference between the baseline and the categories in the predictor variable. Specifically, areas where weed is illegal is estimated to have a 7.4 unit higher mortality rate compared to where weed is decriminalised. Furthermore, where weed is legal for medical and recreational use leads to a 5.9 unit higher mortality rate in comparison. This relationship highlights political and social factors related to mortality rates associated with drugs and alcohol. Even though this only explains the access individuals have to one particular drug (marijuana), it can explain the stigma and criminalisation of drug use in general as well. The biggest increase in mortality rates were associated with legal status of 'illegal' suggesting that there may be a lack of access to proper state approved drugs. The illegality of marijuana can create economic incentives for illegal drug markets, these economic factors can contribute to higher mortality rates through factors such as drug-related violence, accidental overdose, and lack of quality control in illicit drug production.
+
 
 ### Model Fit
 
+Both models had particularly low adjusted r-squared values of 0.08 and 0.13 respectively. The second model was able to explain a greater proportion of variability in the mortality rate associated with drugs and alcohol, however only 13% of this variability is explained which could be from including more relevant predictors.
+
 ## Map
 
-3\. Create at least one map that helps explain your findings (we will show you how to do this in the next session).
 
 ```{r}
-# Create the ggplot object
-plot <- ggplot(us.shape.2) +
+us.shape.2 <- us.shape.2 %>%
+  shift_geometry() #This function moves alaska into a easier area to interpret
+```
+
+```{r}
+
+p1 <- ggplot(us.shape.2) +
   geom_sf(mapping = aes(fill = mortality.rate), colour = NA, inherit.aes = FALSE) +
-  coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
   scale_fill_gradient2(low = "dark blue",
                        high = "dark green",
                        midpoint = mean(us.shape.2$mortality.rate, na.rm = TRUE),
@@ -426,19 +484,16 @@ plot <- ggplot(us.shape.2) +
   labs(title = 'Mortality Rate distribution') +
   guides(fill = guide_legend(keyheight = 0.3)) +
   theme_void() +
-  theme(plot.title = element_text(size = 12),
+  theme(plot.title = element_text(size = 7),
         legend.position = 'bottom',
         legend.title = element_blank())
 
-options(repr.plot.width = 12, repr.plot.height = 10)  # Adjust width and height as needed
-plot  # Display the plot
 ```
 
 ```{r}
-# Create the ggplot object
-plot <- ggplot(us.shape.2) +
+
+p2 <- ggplot(us.shape.2) +
   geom_sf(mapping = aes(fill = below.poverty.rate), colour = NA, inherit.aes = FALSE) +
-  coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
   scale_fill_gradient2(low = "dark blue",
                        high = "dark green",
                        midpoint = mean(us.shape.2$below.poverty.rate, na.rm = TRUE),
@@ -446,25 +501,19 @@ plot <- ggplot(us.shape.2) +
                                   max(us.shape.2$below.poverty.rate, na.rm = TRUE)),
                        label = scales::comma,
                        na.value = "grey") +
-  labs(title = 'Mortality Rate distribution') +
+  labs(title = 'Poverty Rate distribution') +
   guides(fill = guide_legend(keyheight = 0.3)) +
   theme_void() +
-  theme(plot.title = element_text(size = 12),
+  theme(plot.title = element_text(size = 7),
         legend.position = 'bottom',
         legend.title = element_blank())
 
-options(repr.plot.width = 12, repr.plot.height = 10)  # Adjust width and height as needed
-plot  # Display the plot
 ```
 
-```{r}
-us.shape.2 <- us.shape.2 %>%
-  shift_geometry()
-```
 
 ```{r}
-# Create the ggplot object
-plot <- ggplot(us.shape.2) +
+
+p3 <- ggplot(us.shape.2) +
   geom_sf(mapping = aes(fill = X2016.Prescribing.Rate), colour = NA, inherit.aes = FALSE) +
   # coord_sf(xlim = c(-180, -65), ylim = c(24, 72), expand = FALSE) +
   scale_fill_gradient2(low = "dark blue",
@@ -474,19 +523,25 @@ plot <- ggplot(us.shape.2) +
                                   max(us.shape.2$X2016.Prescribing.Rate, na.rm = TRUE)),
                        label = scales::comma,
                        na.value = "grey") +
-  labs(title = 'Mortality Rate distribution') +
+  labs(title = 'Opiates Prescription Rate distribution') +
   guides(fill = guide_legend(keyheight = 0.3)) +
   theme_void() +
-  theme(plot.title = element_text(size = 12),
+  theme(plot.title = element_text(size = 7),
         legend.position = 'bottom',
         legend.title = element_blank())
 
-options(repr.plot.width = 12, repr.plot.height = 10)  # Adjust width and height as needed
-plot  # Display the plot
 ```
 
-## Discussion
+```{r}
 
-4\. Write up your key results.
+p1 +p2 + p3 +
+  plot_annotation(title = 'Demographic distribution in America') +
+  plot_layout(ncol = 3,widths = c(0.8,0.7,1.2))
 
-You will be marked on the quality of your \$R\$ code (including whether it runs for us without errors), how well you have justified your variable selection, the proper use of appropriate methods.
+
+```
+
+Plotting the spatial patterns of poverty rates, prescription rates and mortality rates doesn't show distinct patterns of correlation between the two variables and the dependent variable. The map might show a high mortality rate in a particular county, but within that county, there may be significant variation in individual-level factors such as socioeconomic status, access to healthcare, and lifestyle behaviors. We also can see there is particular missing data for Alaska counties in the prescription map and the central counties mortality rates, leading to missing data bias. 
+
+We also need to remember ecological fallacy and that inferences about individuals because of a given demographic group may not represent how those individuals may behave. In this example, assuming that individuals who live in areas with high poverty rates, high mortality rates, or high opiate prescriptions also have similar characteristics can lead to incorrect conclusions.
+
