@@ -9,21 +9,20 @@ output:
 header-includes:
    - \usepackage{caption}
    - \captionsetup[figure]{font=scriptsize}
-mainfont: Avenir Book
+# mainfont: Avenir Book
 urlcolor: blue
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message= FALSE, warnings = FALSE,
+                      results = "hide")
 
 library(tidyverse)
 library(sf)
 library(janitor)
 library(sf)
-# install.packages("fuzzyjoin")
-library(fuzzyjoin) # to join on inexact matches 
-library(scales) # adds percentage marks to legend
-library(patchwork) #to combin plots
+library(scales) 
+library(patchwork)
 library(ggplot2)
 library(rmapshaper)
 library(tigris)
@@ -31,14 +30,11 @@ library(tigris)
 
 # Introduction
 
-We will be examining the relationship between opiate drug prescriptions and poverty (your independent variables), and mortality caused by drugs and alcohol using the methods covered in this lab, and previously in this unit. The spatial aspect of this is that we are going to use county-level data sourced from the \*US Census Bureau\* and the \*Centers for Disease Control and Prevention (CDC)\*.
+We will be examining the relationship between opiate drug prescriptions, poverty, education and legality of marijuana and mortality caused by drugs and alcohol using the methods covered in this lab, and previously in this unit. The spatial aspect of this is that we are going to use county-level data sourced from the \*US Census Bureau\* and the \*Centers for Disease Control and Prevention (CDC)\*.
 
-We have included two additional variables from county.data:
+We have included an additional variables from county.data:
 
-- State of each county: Because different states in the US have different laws which may affect access to drugs and alcohol
-
-- Education - Percent of adults with a high school diploma only 2014-18: We believe this is a confounding factor of poverty and mortality from drugs since education will affect the jobs you are able to obtain (leading to poverty if unobtainable) and educated drug usage (which we are assuming gets taught in high school in the US). If they haven't been to high school, there is a more likely abuse of drugs since they are uneducated on the effects on their drug usage. Similarly, with poverty, if they are uneducated, they are less likely to have the skills to get a job and be able to obtain an income and then are more likely to enter poverty. 
-
+-   Education - Percent of adults with less than a high school diploma 2014-18: We believe this is a confounding factor of poverty and mortality from drugs since education will affect the jobs you are able to obtain (leading to poverty if unobtainable) and educated drug usage (which we are assuming gets taught in high school in the US). If they haven't been to high school, there is a more likely abuse of drugs since they are uneducated on the effects on their drug usage. Similarly, with poverty, if they are uneducated, they are less likely to have the skills to get a job and be able to obtain an income and then are more likely to enter poverty.
 
 ## Data cleaning
 
@@ -50,7 +46,6 @@ load(
 
 ```
 
-
 ```{r load poverty data, warning=FALSE}
 
 poverty.data <- read.csv(
@@ -58,7 +53,6 @@ poverty.data <- read.csv(
   skip = 1, header = T)
 
 ```
-
 
 ```{r load mortality data, warning=FALSE}
 
@@ -68,14 +62,13 @@ drugs.mort.data <- read.table(
 
 ```
 
-
 ```{r load data on opioid prescription rates}
 
 opioids.data <- read.csv("US data for group task/opioids/opioids prescribing rates.csv")
 
 ```
 
-```{r link us data with shape files, message=FALSE, warning=FALSE}
+```{r link us data with shape files, warning=FALSE, message=FALSE}
 
 us.shape.1 <- 
   st_read("US data for group task/US shapefiles/cb_2016_us_county_20m.shp")
@@ -89,11 +82,9 @@ fip.concordance <- read.csv("US data for group task/fips concordance.csv")
 
 ```
 
-
 \vspace{6mm}
 
 We will join datasets on their similar column - the FIPs code for the county:
-
 
 ```{r compare structure of ID vars, warning=FALSE}
 
@@ -107,11 +98,9 @@ head(opioids.data$FIPS.County.Code)
 
 ```
 
-
 \vspace{6mm}
 
 ```{r merge poverty and death data, warning=FALSE, message=FALSE}
-
 
 patterns <- c(' County| Parish| city| Borough| Census Area')
 
@@ -127,7 +116,6 @@ main.data <- merge(
     dplyr::select(Id2, county, mortality.rate))
 
 ```
-
 
 ```{r}
 main.data <- merge(
@@ -146,7 +134,6 @@ main.data <- merge(
 
 ```{r merge opioids data with county data}
 
-
 main.data <- merge(
   main.data  %>%
   mutate(z.poverty = (below.poverty.rate - mean(below.poverty.rate, na.rm=T)) / 
@@ -158,40 +145,34 @@ main.data <- merge(
     dplyr::select(Id2, z.opiates, X2016.Prescribing.Rate))
 
 ```
+
 ## Transformation of data
 
-1. Standardisation of Geographical Identifiers: 
-To ensure consistent merging across datasets, geographical identifiers such as county names were standardised. The gsub function was utilised to remove specific terms like 'County', 'Parish', 'City', 'Borough', and 'Census Area'. This step was crucial to prevent mismatches during the data merging process due to different naming conventions across datasets.
+1.  Standardisation of Geographical Identifiers: To ensure consistent merging across datasets, geographical identifiers such as county names were standardised. The gsub function was utilised to remove specific terms like 'County', 'Parish', 'City', 'Borough', and 'Census Area'. This step was crucial to prevent mismatches during the data merging process due to different naming conventions across datasets.
 
-2. Calculation of Z-Scores: 
-To facilitate direct comparisons across regions with different scales and units, critical variables such as the percentage of adults without a high school diploma, poverty rates, and opiate prescribing rates were transformed into z-scores. This standardisation adjusted each variable to have a mean of zero and a standard deviation of one, highlighting deviations from the national average.
+2.  Calculation of Z-Scores: To facilitate direct comparisons across regions with different scales and units, critical variables such as the percentage of adults without a high school diploma, poverty rates, and opiate prescribing rates were transformed into z-scores. This standardisation adjusted each variable to have a mean of zero and a standard deviation of one, highlighting deviations from the national average.
 
-3. Merging of Datasets: 
-After cleaning and transforming the relevant variables, the datasets were merged based on FIPS codes. This integration created a unified dataset that combined socio-economic and health-related data, enabling a more robust analysis of the factors influencing opioid mortality rates.
+3.  Merging of Datasets: After cleaning and transforming the relevant variables, the datasets were merged based on FIPS codes. This integration created a unified dataset that combined socio-economic and health-related data, enabling a more robust analysis of the factors influencing opioid mortality rates.
 
+Viewing the first six rows of our new data frame, we can see the structure of these data: \vspace{6mm}
 
-Viewing the first six rows of our new data frame, we can see the structure of these data:
-\vspace{6mm}
-
-```{r view structure of new dataset, echo=FALSE,  warning=FALSE, message=FALSE}
+```{r view structure of new dataset, echo=FALSE,  warning=FALSE, results="markup"}
 
 head(main.data)
 
 ```
-The first row is the ID variable we used to merge our data frames. The below.poverty.rate is the percentage of each county's families with incomes below the poverty rate. county, the name of each country (and the state within which they sit) while as county.state is the state code. X2016.Prescribing.Rate is the rate of opiod prescriptions. education.highschool is the percentage that completed highschool only. Finally, the mortality rate associated with drug and alcohol use (per 100,000 people). 
 
+The first row is the ID variable we used to merge our data frames. The below.poverty.rate is the percentage of each county's families with incomes below the poverty rate. county, the name of each country (and the state within which they sit) while as county.state is the state code. X2016.Prescribing.Rate is the rate of opiod prescriptions. education.highschool is the percentage that completed highschool only. Finally, the mortality rate associated with drug and alcohol use (per 100,000 people).
 
 In this code, we also standardise the education, poverty and prescription rates in the same line of block of code that we use to merge the data.
 
-
 There is one last edit to make to these data before we examine them. If you run the code
 
-```{r}
+```{r, echo=FALSE}
 levels(as.factor(main.data$mortality.rate))
 ```
 
 you will see that some of the observations for the variable `mortality.rate` are coded as 'Unreliable'. This creates two issues for us. Those observations are effectively missing for our purposes, and this converts the variable to a string when we want it to be a number.
-
 
 \vspace{6mm}
 
@@ -204,9 +185,7 @@ main.data <- main.data %>%
            
 ```
 
-
-We then want to link these shapefiles to the county results.
-This file, which we were required to modify a little above, can be matched to the shapefile data using similar syntax to above:  
+We then want to link these shapefiles to the county results. This file, which we were required to modify a little above, can be matched to the shapefile data using similar syntax to above:
 
 \vspace{6mm}
 
@@ -238,33 +217,24 @@ us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
 
 \vspace{6mm}
 
-
 And then we merge the shapefile and the county-level data:
-
 
 \vspace{6mm}
 
-
-```{r link us data with shape files2}
+```{r link us data with shape files2, message=FALSE}
 
 us.shape.2 <- full_join(us.shape.2,
   main.data %>%
     dplyr::select(county, below.poverty.rate, mortality.rate, X2016.Prescribing.Rate)) %>%
   st_as_sf() # To acknolwedge its a shape file
 
-
-```
-```{r}
-shift_geometry(us.shape.2, position="below")
 ```
 
 \vspace{6mm}
 
-
-You are now ready to map these data. Good luck with the rest of the exercise! 
-
 ### Extra Data set - Drug laws by state
-In the context of opioid-related mortality rates, categorising states by marijuana laws into “Legal for Medical Only,” “Legal for Medical and Recreational,” “Illegal,” and “Decriminalised” provides a nuanced framework for analysis. States where marijuana is legally available, either medically or recreationally, may experience a substitution effect, where individuals seeking pain relief opt for marijuana over opioids, potentially reducing opioid misuse and overdoses. Moreover, legalisation can reflect a broader, more progressive attitude towards healthcare and substance use treatment, increasing access to various addiction services. In states where marijuana remains illegal, strict law enforcement may perpetuate stigma around substance use, discouraging individuals from seeking treatment. Conversely, states that have decriminalised marijuana might allocate fewer resources to punitive measures and more towards harm reduction strategies, which could indirectly influence opioid mortality rates. This categorical analysis can reveal correlations between marijuana policies and opioid fatalities, offering crucial insights for future legislative decisions.
+
+In the context of opioid-related mortality rates, categorising states by marijuana laws into "Legal for Medical Only," "Legal for Medical and Recreational," "Illegal," and "Decriminalised" provides a nuanced framework for analysis. States where marijuana is legally available, either medically or recreationally, may experience a substitution effect, where individuals seeking pain relief opt for marijuana over opioids, potentially reducing opioid misuse and overdoses. Moreover, legalisation can reflect a broader, more progressive attitude towards healthcare and substance use treatment, increasing access to various addiction services. In states where marijuana remains illegal, strict law enforcement may perpetuate stigma around substance use, discouraging individuals from seeking treatment. Conversely, states that have decriminalised marijuana might allocate fewer resources to punitive measures and more towards harm reduction strategies, which could indirectly influence opioid mortality rates. This categorical analysis can reveal correlations between marijuana policies and opioid fatalities, offering crucial insights for future legislative decisions.
 
 ```{r}
 main.data = drop_na(main.data, mortality.rate, z.poverty, z.opiates, z.highschool)
@@ -311,13 +281,9 @@ Legality_Status = c("Legal for Medical Only", "Legal for Medical and Recreationa
 legalplus.main.data = merge(main.data, cannabis_legality, by = "county.state", all = TRUE)
 ```
 
-
-
 ## Descriptive Analysis
 
-1\. Conduct some descriptive analyses of these data. You can examine this using scatter plots and correlation coefficients. Do you need to transform any of the variables
-
-```{r ECH0 = FALSE}
+```{r, results="markup"}
 ggplot(main.data, aes(x = mortality.rate)) +
   geom_histogram(bins = 30, fill = "blue", color = "black") +
   ggtitle("Distribution of Mortality Rates") +
@@ -325,10 +291,10 @@ ggplot(main.data, aes(x = mortality.rate)) +
   ylab("Frequency")
 
 ```
+
 This histogram illustrates the distribution of opioid-related mortality rates, predominantly clustered between 0 and 30 deaths per 100,000 population. The data is positively skewed towards lower rates, peaking between 10-20 deaths, indicating this is the most common range. The frequency of occurrences drops sharply for higher rates, with a long tail extending up to 120 deaths, highlighting a few regions with significantly higher mortality rates. Overall, the distribution shows that high opioid mortality rates are relatively rare, with most areas experiencing lower rates.
 
-
-```{r ECH0 = FALSE}
+```{r, results="markup"}
 ggplot(legalplus.main.data, aes(x = Legality_Status, y = mortality.rate, fill = Legality_Status)) +
   geom_boxplot() +
   ggtitle("Mortality Rate vs Cannabis Legality Status") +
@@ -336,14 +302,10 @@ ggplot(legalplus.main.data, aes(x = Legality_Status, y = mortality.rate, fill = 
   ylab("Mortality Rate")
 
 ```
-Decriminalised (Red): Shows lower and more consistent mortality rates with few outliers.
-Illegal (Green): Features a wider spread and higher median, indicating generally higher rates.
-Legal for Medical and Recreational (Blue): Displays a broad range but a lower median than illegal states, suggesting a moderating effect of more liberal cannabis policies.
-Legal for Medical Only (Purple): Similar range to the recreational category but with a slightly lower median, indicating moderately lower mortality rates.
-The plot highlights significant variability within each category, particularly in regions with higher rates, demonstrating the potential impact of cannabis legality on opioid mortality. Overall, this visualisation underscores the potential link between cannabis legality and opioid mortality, suggesting that where cannabis is more accessible, it might serve as a viable alternative to opioids, potentially leading to lower opioid death rates.
 
+Decriminalised (Red): Shows lower and more consistent mortality rates with few outliers. Illegal (Green): Features a wider spread and higher median, indicating generally higher rates. Legal for Medical and Recreational (Blue): Displays a broad range but a lower median than illegal states, suggesting a moderating effect of more liberal cannabis policies. Legal for Medical Only (Purple): Similar range to the recreational category but with a slightly lower median, indicating moderately lower mortality rates. The plot highlights significant variability within each category, particularly in regions with higher rates, demonstrating the potential impact of cannabis legality on opioid mortality. Overall, this visualisation underscores the potential link between cannabis legality and opioid mortality, suggesting that where cannabis is more accessible, it might serve as a viable alternative to opioids, potentially leading to lower opioid death rates.
 
-```{r ECH0 = FALSE}
+```{r, results="markup"}
 ggplot(main.data, aes(x = z.poverty, y = mortality.rate)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
@@ -352,9 +314,10 @@ ggplot(main.data, aes(x = z.poverty, y = mortality.rate)) +
   ylab("Mortality Rate")
 
 ```
+
 The red trend line shows a positive correlation, indicating that as poverty rates increase, there is a general rise in opioid mortality rates. This suggests that higher poverty levels are associated with increased opioid-related deaths. However, the spread of mortality rates at lower poverty rates indicates that poverty is a significant but not the only factor influencing opioid mortality, highlighting the complex interplay between socioeconomic factors and health outcomes.
 
-```{r ECH0 = FALSE}
+```{r, results="markup"}
 ggplot(main.data, aes(x = z.highschool, y = mortality.rate)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
@@ -363,11 +326,12 @@ ggplot(main.data, aes(x = z.highschool, y = mortality.rate)) +
   ylab("Mortality Rate")
 
 ```
+
 The trend line suggests a weak positive correlation, indicating that regions with higher percentages of adults lacking a high school diploma tend to have slightly higher opioid mortality rates. However, the data points are widely dispersed, suggesting that while educational attainment may influence opioid mortality rates, it is one of several factors contributing to these outcomes.
 
 The clustering of many data points at lower percentages of adults without high school diplomas with a broad range of mortality rates further highlights the complexity of this relationship. This visualisation suggests that while lower educational attainment may be associated with higher opioid mortality, the impact is not uniformly strong across all regions.
 
-```{r ECH0 = FALSE}
+```{r, results="markup"}
 
 ggplot(main.data, aes(x = z.opiates, y = mortality.rate)) +
   geom_point(alpha = 0.5) +
@@ -376,12 +340,12 @@ ggplot(main.data, aes(x = z.opiates, y = mortality.rate)) +
   xlab("Opiate use") +
   ylab("Mortality Rate")
 ```
+
 The green trend line indicates a clear positive correlation, suggesting that as opiate use increases, there is a corresponding rise in opioid mortality rates. The dense clustering of data points around lower opiate use rates with varied mortality outcomes highlights that while higher opiate use is associated with higher mortality, there is also significant variability in mortality rates at lower levels of opiate use.
 
 This plot demonstrates that higher opiate use is unsurprisingly strong predictor of opioid mortality, underscoring the need for targeted interventions in regions with higher opiate consumption to potentially mitigate the associated risks.
 
-
-```{r ECH0 = FALSE}
+```{r, results="markup"}
 ggplot(legalplus.main.data, aes(x = X2016.Prescribing.Rate, y = mortality.rate)) +
   geom_point(aes(color = Legality_Status), alpha = 0.6) +
   geom_smooth(method = "lm", se = FALSE) +
@@ -390,6 +354,7 @@ ggplot(legalplus.main.data, aes(x = X2016.Prescribing.Rate, y = mortality.rate))
   xlab("Perscription Rate") +
   ylab("Mortality Rate")
 ```
+
 Decriminalised (Red): Shows a strong positive correlation, with higher prescription rates correlating significantly with higher mortality rates.
 
 Illegal (Green): Displays fewer data points, with a moderate positive correlation indicating a slight increase in mortality rates as prescription rates rise.
@@ -400,19 +365,18 @@ Legal for Medical Only (Purple): Features a low to moderate positive correlation
 
 The plot highlights varying relationships between opioid prescriptions and mortality rates, influenced by the cannabis legality in different regions. More liberal cannabis laws appear to be associated with less pronounced increases in opioid mortality rates against rising prescription rates, suggesting potential differences in prescribing practices.
 
-
 #### Correlation heatmap
 
-```{r}
+```{r, echo=FALSE}
 numeric.data <- data.frame(main.data$z.poverty, main.data$z.opiates, main.data$mortality.rate, main.data$z.highschool)
 ```
 
-
-```{r}
+```{r, echo=FALSE}
 cormat <- round(cor(numeric.data),2)
 head(cormat)
 ```
-```{r}
+
+```{r, results="markup", warning=FALSE}
 library(reshape2)
 melted_cormat <- melt(cormat)
 
@@ -427,14 +391,13 @@ ggplot(data = melted_cormat, aes(Var2, Var1, fill = value))+
  coord_fixed()
 ```
 
-
 ## Relationship of dependent and independent variables
 
-To explore the question 'How does poverty and opiate prescriptions predict mortality rates associated with drugs and alcohol?' we have explored potential variables including poverty rates, opiate prescription rates, education levels and state laws for drug use. With a numerical dependent variable, mortality rate, a linear regression type may be suitable to model the relationship. 
+To explore the question 'How does poverty and opiate prescriptions predict mortality rates associated with drugs and alcohol?' we have explored potential variables including poverty rates, opiate prescription rates, education levels and state laws for drug use. With a numerical dependent variable, mortality rate, a linear regression type may be suitable to model the relationship.
 
 A few assumptions need to be made in order to use this model:
 
-Linearity: The relationship between the predictor variables (poverty, opioid prescriptions) and the response variable (mortality rates associated with drugs and alcohol) should be approximately linear. This assumption is  assessed through our descriptive analysis scatter plots.
+Linearity: The relationship between the predictor variables (poverty, opioid prescriptions) and the response variable (mortality rates associated with drugs and alcohol) should be approximately linear. This assumption is assessed through our descriptive analysis scatter plots.
 
 Independence: The observations should be independent of each other. In other words, the mortality rates for one county should not influence the mortality rates for another county.
 
@@ -442,8 +405,7 @@ Homoscedasticity: The variance of the residuals should be constant across all le
 
 Normality of Residuals: The residuals should follow a normal distribution. This assumption can be assessed by examining a histogram or a Q-Q plot of the residuals.
 
-No Multicollinearity: The predictor variables should not be highly correlated with each other. Multicollinearity can inflate standard errors and make interpretation of coefficients difficult. This is seen in the correlation matrix and it can be assumed this assumption is met. 
-
+No Multicollinearity: The predictor variables should not be highly correlated with each other. Multicollinearity can inflate standard errors and make interpretation of coefficients difficult. This is seen in the correlation matrix and it can be assumed this assumption is met.
 
 Make sure to drop the NA values for all the other columns:
 
@@ -451,62 +413,61 @@ Make sure to drop the NA values for all the other columns:
 legalplus.main.data = drop_na(legalplus.main.data, mortality.rate, z.poverty, z.opiates, z.highschool, Legality_Status)
 ```
 
-
 Model including just the standardised poverty and opiate variables.
 
-```{r}
+```{r, results="markup"}
 model1 <- lm(mortality.rate ~ z.poverty + z.opiates, data = main.data)
 summary(model1)
 ```
 
 Model includes the standardised numerical variables and state law types.
 
-```{r}
+```{r, results="markup"}
 regmodel <- lm(mortality.rate ~ z.poverty + z.opiates + z.highschool  + Legality_Status, data = legalplus.main.data)
 
 summary(regmodel)
 ```
-Testing Homoscedasticity: There is no real pattern in the plot which is good for homoscedasticity. The spread is quite random. 
-```{r}
+
+Testing Homoscedasticity: There is no real pattern in the plot which is good for homoscedasticity. The spread is quite random.
+
+```{r, results="markup"}
 residuals <- resid(model1)
 fitted_values <- fitted(model1)
 plot(fitted_values, residuals, main = "Residuals vs Fitted Values", 
      xlab = "Fitted Values", ylab = "Residuals")
 abline(h = 0, col = "red")  
 ```
-Testing for Normality of Residuals: the plotted points don't form a straight line and indicate that the residuals deviate slightly and the tail ends suggest a skewness. 
-```{r}
+
+Testing for Normality of Residuals: the plotted points don't form a straight line and indicate that the residuals deviate slightly and the tail ends suggest a skewness.
+
+```{r, results="markup"}
 qqnorm(residuals)
 qqline(residuals)
 ```
 
-
-
 ### Interpretations
-We have made two models to identify if the inclusion of confounding factors better explains the mortality rate variable. 
 
-Model 1 identifies that the linear regression model can be suitable for predicting mortality rates with the assumptions holding. The coefficients in this model are all statistically significant. The intercept coefficient is the estimated value of the response variable when all predictor variables are set to zero. In this case, it represents the mortality rate is 20.49 (2dp) when both poverty rates and opiod prescriptions are 0. 
+We have made two models to identify if the inclusion of confounding factors better explains the mortality rate variable.
 
-Furthermore, the poverty coefficient and opiate coefficient are 1.6 and 1.9 respectively. Since the coefficients  were standardised, the interpretation of this is one standard deviation increase in poverty is associated with an estimated increase of 1.6 standard deviation units in mortality rate, holding other variables constant. Similarly, one standard deivation increase in opiod prescription rates is associated with an estimated increase of 1.9 standard deviation units in mortality rate, holding other variables constant.
+Model 1 identifies that the linear regression model can be suitable for predicting mortality rates with the assumptions holding. The coefficients in this model are all statistically significant. The intercept coefficient is the estimated value of the response variable when all predictor variables are set to zero. In this case, it represents the mortality rate is 20.49 (2dp) when both poverty rates and opiod prescriptions are 0.
 
-This positive relationship could be explained by our hypothesis on the social and economical aspects to mortality rate from drug and alcohol. Increases in poverty could relate to limited access to healthcare resources including mental health services and substance abuse treatment programs, increasing risk-taking behaviours associated with drugs and alcohol, increasing mortality rate. Furthermore, people with higher poverty rates could experience higher stress and social isolation due to financial instability, inadequate housing and could contribute to self-medication through substance use, leading to possibilities of addiction and again, higher mortality rates. With an increase in opiate prescriptions, there is an increase of availability and accessibility of opiates which can increase the risk of misuse, addiction and overdose deaths. The increase in prescriptions could also reflect counties that have less regulated prescribing practices. 
+Furthermore, the poverty coefficient and opiate coefficient are 1.6 and 1.9 respectively. Since the coefficients were standardised, the interpretation of this is one standard deviation increase in poverty is associated with an estimated increase of 1.6 standard deviation units in mortality rate, holding other variables constant. Similarly, one standard deivation increase in opiod prescription rates is associated with an estimated increase of 1.9 standard deviation units in mortality rate, holding other variables constant.
 
+This positive relationship could be explained by our hypothesis on the social and economical aspects to mortality rate from drug and alcohol. Increases in poverty could relate to limited access to healthcare resources including mental health services and substance abuse treatment programs, increasing risk-taking behaviours associated with drugs and alcohol, increasing mortality rate. Furthermore, people with higher poverty rates could experience higher stress and social isolation due to financial instability, inadequate housing and could contribute to self-medication through substance use, leading to possibilities of addiction and again, higher mortality rates. With an increase in opiate prescriptions, there is an increase of availability and accessibility of opiates which can increase the risk of misuse, addiction and overdose deaths. The increase in prescriptions could also reflect counties that have less regulated prescribing practices.
 
 Model 2 includes high school attainment and the laws associated with weed access to further explain the relationship of mortality rates from drug and alcohol. Interestingly, all the variables are statistically significant except for legal status of 'legal for medical use only'. The positive relationships between mortality rate and poverty and opiate prescriptions hold true in this model as well. The educational status demonstrates a negative relationship with an increase of one standard deviation associated with high school rates causing approximately a 1.1 standard deviation decrease in mortality rates. Since the variable is associated with the rate of individuals in a county that have attained less than high school education, this relationship explains the social aspect of this problem with individuals that are more educated, making better decisions with drugs and alcohol leading to decreases in mortality rates.
 
-The baseline of the legal variable is 'decriminalised' and the coefficients represent the estimated difference between the baseline and the categories in the predictor variable. Specifically, areas where weed is illegal is estimated to have a 7.4 unit higher mortality rate compared to where weed is decriminalised. Furthermore, where weed is legal for medical and recreational use leads to a 5.9 unit higher mortality rate in comparison. This relationship highlights political and social factors related to mortality rates associated with drugs and alcohol. Even though this only explains the access individuals have to one particular drug (marijuana), it can explain the stigma and criminalisation of drug use in general as well. The biggest increase in mortality rates were associated with legal status of 'illegal' there is two possible suggestions that can be made from this. 
+The baseline of the legal variable is 'decriminalised' and the coefficients represent the estimated difference between the baseline and the categories in the predictor variable. Specifically, areas where weed is illegal is estimated to have a 7.4 unit higher mortality rate compared to where weed is decriminalised. Furthermore, where weed is legal for medical and recreational use leads to a 5.9 unit higher mortality rate in comparison. This relationship highlights political and social factors related to mortality rates associated with drugs and alcohol. Even though this only explains the access individuals have to one particular drug (marijuana), it can explain the stigma and criminalisation of drug use in general as well. The biggest increase in mortality rates were associated with legal status of 'illegal' there is two possible suggestions that can be made from this.
 
-One being  there may be a lack of access to proper state approved drugs. The illegality of marijuana can create economic incentives for illegal drug markets, these economic factors can contribute to higher mortality rates through factors such as drug-related violence, accidental overdose, and lack of quality control in illicit drug production. 
+One being there may be a lack of access to proper state approved drugs. The illegality of marijuana can create economic incentives for illegal drug markets, these economic factors can contribute to higher mortality rates through factors such as drug-related violence, accidental overdose, and lack of quality control in illicit drug production.
 
-A second response may be the fact that those who do not have access to medical marijuana would instead be prescribed and opiod. Therefore, increase the probability of misuse. Whilst states that allow recreational or medical marijuana way find pain relief through this avenue rather than opiod prescriptions. 
-
+A second response may be the fact that those who do not have access to medical marijuana would instead be prescribed and opiod. Therefore, increase the probability of misuse. Whilst states that allow recreational or medical marijuana way find pain relief through this avenue rather than opiod prescriptions.
 
 ### Model Fit
 
 Both models had particularly low adjusted r-squared values of 0.08 and 0.13 respectively. The second model was able to explain a greater proportion of variability in the mortality rate associated with drugs and alcohol, however only 13% of this variability is explained which could be from including more relevant predictors.
 
 ## Map
-
 
 ```{r}
 us.shape.2 <- us.shape.2 %>%
@@ -553,7 +514,6 @@ p2 <- ggplot(us.shape.2) +
 
 ```
 
-
 ```{r}
 
 p3 <- ggplot(us.shape.2) +
@@ -575,7 +535,7 @@ p3 <- ggplot(us.shape.2) +
 
 ```
 
-```{r}
+```{r map_us_demo, results="markup", fig.cap="Demographic distribution in America \\label{fig:map}"}
 
 p1 +p2 + p3 +
   plot_annotation(title = 'Demographic distribution in America') +
@@ -584,7 +544,6 @@ p1 +p2 + p3 +
 
 ```
 
-Plotting the spatial patterns of poverty rates, prescription rates and mortality rates doesn't show distinct patterns of correlation between the two variables and the dependent variable. The map might show a high mortality rate in a particular county, but within that county, there may be significant variation in individual-level factors such as socioeconomic status, access to healthcare, and lifestyle behaviors. We also can see there is particular missing data for Alaska counties in the prescription map and the central counties mortality rates, leading to missing data bias. 
+Plotting the spatial patterns of poverty rates, prescription rates and mortality rates doesn't show distinct patterns of correlation between the two variables and the dependent variable. The map might show a high mortality rate in a particular county, but within that county, there may be significant variation in individual-level factors such as socioeconomic status, access to healthcare, and lifestyle behaviors. We also can see there is particular missing data for Alaska counties in the prescription map and the central counties mortality rates, leading to missing data bias.
 
 We also need to remember ecological fallacy and that inferences about individuals because of a given demographic group may not represent how those individuals may behave. In this example, assuming that individuals who live in areas with high poverty rates, high mortality rates, or high opiate prescriptions also have similar characteristics can lead to incorrect conclusions.
-
