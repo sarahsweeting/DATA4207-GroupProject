@@ -1,0 +1,155 @@
+---
+title: "Group exercise 3: The spread of COVID-19 in the US"
+subtitle: "DATA5207: Data Analysis in the Social Sciences"
+author: Emily and Sarah
+output:
+  pdf_document:
+    toc: no
+    latex_engine: xelatex
+header-includes:
+   - \usepackage{caption}
+   - \captionsetup[figure]{font=scriptsize}
+# mainfont: Avenir Book
+urlcolor: blue
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, messages = FALSE)
+
+library (tidyverse)
+
+```
+
+ 
+# Load Data and Preprocess
+
+
+```{r load google mobility data, eval=FALSE}
+
+google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
+  filter(country_region == 'United States')
+
+```
+
+
+```{r load and clean confirmed case data by county, eval = FALSE}
+
+# load data
+
+confirmed.cases.data <- load("Data/covid.RData")
+# load packages
+
+library(tidyr)
+library(DataCombine)
+
+
+```
+
+
+```{r load additional predictor data, eval=FALSE}
+
+load("Data/county.data.RData")
+
+```
+
+```{r recoding data, eval = FALSE}
+
+# patterns for cleaning county names
+
+patterns <- c(' Borough| Census Area| County| Parish| city')
+
+
+# covid case data 
+
+covid.data <- covid.smooth.data_county %>% 
+  
+  # county data
+
+left_join(county.data %>% 
+            
+            # grab file with full state names 
+  
+  left_join(read.csv('Data/fips concordance.csv') %>% 
+              dplyr::select(State = Alpha.code, 
+                            state_full = Name)) %>%
+         dplyr::mutate(county = gsub(patterns, '', Area_Name),
+                       county_state = paste0(county, ', ', state_full)) %>% 
+    
+    dplyr::select(county_state,
+                  total.population = POP_ESTIMATE_2018,
+                  pop.density = Density.per.square.mile.of.land.area...Population,
+                  age.65.plus = Total_age65plus,
+                  avg.dec.temp = Dec.Temp.AVG...F,
+                  avg.jan.temp = Jan.Temp.AVG...F,
+                  avg.feb.temp = Feb.Temp.AVG...F,
+                  avg.mar.temp = Mar.Temp.AVG...F,
+                  avg.apr.temp = Apr.Temp.AVG...F,
+                  avg.may.temp = May.Temp.AVG...F,
+                  avg.jun.temp = Jun.Temp.AVG...F,
+                  avg.jul.temp = Jul.Temp.AVG...F,
+                  avg.aug.temp = Aug.Temp.AVG...F,
+                  avg.sep.temp = Sep.Temp.AVG...F,
+                  avg.oct.temp = Oct.Temp.AVG...F,
+                  avg.nov.temp = Nov.Temp.AVG...F,
+                  icu.beds = ICU.Beds,
+                  active.physicians = Active.Physicians.per.100000.Population.2018..AAMC.,
+                  active.patient.care.physicians = Total.Active.Patient.Care.Physicians.per.100000.Population.2018..AAMC.,
+                  housing.density = Density.per.square.mile.of.land.area...Housing.units,
+                  transit.scores = transit_scores...population.weighted.averages.aggregated.from.town.city.level.to.county)) %>%
+    
+    
+  merge(google.mobility %>% 
+          dplyr::mutate(county = gsub(patterns, '', sub_region_2),
+                        county_state = paste0(county, ', ', sub_region_1),
+                        date = as.Date(date),
+                        mobility.transit = ifelse(is.na(transit_stations_percent_change_from_baseline), 0,
+                                   transit_stations_percent_change_from_baseline)) %>% 
+  
+  dplyr::select(county_state,
+                date,
+                mobility.transit,
+                mobility.workplaces = workplaces_percent_change_from_baseline,
+                mobility.grocery = grocery_and_pharmacy_percent_change_from_baseline)) %>% 
+  
+  # convert to rates
+  
+  mutate(new.cases = new.cases / (total.population / 100000),
+  #        icu.beds = icu.beds / (total.population / 100000),
+         age.65.plus = age.65.plus / total.population)
+  #        avg.winter.temp = (avg.dec.temp + avg.jan.temp + avg.feb.temp) / 3)
+
+
+# lag new cases
+
+new.cases.rate.lagged <- DataCombine::slide(covid.data,
+                                     Var = 'new.cases', 
+                                     NewVar = 'new.cases.lag',
+                                     GroupVar = 'county_state', 
+                                     slideBy = -1) 
+
+# lag workplace mobility 
+
+workplace.lag14 <- DataCombine::slide(covid.data,
+                            Var = 'mobility.workplaces', 
+                            NewVar = 'workplaces.lag14',
+                            GroupVar = 'county_state', 
+                            slideBy = -14)
+
+
+# combine 
+
+covid.data <- covid.data %>% 
+  
+  merge(new.cases.rate.lagged %>% 
+            dplyr::select(county_state, date, 
+                        new.cases.lag)) %>% 
+  
+    merge(workplace.lag14 %>% 
+            dplyr::select(county_state, date, 
+                        workplaces.lag14))
+
+
+
+```
+
