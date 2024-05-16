@@ -32,12 +32,13 @@ google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
 
 ```
 
+```{r}
+confirmed.cases.data <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv")
+```
+
 
 ```{r load and clean confirmed case data by county, eval = FALSE}
 
-# load data
-
-confirmed.cases.data <- load("Data/covid.RData")
 # load packages
 
 library(tidyr)
@@ -150,6 +151,11 @@ covid.data <- covid.data %>%
                         workplaces.lag14))
 
 
+covid.data <- covid.data %>%
+  merge(confirmed.cases.data %>%
+          dplyr::rename(state = Province_State,
+                        county = Admin2) %>%
+          dplyr::select(-Lat, -Long_))
 
 ```
 
