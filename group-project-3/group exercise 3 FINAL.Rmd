@@ -18,7 +18,14 @@ urlcolor: blue
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, messages = FALSE)
 
 library (tidyverse)
-
+library(sf)
+library(janitor)
+library(sf)
+library(scales) 
+library(patchwork)
+library(ggplot2)
+library(rmapshaper)
+library(tigris)
 ```
 
  
@@ -156,6 +163,59 @@ covid.data <- covid.data %>%
           dplyr::rename(state = Province_State,
                         county = Admin2) %>%
           dplyr::select(-Lat, -Long_))
+
+```
+
+Add shape files for any mapping tasks later
+```{r link us data with shape files, warning=FALSE, message=FALSE}
+
+us.shape.1 <- 
+  st_read("Data/US shapefiles/cb_2016_us_county_20m.shp")
+
+
+```
+
+```{r load fip concordance file}
+
+fip.concordance <- read.csv("Data/fips concordance.csv")
+
+
+```
+
+
+```{r link shapefiles with fip concordance file}
+
+
+us.shape.2 <- us.shape.1 %>% 
+  merge(fip.concordance %>%
+          mutate(STATEFP =  ifelse(Numeric.code >= 0 & Numeric.code <= 9, 
+                             paste0(0 , Numeric.code), Numeric.code)) %>%
+          dplyr::rename(state = Alpha.code))
+
+us.shape.2$county <- paste0(us.shape.2$NAME, ", ", us.shape.2$state)
+
+us.shape.2$county <- gsub("Doña Ana, NM", "Dona Ana, NM", us.shape.2$county)
+us.shape.2$county <- gsub("LaSalle, LA", "La Salle, LA", us.shape.2$county)
+us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
+
+```
+
+```{r link us data with shape files2, message=FALSE}
+
+us.shape.2 <- full_join(us.shape.2,
+  covid.data %>%
+    dplyr::select(county, avg.dec.temp, avg.jan.temp, avg.feb.temp, avg.mar.temp, avg.apr.temp, avg.may.temp, avg.jun.temp, avg.jul.temp, avg.aug.temp, avg.sep.temp, avg.oct.temp, avg.nov.temp)) %>%
+  st_as_sf() # To acknolwedge its a shape file
+```
+
+
+# Descriptive Analysis
+
+## Transit and mobility data
+
+## Climate data
+
+```{r collate climate data and plot over time}
 
 ```
 
