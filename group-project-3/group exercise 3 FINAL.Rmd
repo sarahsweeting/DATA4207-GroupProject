@@ -11,19 +11,23 @@ header-includes:
    - \captionsetup[figure]{font=scriptsize}
 # mainfont: Avenir Book
 urlcolor: blue
-
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, messages = FALSE)
 
 library (tidyverse)
-
+library(sf)
+library(janitor)
+library(sf)
+library(scales) 
+library(patchwork)
+library(ggplot2)
+library(rmapshaper)
+library(tigris)
 ```
 
- 
 # Load Data and Preprocess
-
 
 ```{r load google mobility data, eval=FALSE}
 
@@ -36,7 +40,6 @@ google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
 confirmed.cases.data <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv")
 ```
 
-
 ```{r load and clean confirmed case data by county, eval = FALSE}
 
 # load packages
@@ -47,11 +50,43 @@ library(DataCombine)
 
 ```
 
-
 ```{r load additional predictor data, eval=FALSE}
 
 load("Data/county.data.RData")
 
+```
+
+```{r}
+# patterns for cleaning county names
+
+patterns <- c(' Borough| Census Area| County| Parish| city')
+
+climate.data <- county.data %>% 
+    # grab file with full state names 
+  
+  left_join(read.csv('Data/fips concordance.csv') %>% 
+              dplyr::select(State = Alpha.code, 
+                            state_full = Name)) %>%
+         dplyr::mutate(county = gsub(patterns, '', Area_Name),
+                       county_state = paste0(county, ', ', state_full),
+                       state = state_full) %>% 
+    
+    dplyr::select(county,
+                  county_state,
+                  state,
+                  avg.dec.temp = Dec.Temp.AVG...F,
+                  avg.jan.temp = Jan.Temp.AVG...F,
+                  avg.feb.temp = Feb.Temp.AVG...F,
+                  avg.mar.temp = Mar.Temp.AVG...F,
+                  avg.apr.temp = Apr.Temp.AVG...F,
+                  avg.may.temp = May.Temp.AVG...F,
+                  avg.jun.temp = Jun.Temp.AVG...F,
+                  avg.jul.temp = Jul.Temp.AVG...F,
+                  avg.aug.temp = Aug.Temp.AVG...F,
+                  avg.sep.temp = Sep.Temp.AVG...F,
+                  avg.oct.temp = Oct.Temp.AVG...F,
+                  avg.nov.temp = Nov.Temp.AVG...F)
+    
 ```
 
 ```{r recoding data, eval = FALSE}
@@ -62,6 +97,7 @@ patterns <- c(' Borough| Census Area| County| Parish| city')
 
 
 # covid case data 
+load("Data/covid.RData")
 
 covid.data <- covid.smooth.data_county %>% 
   
@@ -159,3 +195,239 @@ covid.data <- covid.data %>%
 
 ```
 
+Add shape files for any mapping tasks later
+
+```{r link us data with shape files, warning=FALSE, message=FALSE}
+
+us.shape.1 <- 
+  st_read("Data/US shapefiles/cb_2016_us_county_20m.shp")
+us.shape.1 <- us.shape.1 %>%
+  shift_geometry() #This function moves alaska into a easier area to interpret
+
+```
+
+```{r load fip concordance file}
+
+fip.concordance <- read.csv("Data/fips concordance.csv")
+
+
+```
+
+```{r link shapefiles with fip concordance file}
+
+
+us.shape.2 <- us.shape.1 %>% 
+  merge(fip.concordance %>%
+          mutate(STATEFP =  ifelse(Numeric.code >= 0 & Numeric.code <= 9, 
+                             paste0(0 , Numeric.code), Numeric.code)) %>%
+          dplyr::rename(state = Alpha.code))
+
+us.shape.2$county <- paste0(us.shape.2$NAME, ", ", us.shape.2$state)
+
+us.shape.2$county <- gsub("Doña Ana, NM", "Dona Ana, NM", us.shape.2$county)
+us.shape.2$county <- gsub("LaSalle, LA", "La Salle, LA", us.shape.2$county)
+us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
+
+
+```
+
+# Descriptive Analysis
+
+## Transit and mobility data
+
+```{r}
+# install.packages("zoo")
+library(zoo)
+```
+
+```{r summarise data}
+mobility.data <- covid.data %>%
+  group_by(date) %>%
+  summarise(mobility.transit = mean(mobility.transit, na.rm = TRUE),
+            mobility.grocery = mean(mobility.grocery, na.rm = TRUE),
+            mobility.workplaces = mean(mobility.workplaces, na.rm = TRUE))
+
+
+# Mobility Values: Each value in the dataset represents a percentage change from a baseline.
+# Rolling Average: The 7-day rolling average smooths these daily percentage changes to show a trend over time.
+# Percentage Representation: The rolling average remains a percentage because it’s derived from percentage values.
+
+# Calculate rolling 7 day average
+mobility.data <- mobility.data %>%
+  arrange(date) %>%
+  mutate(rolling_avg = zoo::rollmean(mobility.grocery, 7, fill = NA, align = "right"))
+```
+
+```{r}
+ggplot(mobility.data, aes(x = date, y = rolling_avg)) +
+  geom_line(color = "blue") +
+  labs(title = "Changes in Visitors to Grocery and Pharmacy Stores Over Time",
+       x = "Date",
+       y = "7-day Rolling Average of Mobility (%)") +
+  theme_minimal()
+```
+
+```{r describe transit scores for each county}
+
+# Issue is, lots of counties so depends how granular we need our descriptive analysis to be. 
+# Lets look by state first since laws usually run by state
+
+create_histogram <- function(data, state_name) {
+  # Filter the data for the given state
+  state_data <- data %>% filter(state == state_name)%>% 
+    summarise(transit.scores = mean(transit.scores, na.rm = TRUE))              # i can't remember what I was doing here 
+  
+  if(nrow(state_data) == 0) {
+    message("No data available for state: ", state_name)
+    return(NULL)
+  }
+  
+  ggplot(state_data, aes(x = transit_scores)) +
+    geom_histogram(binwidth = 1, fill = "blue", color = "black", alpha = 0.7) +
+    labs(title = paste("Distribution of Average Transit Scores in", state_name),
+         x = "Transit Scores",
+         y = "Frequency") +
+    theme_minimal()
+}
+
+  
+
+```
+
+```{r}
+unique_states <- unique(covid.data$state)
+
+# Loop through each state and create a histogram
+for (state in unique_states) {
+  print(create_histogram(covid.data, state))
+}
+```
+
+## Climate data
+
+```{r}
+# Changing the climate data from a wide format to long format:
+climate.data <- climate.data %>%
+  dplyr::select(county, 
+                state,
+                avg.temp.jan = avg.jan.temp,
+                avg.temp.feb = avg.feb.temp,
+                avg.temp.mar = avg.mar.temp,
+                avg.temp.apr = avg.apr.temp,
+                avg.temp.may = avg.may.temp,
+                avg.temp.jun = avg.jun.temp,
+                avg.temp.jul = avg.jul.temp,
+                avg.temp.aug = avg.aug.temp,
+                avg.temp.sep = avg.sep.temp,
+                avg.temp.oct = avg.oct.temp,
+                avg.temp.nov = avg.nov.temp,
+                avg.temp.dec = avg.dec.temp)
+
+
+climate.data.long <- climate.data %>%
+  pivot_longer(
+    cols = starts_with("avg.temp."),
+    names_to = "month",
+    values_to = "temp"
+  )
+
+climate.data.long <- climate.data.long %>%
+  mutate(month = case_when(
+    month == "avg.temp.jan" ~ "Jan",
+    month == "avg.temp.feb" ~ "Feb",
+    month == "avg.temp.mar" ~ "Mar",
+    month == "avg.temp.apr" ~ "Apr",
+    month == "avg.temp.may" ~ "May",
+    month == "avg.temp.jun" ~ "Jun",
+    month == "avg.temp.jul" ~ "Jul",
+    month == "avg.temp.aug" ~ "Aug",
+    month == "avg.temp.sep" ~ "Sep",
+    month == "avg.temp.oct" ~ "Oct",
+    month == "avg.temp.nov" ~ "Nov",
+    month == "avg.temp.dec" ~ "Dec",
+    TRUE ~ month
+  ))
+```
+
+```{r link us data with shape files2, message=FALSE}
+us.shape.2 <- us.shape.2 %>%
+  select(-county, -NAME, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
+  rename(county = Name)
+
+# Don't want to include missing data since its not useful - hence inner join 
+climate.map <- full_join(us.shape.2,
+                         climate.data.long %>% 
+                           select(county, state, month, temp), 
+                         by = "county") %>%
+              st_as_sf()
+ # To acknolwedge its a shape file
+```
+
+```{r collate climate data and plot over time}
+
+climate.state <- climate.data.long %>%
+  group_by(state, month)%>%
+  summarise(avg_temp = mean(temp, na.rm= TRUE, .groups = 'drop'))
+
+
+ggplot(climate.state, aes(x = month, y = avg_temp, group = state, color = state)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Average Temperature Over Each Month Per State",
+       x = "Month",
+       y = "Average Temperature") +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 12),  # Set title size
+    axis.title.x = element_text(size = 10), # Set x-axis label size
+    axis.title.y = element_text(size = 10), # Set y-axis label size
+    legend.position = "bottom",  # Move legend below plot
+    legend.title = element_blank(),  # Remove legend title
+    legend.text = element_text(size = 8)  # Set legend text size
+  ) +
+  guides(color = guide_legend(nrow = 5))  # Set legend to one row
+```
+
+```{r}
+library(plotly)
+
+# Create the plot using ggplot
+p <- ggplot(climate.state, aes(x = month, y = avg_temp, group = state, color = state)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Average Temperature Over Each Month Per State",
+       x = "Month",
+       y = "Average Temperature") +
+  theme_minimal()
+
+# Convert the ggplot object to plotly
+p <- ggplotly(p, tooltip = c("x", "y", "color"))
+
+# Show the interactive plot
+p
+```
+
+```{r map the average temperature for each month in each county}
+month_order <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+# Convert the month variable to a factor with the desired order
+climate.map$month <- factor(climate.map$month, levels = month_order)
+
+ggplot(climate.map) +
+  geom_sf(mapping = aes(fill = temp), colour = NA, inherit.aes = FALSE) +
+  scale_fill_gradient2(low = "#0072B2",
+                       high = "red",
+                       midpoint = mean(climate.map$temp, na.rm = TRUE),
+                       limits = c(min(climate.map$temp, na.rm = TRUE),
+                                  max(climate.map$temp, na.rm = TRUE)),
+                       label = scales::comma,
+                       na.value = "grey") +
+  labs(title = 'Average Climate distribution') +
+  guides(fill = guide_legend(keyheight = 0.3)) +
+  theme_void() +
+  theme(plot.title = element_text(size = 7),
+        legend.position = 'bottom',
+        legend.title = element_blank()) +
+  facet_wrap(~month) # This line tells ggplot to create separate panels for each unique value in the month column. Each panel will display the map for one month.
+
+```
