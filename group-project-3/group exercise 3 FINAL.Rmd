@@ -32,7 +32,6 @@ library(tigris)
 
 # Load Data and Preprocess
 
-
 ```{r load google mobility data, eval=FALSE}
 google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
   filter(country_region == 'United States')
@@ -94,7 +93,6 @@ covid.smooth.data_county <- confirmed.cases.data2 %>%
                        'Virgin Islands'))
 ```
 
-
 ```{r load additional predictor data, eval=FALSE}
 
 
@@ -102,6 +100,7 @@ load("Data/county.data.RData")
 
 ```
 
+#### Climate DF
 
 ```{r}
 # patterns for cleaning county names
@@ -135,6 +134,63 @@ climate.data <- county.data %>%
                   avg.nov.temp = Nov.Temp.AVG...F)
     
 ```
+
+#### Mobility DF
+
+```{r}
+mobility.data <- google.mobility %>% 
+          dplyr::mutate(county = gsub(patterns, '', sub_region_2),
+                        state = sub_region_1,
+                        date = as.Date(date)) %>%
+  dplyr::select(county,
+                state,
+                date,
+                mobility.transit = transit_stations_percent_change_from_baseline,
+                mobility.workplaces = workplaces_percent_change_from_baseline,
+                mobility.grocery = grocery_and_pharmacy_percent_change_from_baseline)
+  
+```
+
+```{r}
+mobility.data <- na.omit(mobility.data)
+```
+
+
+```{r checking blank rows}
+blank_counts <- sapply(mobility.data, function(col) sum(col == ""))
+print(blank_counts)
+```
+
+```{r removing said blank rows}
+clean.mobility.data <- mobility.data %>% filter(county != "")
+clean.mobility.data <- clean.mobility.data %>% filter(state != "")
+```
+
+#### Transit DF
+
+```{r}
+# patterns for cleaning county names
+
+patterns <- c(' Borough| Census Area| County| Parish| city')
+
+transit.data <- county.data %>% 
+    # grab file with full state names 
+  
+  left_join(read.csv('Data/fips concordance.csv') %>% 
+              dplyr::select(State = Alpha.code, 
+                            state_full = Name)) %>%
+         dplyr::mutate(county = gsub(patterns, '', Area_Name),
+                       county_state = paste0(county, ', ', state_full),
+                       state = state_full) %>% 
+    
+    dplyr::select(county,
+                  county_state,
+                  state,
+                  transit.scores = transit_scores...population.weighted.averages.aggregated.from.town.city.level.to.county) 
+    
+```
+
+#### Collated Data
 
 ```{r recoding data, eval = FALSE}
 
@@ -242,6 +298,9 @@ covid.data <- covid.data %>%
     #      dplyr::select(-Lat, -Long_))
 
 ```
+```{r}
+colnames(covid.data)
+```
 
 
 Add shape files for any mapping tasks later
@@ -259,8 +318,27 @@ us.shape.1 <- us.shape.1 %>%
 
 fip.concordance <- read.csv("Data/fips concordance.csv")
 
+```
+
+```{r}
+
+fip.concordance <- read.csv("Data/fips concordance.csv")
+
+us.shape.2 <- us.shape.1 %>% 
+  merge(fip.concordance %>%
+          mutate(STATEFP =  ifelse(Numeric.code >= 0 & Numeric.code <= 9, 
+                             paste0(0 , Numeric.code), Numeric.code)) %>%
+          dplyr::rename(state = Alpha.code))
+
+
+us.shape.2$county <- paste0(us.shape.2$NAME, ", ", us.shape.2$state)
+
+us.shape.2$county <- gsub("Doña Ana, NM", "Dona Ana, NM", us.shape.2$county)
+us.shape.2$county <- gsub("LaSalle, LA", "La Salle, LA", us.shape.2$county)
+us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
 
 ```
+
 
 ```{r link shapefiles with fip concordance file}
 
@@ -302,34 +380,73 @@ cor(covid.data$active.patient.care.physicians, covid.data$new.cases, use = "comp
 plot(covid.data$new.cases, covid.data$active.patient.care.physicians, ylab = "Active Physicians per 100,000", xlab = "New COVID-19 Cases", main = "Physicians vs. New COVID-19 Cases")
 ```
 
-```{r}
 
-us.shape.1 <- 
-  st_read("US data for group task/US shapefiles/cb_2016_us_county_20m.shp")
-```
-
-```{r}
-fip.concordance <- read.csv("Data/fips concordance.csv")
-
-us.shape.2 <- us.shape.1 %>% 
-  merge(fip.concordance %>%
-          mutate(STATEFP =  ifelse(Numeric.code >= 0 & Numeric.code <= 9, 
-                             paste0(0 , Numeric.code), Numeric.code)) %>%
-          dplyr::rename(state = Alpha.code))
-
-
-us.shape.2$county <- paste0(us.shape.2$NAME, ", ", us.shape.2$state)
-
-us.shape.2$county <- gsub("Doña Ana, NM", "Dona Ana, NM", us.shape.2$county)
-us.shape.2$county <- gsub("LaSalle, LA", "La Salle, LA", us.shape.2$county)
-us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
-
-
-```
 
 # Descriptive Analysis
 
-## Transit and mobility data
+## Transit
+
+```{r}
+
+na_count_per_column <- transit.data %>%
+  summarise_all(~ sum(is.na(.)))
+print(na_count_per_column)
+
+```
+
+```{r remove NA values}
+clean.transit.data <- na.omit(transit.data)
+
+# standardise
+clean.transit.data <- clean.transit.data %>%
+  mutate(z.transit = (transit.scores - mean(transit.scores, na.rm=T)) / 
+           sd(transit.scores, na.rm=T))
+```
+
+```{r}
+ggplot(clean.transit.data, aes(x = z.transit)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "black", alpha = 0.7) +
+  labs(title = "Standardised transit scores in America",
+       x = "Transit Scores",
+       y = "Frequency") +
+  theme_minimal()
+```
+
+```{r link the geometry with transit data}
+us.shape.2 <- us.shape.2 %>%
+  select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
+  rename(county = NAME)
+
+transit.map <- full_join(us.shape.2,
+                         clean.transit.data %>% 
+                           select(county, state, z.transit), 
+                         by = "county") %>%
+              st_as_sf()
+```
+
+```{r}
+
+ggplot(transit.map) +
+  geom_sf(mapping = aes(fill = z.transit), colour = NA, inherit.aes = FALSE) +
+  scale_fill_gradient2(low = "#2c7bb6",          # Blue
+                        mid = "#ffffbf",          # Yellow (midpoint)
+                      high = "#d7191c",         # Red
+                       midpoint = mean(transit.map$z.transit, na.rm = TRUE),
+                       limits = c(min(transit.map$z.transit, na.rm = TRUE),
+                                  max(transit.map$z.transit, na.rm = TRUE)),
+                       label = scales::comma,
+                       na.value = "grey") +
+  labs(title = 'Standardised Transit distribution') +
+  guides(fill = guide_legend(keyheight = 0.3)) +
+  theme_void() +
+  theme(plot.title = element_text(size = 7),
+        legend.position = 'bottom',
+        legend.title = element_blank())
+
+
+```
+
+## Mobility
 
 ```{r}
 # install.packages("zoo")
@@ -337,7 +454,7 @@ library(zoo)
 ```
 
 ```{r summarise data}
-mobility.data <- covid.data %>%
+summarise.mobility.data <- clean.mobility.data %>%
   group_by(date) %>%
   summarise(mobility.transit = mean(mobility.transit, na.rm = TRUE),
             mobility.grocery = mean(mobility.grocery, na.rm = TRUE),
@@ -349,13 +466,24 @@ mobility.data <- covid.data %>%
 # Percentage Representation: The rolling average remains a percentage because it’s derived from percentage values.
 
 # Calculate rolling 7 day average
-mobility.data <- mobility.data %>%
+grocery.mobility.data <- summarise.mobility.data %>%
   arrange(date) %>%
   mutate(rolling_avg = zoo::rollmean(mobility.grocery, 7, fill = NA, align = "right"))
+
+transit.mobility.data <- summarise.mobility.data %>%
+  arrange(date) %>%
+  mutate(rolling_avg = zoo::rollmean(mobility.transit, 7, fill = NA, align = "right"))
+
+
+workplace.mobility.data <- summarise.mobility.data %>%
+  arrange(date) %>%
+  mutate(rolling_avg = zoo::rollmean(mobility.workplaces, 7, fill = NA, align = "right"))
+
+
 ```
 
 ```{r}
-ggplot(mobility.data, aes(x = date, y = rolling_avg)) +
+ggplot(grocery.mobility.data, aes(x = date, y = rolling_avg)) +
   geom_line(color = "blue") +
   labs(title = "Changes in Visitors to Grocery and Pharmacy Stores Over Time",
        x = "Date",
@@ -363,41 +491,56 @@ ggplot(mobility.data, aes(x = date, y = rolling_avg)) +
   theme_minimal()
 ```
 
-```{r describe transit scores for each county}
-
-# Issue is, lots of counties so depends how granular we need our descriptive analysis to be. 
-# Lets look by state first since laws usually run by state
-
-create_histogram <- function(data, state_name) {
-  # Filter the data for the given state
-  state_data <- data %>% filter(state == state_name)%>% 
-    summarise(transit.scores = mean(transit.scores, na.rm = TRUE))              # i can't remember what I was doing here 
-  
-  if(nrow(state_data) == 0) {
-    message("No data available for state: ", state_name)
-    return(NULL)
-  }
-  
-  ggplot(state_data, aes(x = transit_scores)) +
-    geom_histogram(binwidth = 1, fill = "blue", color = "black", alpha = 0.7) +
-    labs(title = paste("Distribution of Average Transit Scores in", state_name),
-         x = "Transit Scores",
-         y = "Frequency") +
-    theme_minimal()
-}
-
-  
-
+```{r}
+ggplot(transit.mobility.data, aes(x = date, y = rolling_avg)) +
+  geom_line(color = "blue") +
+  labs(title = "Changes in Visitors to Transit Over Time",
+       x = "Date",
+       y = "7-day Rolling Average of Mobility (%)") +
+  theme_minimal()
 ```
 
 ```{r}
-unique_states <- unique(covid.data$state)
-
-# Loop through each state and create a histogram
-for (state in unique_states) {
-  print(create_histogram(covid.data, state))
-}
+ggplot(workplace.mobility.data, aes(x = date, y = rolling_avg)) +
+  geom_line(color = "blue") +
+  labs(title = "Changes in Visitors to Workplaces Over Time",
+       x = "Date",
+       y = "7-day Rolling Average of Mobility (%)") +
+  theme_minimal()
 ```
+```{r}
+
+
+# Add a type column to each dataframe
+grocery.mobility.data <- grocery.mobility.data %>%
+  mutate(type = "Grocery and Pharmacy")
+
+transit.mobility.data <- transit.mobility.data %>%
+  mutate(type = "Transit")
+
+workplace.mobility.data <- workplace.mobility.data %>%
+  mutate(type = "Workplace")
+
+# Combine the dataframes into one
+combined_mobility_data <- bind_rows(grocery.mobility.data, transit.mobility.data, workplace.mobility.data)
+
+# Create the ggplot
+p <- ggplot(combined_mobility_data, aes(x = date, y = rolling_avg, color = type)) +
+  geom_line() +
+  labs(title = "Changes in Mobility Over Time",
+       x = "Date",
+       y = "7-day Rolling Average of Mobility (%)",
+       color = "Mobility Type") +
+  theme_minimal()
+
+# Convert the ggplot to an interactive plotly plot
+interactive_plot <- ggplotly(p)
+
+# Display the interactive plot
+interactive_plot
+
+```
+
 
 ## Climate data
 
@@ -447,8 +590,8 @@ climate.data.long <- climate.data.long %>%
 
 ```{r link us data with shape files2, message=FALSE}
 us.shape.2 <- us.shape.2 %>%
-  select(-county, -NAME, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
-  rename(county = Name)
+  select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
+  rename(county = NAME)
 
 # Don't want to include missing data since its not useful - hence inner join 
 climate.map <- full_join(us.shape.2,
@@ -528,6 +671,7 @@ ggplot(climate.map) +
 
 ```
 
+# Sarah's stuff :)
 
 ```{r}
 # Check column names and data types
@@ -540,7 +684,6 @@ covid.data <- covid.data %>%
 us.shape.2 <- us.shape.2 %>%
   mutate(GEOID = as.character(GEOID))
 ```
-
 
 ```{r}
 # Function to perform join in chunks
@@ -595,7 +738,6 @@ plot_in_chunks <- function(data, chunk_size = 1000) {
 plot_in_chunks(county_data, chunk_size = 1000)
 ```
 
-
 ```{r}
 # Plot Age Over 65
 ggplot(data = county_data) +
@@ -617,4 +759,29 @@ ggplot(data = county_data) +
        fill = "Physicians/100k")
 ```
 
->>>>>>> sarah
+
+
+# Model
+"county_state"                   "date"                           "new.cases"                     
+ [4] "cases_14days"                   "county"                         "state"                         
+ [7] "FIPS"                           "total.population"               "pop.density"                   
+[10] "age.65.plus"                    "avg.dec.temp"                   "avg.jan.temp"                  
+[13] "avg.feb.temp"                   "avg.mar.temp"                   "avg.apr.temp"                  
+[16] "avg.may.temp"                   "avg.jun.temp"                   "avg.jul.temp"                  
+[19] "avg.aug.temp"                   "avg.sep.temp"                   "avg.oct.temp"                  
+[22] "avg.nov.temp"                   "icu.beds"                       "active.physicians"             
+[25] "active.patient.care.physicians" "housing.density"                "transit.scores"                
+[28] "mobility.transit"               "mobility.workplaces"            "mobility.grocery"              
+[31] "new.cases.lag"                  "workplaces.lag14"              
+
+```{r see the significance of temperature}
+model2 <- lm(cases_14days ~ avg.jan.temp + avg.feb.temp + avg.mar.temp + avg.apr.temp + avg.may.temp + avg.jun.temp + avg.jul.temp + avg.aug.temp + avg.sep.temp + avg.oct.temp + avg.nov.temp + avg.dec.temp , covid.data)
+
+summary(model2)
+```
+
+```{r see the significance of mobility}
+model3 <- lm(cases_14days ~mobility.transit +mobility.grocery +mobility.workplaces + avg.jan.temp + avg.feb.temp + avg.mar.temp + avg.apr.temp + avg.may.temp + avg.jun.temp + avg.jul.temp + avg.aug.temp + avg.sep.temp + avg.oct.temp + avg.nov.temp + avg.dec.temp, covid.data)
+summary(model3)
+```
+
