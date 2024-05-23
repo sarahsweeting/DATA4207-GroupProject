@@ -25,12 +25,15 @@ library(patchwork)
 library(ggplot2)
 library(rmapshaper)
 library(tigris)
+
+
+
 ```
 
 # Load Data and Preprocess
 
-```{r load google mobility data, eval=FALSE}
 
+```{r load google mobility data, eval=FALSE}
 google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
   filter(country_region == 'United States')
 
@@ -38,9 +41,11 @@ google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
 
 ```{r}
 confirmed.cases.data <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv")
+
 ```
 
 ```{r load and clean confirmed case data by county, eval = FALSE}
+
 
 # load packages
 
@@ -48,13 +53,55 @@ library(tidyr)
 library(DataCombine)
 
 
+# clean data
+
+confirmed.cases.data2 <- confirmed.cases.data %>%
+  dplyr::rename(state = Province_State,
+                county = Admin2) %>% 
+  dplyr::select(-UID, -iso2, -iso3, -code3,
+                -Lat, -Long_, -Combined_Key, -Country_Region) %>% 
+    gather(date, confirmed.cases,-state,-county,-FIPS) %>%
+  dplyr::mutate(date = gsub('X', '', date), 
+                date = as.Date(as.character(date), "%m.%d.%y"),
+                county_state = paste0(county, ', ', state)) %>%
+  arrange(county_state, date) %>%
+  dplyr::mutate(lag = slide(.,
+                                  Var = 'confirmed.cases', 
+                                  NewVar = 'new',
+                                  GroupVar = 'county_state', 
+                                  slideBy = -1)[,'new'],
+                new.cases = confirmed.cases - lag)
+
+
+## calculate rolling averages and remove non-states
+
+covid.smooth.data_county <- confirmed.cases.data2 %>%
+    dplyr::group_by(county_state, date) %>% 
+    dplyr::summarise(new.cases = sum(new.cases)) %>%
+      dplyr::group_by(county_state) %>% 
+    dplyr::mutate(cases_14days = zoo::rollmean(new.cases, 
+                                               k = 14, fill = 0)) %>% 
+  dplyr::ungroup() %>% 
+  mutate() %>% 
+  merge(confirmed.cases.data2 %>% 
+          dplyr::select(county_state, date, county, state)) %>% 
+  filter(!state %in% c('American Samoa', 
+                       'Diamond Princess',
+                       'Grand Princess',
+                       'Guam',
+                       'Northern Mariana Islands',
+                       'Puerto Rico',
+                       'Virgin Islands'))
 ```
 
+
 ```{r load additional predictor data, eval=FALSE}
+
 
 load("Data/county.data.RData")
 
 ```
+
 
 ```{r}
 # patterns for cleaning county names
@@ -114,6 +161,7 @@ left_join(county.data %>%
                        county_state = paste0(county, ', ', state_full)) %>% 
     
     dplyr::select(county_state,
+                  FIPS = FIPS,
                   total.population = POP_ESTIMATE_2018,
                   pop.density = Density.per.square.mile.of.land.area...Population,
                   age.65.plus = Total_age65plus,
@@ -187,13 +235,14 @@ covid.data <- covid.data %>%
                         workplaces.lag14))
 
 
-covid.data <- covid.data %>%
-  merge(confirmed.cases.data %>%
-          dplyr::rename(state = Province_State,
-                        county = Admin2) %>%
-          dplyr::select(-Lat, -Long_))
+#covid.data <- covid.data %>%
+ # merge(confirmed.cases.data %>%
+  #        dplyr::rename(state = Province_State,
+   #                     county = Admin2) %>%
+    #      dplyr::select(-Lat, -Long_))
 
 ```
+
 
 Add shape files for any mapping tasks later
 
@@ -215,12 +264,59 @@ fip.concordance <- read.csv("Data/fips concordance.csv")
 
 ```{r link shapefiles with fip concordance file}
 
+# Summary statistics for age over 65
+summary(covid.data$age.65.plus)
+
+# Correlation between age over 65 and new cases
+cor(covid.data$age.65.plus, covid.data$new.cases, use = "complete.obs")
+
+# Scatter plot
+plot(covid.data$new.cases, covid.data$age.65.plus, ylab = "Age Over 65", xlab = "New COVID-19 Cases", main = "Age Over 65 vs. New COVID-19 Cases")
+
+
+```
+
+```{r}
+
+specific_date <- as.Date("2020-07-20	")  
+filtered_data <- covid.data %>%
+  filter(date == specific_date)
+# Summary statistics for population density
+summary(covid.data$pop.density)
+
+# Correlation between population density and new cases
+cor(covid.data$pop.density, covid.data$new.cases, use = "complete.obs")
+
+# Scatter plot
+plot(filtered_data$new.cases, filtered_data$pop.density, ylab = "Population Density", xlab = "New COVID-19 Cases", main = "Population Density vs. New COVID-19 Cases")
+```
+
+```{r}
+# Summary statistics for active physicians per 100,000
+summary(covid.data$active.patient.care.physicians)
+
+# Correlation between active physicians and new cases
+cor(covid.data$active.patient.care.physicians, covid.data$new.cases, use = "complete.obs")
+
+# Scatter plot
+plot(covid.data$new.cases, covid.data$active.patient.care.physicians, ylab = "Active Physicians per 100,000", xlab = "New COVID-19 Cases", main = "Physicians vs. New COVID-19 Cases")
+```
+
+```{r}
+
+us.shape.1 <- 
+  st_read("US data for group task/US shapefiles/cb_2016_us_county_20m.shp")
+```
+
+```{r}
+fip.concordance <- read.csv("Data/fips concordance.csv")
 
 us.shape.2 <- us.shape.1 %>% 
   merge(fip.concordance %>%
           mutate(STATEFP =  ifelse(Numeric.code >= 0 & Numeric.code <= 9, 
                              paste0(0 , Numeric.code), Numeric.code)) %>%
           dplyr::rename(state = Alpha.code))
+
 
 us.shape.2$county <- paste0(us.shape.2$NAME, ", ", us.shape.2$state)
 
@@ -431,3 +527,94 @@ ggplot(climate.map) +
   facet_wrap(~month) # This line tells ggplot to create separate panels for each unique value in the month column. Each panel will display the map for one month.
 
 ```
+
+
+```{r}
+# Check column names and data types
+
+
+# Ensure FIPS column is correctly named and of the same type in both data frames
+covid.data <- covid.data %>%
+  mutate(FIPS = as.character(FIPS))
+
+us.shape.2 <- us.shape.2 %>%
+  mutate(GEOID = as.character(GEOID))
+```
+
+
+```{r}
+# Function to perform join in chunks
+join_in_chunks <- function(shape_data, covid_data, chunk_size = 1000) {
+  n <- nrow(shape_data)
+  result <- NULL
+  
+  for (i in seq(1, n, by = chunk_size)) {
+    chunk <- shape_data[i:min(i + chunk_size - 1, n), ]
+    chunk_result <- chunk %>%
+      left_join(covid_data, by = c("GEOID" = "FIPS"))
+    
+    if (is.null(result)) {
+      result <- chunk_result
+    } else {
+      result <- bind_rows(result, chunk_result)
+    }
+  }
+  
+  return(result)
+}
+
+# Perform join in chunks
+county_data <- join_in_chunks(us.shape.2, covid.data, chunk_size = 1000)
+
+county_data <- st_transform(county_data, crs = st_crs(5070))
+```
+
+```{r}
+# Function to plot in chunks
+county_data <- st_simplify(county_data, dTolerance = 1000)
+
+# Function to plot in chunks
+plot_in_chunks <- function(data, chunk_size = 1000) {
+  n <- nrow(data)
+  
+  for (i in seq(1, n, by = chunk_size)) {
+    chunk <- data[i:min(i + chunk_size - 1, n), ]
+    
+    # Plot Population Density
+    ggplot(data = chunk) +
+      geom_sf(aes(fill = pop_density), color = NA) +
+      scale_fill_viridis_c(option = "viridis") +
+      theme_minimal() +
+      labs(title = paste("Population Density by County (Chunk", i, "to", min(i + chunk_size - 1, n), ")"),
+           fill = "Density (per sq. mile)") +
+      print()
+  }
+}
+
+# Call the function to plot in chunks
+plot_in_chunks(county_data, chunk_size = 1000)
+```
+
+
+```{r}
+# Plot Age Over 65
+ggplot(data = county_data) +
+  geom_sf(aes(fill = age.65.plus), color = NA) +
+  scale_fill_viridis_c(option = "viridis") +
+  theme_minimal() +
+  labs(title = "Proportion of Population Age 65+ by County",
+       fill = "Proportion")
+
+```
+
+```{r}
+# Plot Active Physicians per 100,000
+ggplot(data = county_data) +
+  geom_sf(aes(fill = active.patient.care.physicians), color = NA) +
+  scale_fill_viridis_c(option = "viridis") +
+  theme_minimal() +
+  labs(title = "Active Physicians per 100,000 by County",
+       fill = "Physicians/100k")
+```
+
+>>>>>>> sarah
