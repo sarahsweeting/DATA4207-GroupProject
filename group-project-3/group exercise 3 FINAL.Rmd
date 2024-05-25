@@ -1,15 +1,17 @@
 ---
 title: "Group exercise 3: The spread of COVID-19 in the US"
-subtitle: "DATA5207: Data Analysis in the Social Sciences"
-author: Emily and Sarah
+author: "Emily and Sarah"
+subtitle: 'DATA5207: Data Analysis in the Social Sciences'
 output:
+  html_document:
+    toc: no
+    df_print: paged
   pdf_document:
     toc: no
     latex_engine: xelatex
 header-includes:
-   - \usepackage{caption}
-   - \captionsetup[figure]{font=scriptsize}
-# mainfont: Avenir Book
+- \usepackage{caption}
+- \captionsetup[figure]{font=scriptsize}
 urlcolor: blue
 ---
 
@@ -25,14 +27,15 @@ library(patchwork)
 library(ggplot2)
 library(rmapshaper)
 library(tigris)
-
+library(plotly)
+devtools::install_github('bbc/bbplot')
 
 
 ```
 
 # Load Data and Preprocess
 
-```{r load google mobility data, eval=FALSE}
+```{r load google mobility data}
 google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
   filter(country_region == 'United States')
 
@@ -43,7 +46,7 @@ confirmed.cases.data <- read.csv("https://raw.githubusercontent.com/CSSEGISandDa
 
 ```
 
-```{r load and clean confirmed case data by county, eval = FALSE}
+```{r load and clean confirmed case data by county}
 
 
 # load packages
@@ -93,7 +96,7 @@ covid.smooth.data_county <- confirmed.cases.data2 %>%
                        'Virgin Islands'))
 ```
 
-```{r load additional predictor data, eval=FALSE}
+```{r load additional predictor data}
 
 
 load("Data/county.data.RData")
@@ -155,7 +158,6 @@ mobility.data <- google.mobility %>%
 mobility.data <- na.omit(mobility.data)
 ```
 
-
 ```{r checking blank rows}
 blank_counts <- sapply(mobility.data, function(col) sum(col == ""))
 print(blank_counts)
@@ -192,7 +194,7 @@ transit.data <- county.data %>%
 
 #### Collated Data
 
-```{r recoding data, eval = FALSE}
+```{r recoding data}
 
 # patterns for cleaning county names
 
@@ -298,10 +300,10 @@ covid.data <- covid.data %>%
     #      dplyr::select(-Lat, -Long_))
 
 ```
+
 ```{r}
 colnames(covid.data)
 ```
-
 
 Add shape files for any mapping tasks later
 
@@ -338,7 +340,6 @@ us.shape.2$county <- gsub("LaSalle, LA", "La Salle, LA", us.shape.2$county)
 us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
 
 ```
-
 
 ```{r link shapefiles with fip concordance file}
 
@@ -380,11 +381,22 @@ cor(covid.data$active.patient.care.physicians, covid.data$new.cases, use = "comp
 plot(covid.data$new.cases, covid.data$active.patient.care.physicians, ylab = "Active Physicians per 100,000", xlab = "New COVID-19 Cases", main = "Physicians vs. New COVID-19 Cases")
 ```
 
-
-
 # Descriptive Analysis
 
 ## Transit
+
+| Transit Score® | Description                         |
+|----------------|-------------------------------------|
+| 90–100         | Rider's Paradise                    |
+|                | World-class public transportation.  |
+| 70–89          | Excellent Transit                   |
+|                | Transit is convenient for most trips.|
+| 50–69          | Good Transit                        |
+|                | Many nearby public transportation options. |
+| 25–49          | Some Transit                        |
+|                | A few nearby public transportation options. |
+| 0–24           | Minimal Transit                     |
+|                | It is possible to get on a bus.     |
 
 ```{r}
 
@@ -409,12 +421,15 @@ ggplot(clean.transit.data, aes(x = z.transit)) +
   labs(title = "Standardised transit scores in America",
        x = "Transit Scores",
        y = "Frequency") +
-  theme_minimal()
+  bbplot::bbc_style()+
+  theme(plot.title = element_text(size = 12),
+        axis.title.x = element_text(size = 8), # Adjust the x-axis label size
+    axis.title.y = element_text(size = 8))
 ```
 
 ```{r link the geometry with transit data}
 us.shape.2 <- us.shape.2 %>%
-  select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
+  select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
   rename(county = NAME)
 
 transit.map <- full_join(us.shape.2,
@@ -428,21 +443,28 @@ transit.map <- full_join(us.shape.2,
 
 ggplot(transit.map) +
   geom_sf(mapping = aes(fill = z.transit), colour = NA, inherit.aes = FALSE) +
-  scale_fill_gradient2(low = "#2c7bb6",          # Blue
-                        mid = "#ffffbf",          # Yellow (midpoint)
-                      high = "#d7191c",         # Red
-                       midpoint = mean(transit.map$z.transit, na.rm = TRUE),
-                       limits = c(min(transit.map$z.transit, na.rm = TRUE),
-                                  max(transit.map$z.transit, na.rm = TRUE)),
-                       label = scales::comma,
-                       na.value = "grey") +
-  labs(title = 'Standardised Transit distribution') +
+  scale_fill_gradient2(
+    low = "#2c7bb6",           # Blue
+    mid = "#ffffbf",           # Yellow (midpoint)
+    high = "#d7191c",          # Red
+    midpoint = mean(transit.map$z.transit, na.rm = TRUE),
+    limits = c(min(transit.map$z.transit, na.rm = TRUE),
+               max(transit.map$z.transit, na.rm = TRUE)),
+    label = scales::comma,
+    na.value = "grey"
+  ) +
+  labs(title = 'Standardised Transit Distribution') +
   guides(fill = guide_legend(keyheight = 0.3)) +
   theme_void() +
-  theme(plot.title = element_text(size = 7),
-        legend.position = 'bottom',
-        legend.title = element_blank())
-
+  bbplot::bbc_style() +
+  theme(
+    plot.title = element_text(size = 16),         # Make the title larger
+    legend.position = 'bottom',
+    legend.title = element_blank(),
+    legend.text = element_text(size = 10),        # Make legend text smaller
+    axis.title = element_text(size = 10),         # Make axis labels smaller
+    axis.text = element_text(size = 8)            # Make axis text smaller
+  )
 
 ```
 
@@ -488,7 +510,34 @@ ggplot(grocery.mobility.data, aes(x = date, y = rolling_avg)) +
   labs(title = "Changes in Visitors to Grocery and Pharmacy Stores Over Time",
        x = "Date",
        y = "7-day Rolling Average of Mobility (%)") +
-  theme_minimal()
+  bbplot::bbc_style()+
+  theme(plot.title = element_text(size = 12),
+        axis.title.x = element_text(size = 8), # Adjust the x-axis label size
+    axis.title.y = element_text(size = 8))
+```
+
+```{r}
+ggplot(grocery.mobility.data, aes(x = date, y = rolling_avg)) +
+  geom_line(color = "blue", size = 1) +  # Thicker line for better visibility
+  # geom_point(color = "red", size = 1, alpha = 0.7) +  # Adding points for data
+  labs(title = "Changes in Visitors to Grocery and Pharmacy Stores Over Time",
+       x = "Date",
+       y = "7-day Rolling Average of Mobility (%)") +
+  bbplot::bbc_style() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),  # Larger, bold title
+    axis.title.x = element_text(size = 12),  # Larger x-axis label
+    axis.title.y = element_text(size = 12),  # Larger y-axis label
+    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),  # Rotate x-axis labels for better readability
+    axis.text.y = element_text(size = 10)
+  ) +
+  scale_x_date(date_labels = "%b %Y", date_breaks = "1 month") +  # Format x-axis dates
+  geom_vline(xintercept = as.numeric(as.Date(c("2020-03-11", "2020-12-25"))),  # Add vertical lines for significant dates
+             linetype = "dashed", color = "grey50") +
+  annotate("text", x = as.Date("2020-03-11"), y = max(grocery.mobility.data$rolling_avg, na.rm = TRUE)* -0.5,
+           label = "Pandemic Declared", angle = 90, vjust = -0.5, size = 3, color = "grey50") +
+  annotate("text", x = as.Date("2020-12-25"), y = max(grocery.mobility.data$rolling_avg, na.rm = TRUE)* 0.8,
+           label = "Christmas", angle = 90, vjust = -0.5, size = 3, color = "grey50")
 ```
 
 ```{r}
@@ -508,6 +557,7 @@ ggplot(workplace.mobility.data, aes(x = date, y = rolling_avg)) +
        y = "7-day Rolling Average of Mobility (%)") +
   theme_minimal()
 ```
+
 ```{r}
 
 
@@ -540,7 +590,6 @@ interactive_plot <- ggplotly(p)
 interactive_plot
 
 ```
-
 
 ## Climate data
 
@@ -589,9 +638,9 @@ climate.data.long <- climate.data.long %>%
 ```
 
 ```{r link us data with shape files2, message=FALSE}
-us.shape.2 <- us.shape.2 %>%
-  select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
-  rename(county = NAME)
+# us.shape.2 <- us.shape.2 %>%
+#   select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
+#   rename(county = NAME)
 
 # Don't want to include missing data since its not useful - hence inner join 
 climate.map <- full_join(us.shape.2,
@@ -628,7 +677,7 @@ ggplot(climate.state, aes(x = month, y = avg_temp, group = state, color = state)
 ```
 
 ```{r}
-library(plotly)
+
 
 # Create the plot using ggplot
 p <- ggplot(climate.state, aes(x = month, y = avg_temp, group = state, color = state)) +
@@ -724,13 +773,13 @@ plot_in_chunks <- function(data, chunk_size = 1000) {
     chunk <- data[i:min(i + chunk_size - 1, n), ]
     
     # Plot Population Density
-    ggplot(data = chunk) +
+    p<- ggplot(data = chunk) +
       geom_sf(aes(fill = pop_density), color = NA) +
       scale_fill_viridis_c(option = "viridis") +
       theme_minimal() +
       labs(title = paste("Population Density by County (Chunk", i, "to", min(i + chunk_size - 1, n), ")"),
-           fill = "Density (per sq. mile)") +
-      print()
+           fill = "Density (per sq. mile)") 
+    p
   }
 }
 
@@ -759,20 +808,19 @@ ggplot(data = county_data) +
        fill = "Physicians/100k")
 ```
 
-
-
 # Model
-"county_state"                   "date"                           "new.cases"                     
- [4] "cases_14days"                   "county"                         "state"                         
- [7] "FIPS"                           "total.population"               "pop.density"                   
-[10] "age.65.plus"                    "avg.dec.temp"                   "avg.jan.temp"                  
-[13] "avg.feb.temp"                   "avg.mar.temp"                   "avg.apr.temp"                  
-[16] "avg.may.temp"                   "avg.jun.temp"                   "avg.jul.temp"                  
-[19] "avg.aug.temp"                   "avg.sep.temp"                   "avg.oct.temp"                  
-[22] "avg.nov.temp"                   "icu.beds"                       "active.physicians"             
-[25] "active.patient.care.physicians" "housing.density"                "transit.scores"                
-[28] "mobility.transit"               "mobility.workplaces"            "mobility.grocery"              
-[31] "new.cases.lag"                  "workplaces.lag14"              
+
+"county_state" "date" "new.cases"\
+[4] "cases_14days" "county" "state"\
+[7] "FIPS" "total.population" "pop.density"\
+[10] "age.65.plus" "avg.dec.temp" "avg.jan.temp"\
+[13] "avg.feb.temp" "avg.mar.temp" "avg.apr.temp"\
+[16] "avg.may.temp" "avg.jun.temp" "avg.jul.temp"\
+[19] "avg.aug.temp" "avg.sep.temp" "avg.oct.temp"\
+[22] "avg.nov.temp" "icu.beds" "active.physicians"\
+[25] "active.patient.care.physicians" "housing.density" "transit.scores"\
+[28] "mobility.transit" "mobility.workplaces" "mobility.grocery"\
+[31] "new.cases.lag" "workplaces.lag14"
 
 ```{r see the significance of temperature}
 model2 <- lm(cases_14days ~ avg.jan.temp + avg.feb.temp + avg.mar.temp + avg.apr.temp + avg.may.temp + avg.jun.temp + avg.jul.temp + avg.aug.temp + avg.sep.temp + avg.oct.temp + avg.nov.temp + avg.dec.temp , covid.data)
@@ -785,3 +833,29 @@ model3 <- lm(cases_14days ~mobility.transit +mobility.grocery +mobility.workplac
 summary(model3)
 ```
 
+```{r testing independence}
+library(lmtest)
+
+# Durbin-Watson test
+dwtest(model3)
+
+```
+
+```{r testing homoskedasticity}
+# Plot residuals vs fitted values
+plot(fitted(model3), residuals(model3), main = "Residuals vs Fitted")
+abline(h = 0, col = "red")
+```
+
+```{r}
+# Q-Q plot
+qqnorm(residuals(model3))
+qqline(residuals(model3), col = "red")
+
+```
+
+# Results and data journalism project explaining the spread of COVID-19 in the US. Why has it impacted some
+
+areas more than others?
+
+COVID-19
