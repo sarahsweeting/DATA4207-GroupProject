@@ -30,7 +30,6 @@ library(tigris)
 library(plotly)
 devtools::install_github('bbc/bbplot')
 
-
 ```
 
 # Load Data and Preprocess
@@ -313,12 +312,6 @@ us.shape.1 <-
   st_read("Data/US shapefiles/cb_2016_us_county_20m.shp")
 us.shape.1 <- us.shape.1 %>%
   shift_geometry() #This function moves alaska into a easier area to interpret
-
-```
-
-```{r load fip concordance file}
-
-fip.concordance <- read.csv("Data/fips concordance.csv")
 
 ```
 
@@ -723,18 +716,22 @@ ggplot(climate.map) +
 # Sarah's stuff :)
 
 ```{r}
-# Check column names and data types
-
 
 # Ensure FIPS column is correctly named and of the same type in both data frames
-covid.data <- covid.data %>%
+county.data <- county.data %>%
   mutate(FIPS = as.character(FIPS))
 
 us.shape.2 <- us.shape.2 %>%
   mutate(GEOID = as.character(GEOID))
+
+covid.data <- covid.data %>%
+  mutate(FIPS = as.character(FIPS))
 ```
 
 ```{r}
+
+county.data$FIPS <- str_pad(as.character(county.data$FIPS), width = 5, pad = "0")
+
 # Function to perform join in chunks
 join_in_chunks <- function(shape_data, covid_data, chunk_size = 1000) {
   n <- nrow(shape_data)
@@ -756,57 +753,125 @@ join_in_chunks <- function(shape_data, covid_data, chunk_size = 1000) {
 }
 
 # Perform join in chunks
-county_data <- join_in_chunks(us.shape.2, covid.data, chunk_size = 1000)
 
-county_data <- st_transform(county_data, crs = st_crs(5070))
+
+county_data_geo <- join_in_chunks(us.shape.2, county.data, chunk_size = 1000)
 ```
 
 ```{r}
-# Function to plot in chunks
-county_data <- st_simplify(county_data, dTolerance = 1000)
+county.covid = join_in_chunks(us.shape.2, covid.data, chunk_size = 1000)
+```
 
-# Function to plot in chunks
-plot_in_chunks <- function(data, chunk_size = 1000) {
-  n <- nrow(data)
-  
-  for (i in seq(1, n, by = chunk_size)) {
-    chunk <- data[i:min(i + chunk_size - 1, n), ]
-    
-    # Plot Population Density
-    p<- ggplot(data = chunk) +
-      geom_sf(aes(fill = pop_density), color = NA) +
+
+```{r}
+ggplot(data = county_data_geo) +
+      geom_sf(aes(fill = log(Density.per.square.mile.of.land.area...Population)), color = NA) +
       scale_fill_viridis_c(option = "viridis") +
       theme_minimal() +
-      labs(title = paste("Population Density by County (Chunk", i, "to", min(i + chunk_size - 1, n), ")"),
-           fill = "Density (per sq. mile)") 
-    p
-  }
-}
+      labs(title = "Population Density by County Standardised", 
+           fill = "Density (per sq. mile)")
 
-# Call the function to plot in chunks
-plot_in_chunks(county_data, chunk_size = 1000)
 ```
 
 ```{r}
-# Plot Age Over 65
-ggplot(data = county_data) +
-  geom_sf(aes(fill = age.65.plus), color = NA) +
+ggplot(data = county_data_geo) +
+  geom_sf(aes(fill = log(Total_age85plusr/POP_ESTIMATE_2018)), color = NA) +
   scale_fill_viridis_c(option = "viridis") +
   theme_minimal() +
-  labs(title = "Proportion of Population Age 65+ by County",
+  labs(title = "Proportion of Population Age 65+ by County Standardised",
        fill = "Proportion")
-
 ```
+
 
 ```{r}
 # Plot Active Physicians per 100,000
-ggplot(data = county_data) +
-  geom_sf(aes(fill = active.patient.care.physicians), color = NA) +
+ggplot(data = county_data_geo) +
+  geom_sf(aes(fill = log(Total.Active.Patient.Care.Physicians.per.100000.Population.2018..AAMC.)), color = NA) +
   scale_fill_viridis_c(option = "viridis") +
   theme_minimal() +
-  labs(title = "Active Physicians per 100,000 by County",
+  labs(title = "Active Physicians per 100,000 by County Standardised",
        fill = "Physicians/100k")
 ```
+
+```{r}
+
+county.covid$date <- as.Date(county.covid$date)
+
+# Filter the data for the year 2021
+county.covid_2021 <- county.covid %>%
+  filter(year(date) == 2021)
+```
+
+```{r}
+# Ensure the geometry column is in the correct format and extract centroids
+county.covid_2021 <- st_transform(county.covid_2021, 4326)
+county.covid_2021$centroid <- st_centroid(st_geometry(county.covid_2021))
+
+# Extract coordinates from centroids
+county.covid_df <- county.covid_2021 %>%
+  mutate(long = st_coordinates(centroid)[,1],
+         lat = st_coordinates(centroid)[,2]) %>%
+  as.data.frame() %>%
+  select(-geometry, -centroid)  # Remove geometry columns as they are now in long and lat
+
+```
+
+
+
+```{r}
+start_date <- as.Date("2021-01-01")
+filtered_dates <- seq(start_date, max(county.covid_df$date), by = "14 days")
+county.covid_df <- county.covid_df %>%
+  filter(date %in% filtered_dates)
+
+# Prepare data for plotly
+county.covid_long <- county.covid_df %>%
+  gather(key = "variable", value = "value", -GEOID, -date, -cases_14days, -long, -lat)
+
+# Check the resulting data
+head(county.covid_long)
+```
+
+
+```{r}
+# Create the plot using plotly
+fig <- plot_ly(county.covid_long, 
+               x = ~long, 
+               y = ~lat, 
+               frame = ~date, 
+               ids = ~GEOID, 
+               type = 'scatter', 
+               mode = 'markers', 
+               marker = list(color = ~cases_14days, colorscale = 'Viridis', showscale = TRUE)) %>%
+  layout(title = "New COVID-19 Cases by County in 2021 Fortnightly Average",
+         xaxis = list(title = "Longitude"),
+         yaxis = list(title = "Latitude")) %>%
+  animation_opts(frame = 1000, easing = "elastic", redraw = TRUE) %>%
+  animation_button(x = 1, xanchor = "right", y = 0, yanchor = "bottom")
+
+# Render the plotly object
+## fig
+```
+
+
+```{r}
+# Create a simpler plot without additional options
+fig_simple <- plot_ly(county.covid_long,
+                      x = ~long,
+                      y = ~lat,
+                      frame = ~date,
+                      ids = ~GEOID,
+                      type = 'scattergl',  # Use scattergl for WebGL rendering
+                      mode = 'markers')
+
+# Render the simpler plotly object
+fig_simple
+```
+
+
+
+
+
 
 # Model
 
