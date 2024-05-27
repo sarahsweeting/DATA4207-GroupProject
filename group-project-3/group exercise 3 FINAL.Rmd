@@ -17,8 +17,9 @@ urlcolor: blue
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE, messages = FALSE)
 
+library(htmlwidgets)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, messages = FALSE)
 library (tidyverse)
 library(sf)
 library(janitor)
@@ -886,11 +887,12 @@ Density_Cross_deaths$Area
 ```
 
 ## Population Density: Urban-Rural Separation
+
 The density per county, which measures the number of people living in a given area within a county, is an important factor in the spread of infectious diseases like COVID-19. Higher density means more people are concentrated in a smaller area, increasing the likelihood of person-to-person transmission through close contact. By analysing density per county, we can assess how different population concentrations impact the rate of new infections. This information can help identify areas that might need more stringent public health measures to control the spread of the virus.
 
 As seen below area, with the highest areas tend to have higher number of case of covid. 
 
-```{r}
+```{r fig.align='center'}
 ggplot(data = county_data_geo) +
       geom_sf(aes(fill = log(Density.per.square.mile.of.land.area...Population)), color = NA) +
       scale_fill_viridis_c(option = "viridis") +
@@ -902,6 +904,8 @@ ggplot(data = county_data_geo) +
   theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
         axis.title.y = element_blank())
 ```
+
+
 Additionally, the county areas below show that within the 20 most dense counties, there is an intersection counties with the highest case number
 ```{r}
 Density_Cross$Area_Name
@@ -911,13 +915,14 @@ Additionally, this extend beyond case numbers and is also true for deaths in cou
 Density_Cross_deaths$Area
 ```
 
-##Age Demographics: Vulnerability of Elderly
+## Age Demographics: Vulnerability of Elderly
+
 The age distribution of a population, particularly the proportion of individuals over 65, is essential in studying COVID-19 spread and impact. Older adults are more susceptible to severe illness and complications from COVID-19. They are also more likely to require hospitalisation and intensive care. By examining the share of the population over 65, we can assess the potential burden on healthcare systems and identify regions where protective measures and vaccination campaigns might need to be prioritised to protect this vulnerable group.
 
 Seen below, a visual trend of areas with a higher proportion of 65+ indicates somewhat higher scores of covid cases. For example areas like Florida that historically have high numbers of retirees. However, the is no intersection between the county areas with the highest proportion of 65+ and covid cases.
 
 
-```{r}
+```{r fig.align='center'}
 ggplot(data = county_data_geo) +
   geom_sf(aes(fill = log(Total_age85plusr/POP_ESTIMATE_2018)), color = NA) +
   scale_fill_viridis_c(option = "viridis") +
@@ -929,11 +934,13 @@ ggplot(data = county_data_geo) +
   theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
         axis.title.y = element_blank())
 ```
+
 ## Healthcare Resources: Active Physicians per capita 
+
 The availability of healthcare resources, such as active physicians per 100,000 population, is a critical factor in managing and mitigating the effects of the COVID-19 pandemic. Areas with a higher number of active physicians can provide better medical care, testing, and treatment, which can help control the spread of the virus and reduce mortality rates. By analysing the distribution of active physicians, we can understand the capacity of different regions to respond to the pandemic and highlight areas that may need additional support and resources to effectively manage the healthcare demands caused by COVID-19. 
 
 However, the is no intersection between the county areas with the highest proportion of physicians and covid cases.
-```{r}
+```{r fig.align='center'}
 # Plot Active Physicians per 100,000
 ggplot(data = county_data_geo) +
   geom_sf(aes(fill = log(Total.Active.Patient.Care.Physicians.per.100000.Population.2018..AAMC.)), color = NA) +
@@ -949,9 +956,9 @@ ggplot(data = county_data_geo) +
 Active physicians, may be a confounding factor with population density, as higher dense city-areas may attract more physicians. And as there is low evidence above that increased physicians means less cases, it demonstrates that density is a more telling factor of cases then physicians. 
 
 ## Statistical Analysis 
-This statement that population density is more significant to contributing to case numbers can be proved statistically. 
+This statement that population density is more significant to indicating case numbers can be proved statistically. 
 
-```{r see the significance of proportiona of 65+, include=FALSE}
+```{r see the significance of proportiona of 65+, fig.align='center'}
 
 county_cases_sum_df <- as.data.frame(county_cases_sum)
 
@@ -971,9 +978,9 @@ model_proption65 = lm(new_cases_sum ~ pop.density + age.65.plus + active.patient
 summary(model_proption65)
 ```
 
-As seen above, compared to the other two variables, population density is most siginificant to indicating new cases. 
+As seen above, compared to the other two variables, population density is siginificant at indicating new cases. 
 
-Below is an interactive graph that demonstrates displays the top 100 counties and their new covid cases over 2020 - 2021. It can be identified visually the different Covid-waves/influxes in cases. 
+Below is an interactive graph that demonstrates and displays the top 100 counties and their standardised new covid cases over 2020 - 2021. It can be identified visually the different Covid-waves/influxes in cases with the larger the circle the larger higher the number of cases. Hover your mouse to see the county name. 
 
 ```{r include=FALSE}
 
@@ -1034,8 +1041,8 @@ scaling_factor <- 2
 ```
 
 
-```{r}
-fig <- plot_ly(county.covid_long_top_df,
+```{r fig.align='center'}
+plot_ly(county.covid_long_top_df,
                x = ~long,
                y = ~lat,
                frame = ~year_month,
@@ -1067,9 +1074,9 @@ fig <- plot_ly(county.covid_long_top_df,
   ) %>%
   animation_opts(frame = 1000, easing = "elastic", redraw = TRUE) %>%
   animation_button(x = 1, xanchor = "right", y = 0, yanchor = "bottom")
-
 # Render the plotly object
-fig
+
+
 ```
 
 # Model
