@@ -45,6 +45,11 @@ confirmed.cases.data <- read.csv("https://raw.githubusercontent.com/CSSEGISandDa
 
 ```
 
+```{r}
+confirmed_deaths = read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv")
+```
+
+
 ```{r load and clean confirmed case data by county}
 
 
@@ -52,7 +57,6 @@ confirmed.cases.data <- read.csv("https://raw.githubusercontent.com/CSSEGISandDa
 
 library(tidyr)
 library(DataCombine)
-
 
 # clean data
 
@@ -94,6 +98,47 @@ covid.smooth.data_county <- confirmed.cases.data2 %>%
                        'Puerto Rico',
                        'Virgin Islands'))
 ```
+```{r}
+confirmed_deaths_cleaned <- confirmed_deaths %>%
+  dplyr::rename(state = Province_State,
+                county = Admin2) %>% 
+  dplyr::select(-UID, -iso2, -iso3, -code3,
+                -Lat, -Long_, -Combined_Key, -Country_Region) %>% 
+    gather(date, deaths,-state,-county,-FIPS) %>%
+  dplyr::mutate(date = gsub('X', '', date), 
+                date = as.Date(as.character(date), "%m.%d.%y"),
+                county_state = paste0(county, ', ', state)) %>%
+  arrange(county_state, date) %>%
+  dplyr::mutate(lag = slide(.,
+                                  Var = 'deaths', 
+                                  NewVar = 'new',
+                                  GroupVar = 'county_state', 
+                                  slideBy = -1)[,'new'],
+                new.deaths = deaths - lag)
+
+
+## calculate rolling averages and remove non-states
+
+confirmed_deaths_cleaned <- confirmed_deaths_cleaned %>%
+    dplyr::group_by(county_state, date) %>% 
+    dplyr::summarise(new.deaths = sum(new.deaths),FIPS) %>%
+      dplyr::group_by(county_state) %>% 
+    dplyr::mutate(deaths_14days = zoo::rollmean(new.deaths, 
+                                               k = 14, fill = 0)) %>% 
+  dplyr::ungroup() %>% 
+  mutate() %>% 
+  merge(confirmed_deaths_cleaned %>% 
+          dplyr::select(county_state, date, county, state)) %>% 
+  filter(!state %in% c('American Samoa', 
+                       'Diamond Princess',
+                       'Grand Princess',
+                       'Guam',
+                       'Northern Mariana Islands',
+                       'Puerto Rico',
+                       'Virgin Islands'))
+```
+
+
 
 ```{r load additional predictor data}
 
@@ -726,9 +771,14 @@ us.shape.2 <- us.shape.2 %>%
 
 covid.data <- covid.data %>%
   mutate(FIPS = as.character(FIPS))
+
+confirmed_deaths_cleaned <- confirmed_deaths_cleaned %>%
+  mutate(FIPS = as.character(FIPS))
 ```
 
+
 ```{r}
+
 
 county.data$FIPS <- str_pad(as.character(county.data$FIPS), width = 5, pad = "0")
 
@@ -756,12 +806,85 @@ join_in_chunks <- function(shape_data, covid_data, chunk_size = 1000) {
 
 
 county_data_geo <- join_in_chunks(us.shape.2, county.data, chunk_size = 1000)
+
+
 ```
 
 ```{r}
 county.covid = join_in_chunks(us.shape.2, covid.data, chunk_size = 1000)
 ```
 
+```{r}
+# Summarize the data (assuming you have a county.covid dataset)
+county_cases_sum <- county.covid %>%
+  group_by(GEOID) %>%
+  summarize(new_cases_sum = sum(new.cases, na.rm = TRUE),
+            new_case_max = max(new.cases, na.rm = TRUE), ,
+            county = first(county.x))
+
+
+```
+
+```{r}
+county_cases_sum <- county_cases_sum %>%
+  mutate(centroid = st_centroid(geometry))
+
+# Extract coordinates from the centroids
+county_cases_sum <- county_cases_sum %>%
+  mutate(long = st_coordinates(centroid)[,1],
+         lat = st_coordinates(centroid)[,2])
+```
+
+
+```{r}
+# Highlight top counties with the highest new cases
+top_counties <- county_cases_sum %>%
+  arrange(desc(new_cases_sum)) %>%
+  head(20)
+```
+
+```{r}
+top_densities <- county.data %>%
+  arrange(desc(Density.per.square.mile.of.land.area...Population)) %>%
+  select(FIPS, Density = Density.per.square.mile.of.land.area...Population, Area_Name)  %>%
+  head(20)
+top_densities
+
+
+lowest_physic <- county.data %>%
+  arrange(Total.Active.Patient.Care.Physicians.per.100000.Population.2018..AAMC.) %>%
+  select(FIPS, 'ActivePhy/100k' = Total.Active.Patient.Care.Physicians.per.100000.Population.2018..AAMC., Area_Name)  %>%
+  head(20)
+
+  arrange(desc()) %>%
+  select(FIPS, Density = Density.per.square.mile.of.land.area...Population, Area_Name)  %>%
+  head(20)
+
+top_65 <- county.data %>%
+  arrange(desc(Total_age65plus/POP_ESTIMATE_2018)) %>%
+  select(FIPS, '65plus%' = Total_age65plus/POP_ESTIMATE_2018, Area_Name)  %>%
+  head(20)
+
+```
+
+```{r}
+confirmed_deaths_cleaned_sum <- confirmed_deaths_cleaned %>%
+  arrange(desc(new.deaths)) %>%
+  head(20)
+```
+
+```{r}
+top_deaths <- confirmed_deaths_cleaned_sum %>%
+  arrange(desc(new.deaths)) %>%
+  head(20)
+top_deaths
+```
+
+
+
+```{r}
+Density_Cross = inner_join(top_65, top_deaths, by = c('FIPS' = 'FIPS'))
+```
 
 ```{r}
 ggplot(data = county_data_geo) +
@@ -769,9 +892,13 @@ ggplot(data = county_data_geo) +
       scale_fill_viridis_c(option = "viridis") +
       theme_minimal() +
       labs(title = "Population Density by County Standardised", 
-           fill = "Density (per sq. mile)")
-
+           fill = "Density (per sq. mile)") +
+  geom_point(data = top_counties, aes(x = long, y = lat, size = new_cases_sum), color = "red", alpha = 0.7) +
+  scale_size_continuous(name = "Summed New Cases") +
+  theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
+        axis.title.y = element_blank())
 ```
+
 
 ```{r}
 ggplot(data = county_data_geo) +
@@ -779,7 +906,11 @@ ggplot(data = county_data_geo) +
   scale_fill_viridis_c(option = "viridis") +
   theme_minimal() +
   labs(title = "Proportion of Population Age 65+ by County Standardised",
-       fill = "Proportion")
+       fill = "Proportion") +
+  geom_point(data = top_counties, aes(x = long, y = lat, size = new_cases_sum), color = "red", alpha = 0.7) +
+  scale_size_continuous(name = "Summed New Cases") +
+  theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
+        axis.title.y = element_blank())
 ```
 
 
@@ -790,7 +921,11 @@ ggplot(data = county_data_geo) +
   scale_fill_viridis_c(option = "viridis") +
   theme_minimal() +
   labs(title = "Active Physicians per 100,000 by County Standardised",
-       fill = "Physicians/100k")
+       fill = "Physicians/100k") +
+  geom_point(data = top_counties, aes(x = long, y = lat, size = new_cases_sum), color = "red", alpha = 0.7) +
+  scale_size_continuous(name = "Summed New Cases") +
+  theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
+        axis.title.y = element_blank())
 ```
 
 ```{r}
@@ -865,7 +1000,7 @@ fig_simple <- plot_ly(county.covid_long,
                       mode = 'markers')
 
 # Render the simpler plotly object
-fig_simple
+## fig_simple
 ```
 
 
