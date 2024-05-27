@@ -4,6 +4,7 @@ author: "Emily and Sarah"
 subtitle: 'DATA5207: Data Analysis in the Social Sciences'
 output:
   html_document:
+    code_folding: hide
     toc: no
     df_print: paged
   pdf_document:
@@ -34,23 +35,22 @@ devtools::install_github('bbc/bbplot')
 
 # Load Data and Preprocess
 
-```{r load google mobility data}
+```{r load google mobility data, include=FALSE}
 google.mobility <- read.csv('Data/Global_Mobility_Report.csv') %>%
   filter(country_region == 'United States')
 
 ```
 
-```{r}
+```{r include=FALSE}
 confirmed.cases.data <- read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv")
 
 ```
 
-```{r}
+```{r include=FALSE}
 confirmed_deaths = read.csv("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv")
 ```
 
-
-```{r load and clean confirmed case data by county}
+```{r load and clean confirmed case data by county, include=FALSE}
 
 
 # load packages
@@ -98,7 +98,8 @@ covid.smooth.data_county <- confirmed.cases.data2 %>%
                        'Puerto Rico',
                        'Virgin Islands'))
 ```
-```{r}
+
+```{r include=FALSE}
 confirmed_deaths_cleaned <- confirmed_deaths %>%
   dplyr::rename(state = Province_State,
                 county = Admin2) %>% 
@@ -138,9 +139,7 @@ confirmed_deaths_cleaned <- confirmed_deaths_cleaned %>%
                        'Virgin Islands'))
 ```
 
-
-
-```{r load additional predictor data}
+```{r load additional predictor data, include=FALSE}
 
 
 load("Data/county.data.RData")
@@ -149,7 +148,7 @@ load("Data/county.data.RData")
 
 #### Climate DF
 
-```{r}
+```{r, include=FALSE}
 # patterns for cleaning county names
 
 patterns <- c(' Borough| Census Area| County| Parish| city')
@@ -184,7 +183,7 @@ climate.data <- county.data %>%
 
 #### Mobility DF
 
-```{r}
+```{r, include=FALSE}
 mobility.data <- google.mobility %>% 
           dplyr::mutate(county = gsub(patterns, '', sub_region_2),
                         state = sub_region_1,
@@ -198,23 +197,23 @@ mobility.data <- google.mobility %>%
   
 ```
 
-```{r}
+```{r include=FALSE}
 mobility.data <- na.omit(mobility.data)
 ```
 
-```{r checking blank rows}
+```{r checking blank rows,include=FALSE}
 blank_counts <- sapply(mobility.data, function(col) sum(col == ""))
 print(blank_counts)
 ```
 
-```{r removing said blank rows}
+```{r removing said blank rows,include=FALSE}
 clean.mobility.data <- mobility.data %>% filter(county != "")
 clean.mobility.data <- clean.mobility.data %>% filter(state != "")
 ```
 
 #### Transit DF
 
-```{r}
+```{r include=FALSE}
 # patterns for cleaning county names
 
 patterns <- c(' Borough| Census Area| County| Parish| city')
@@ -238,7 +237,7 @@ transit.data <- county.data %>%
 
 #### Collated Data
 
-```{r recoding data}
+```{r recoding data, include=FALSE}
 
 # patterns for cleaning county names
 
@@ -345,13 +344,13 @@ covid.data <- covid.data %>%
 
 ```
 
-```{r}
+```{r, include=FALSE}
 colnames(covid.data)
 ```
 
-Add shape files for any mapping tasks later
 
-```{r link us data with shape files, warning=FALSE, message=FALSE}
+```{r link us data with shape files, warning=FALSE, message=FALSE, include=FALSE}
+#Add shape files for any mapping tasks later
 
 us.shape.1 <- 
   st_read("Data/US shapefiles/cb_2016_us_county_20m.shp")
@@ -360,7 +359,7 @@ us.shape.1 <- us.shape.1 %>%
 
 ```
 
-```{r}
+```{r include=FALSE}
 
 fip.concordance <- read.csv("Data/fips concordance.csv")
 
@@ -379,7 +378,7 @@ us.shape.2$county <- gsub("Oglala Lakota, SD", "Oglala, SD", us.shape.2$county)
 
 ```
 
-```{r link shapefiles with fip concordance file}
+```{r link shapefiles with fip concordance file, include=FALSE}
 
 # Summary statistics for age over 65
 summary(covid.data$age.65.plus)
@@ -393,7 +392,7 @@ plot(covid.data$new.cases, covid.data$age.65.plus, ylab = "Age Over 65", xlab = 
 
 ```
 
-```{r}
+```{r include=FALSE}
 
 specific_date <- as.Date("2020-07-20	")  
 filtered_data <- covid.data %>%
@@ -408,7 +407,7 @@ cor(covid.data$pop.density, covid.data$new.cases, use = "complete.obs")
 plot(filtered_data$new.cases, filtered_data$pop.density, ylab = "Population Density", xlab = "New COVID-19 Cases", main = "Population Density vs. New COVID-19 Cases")
 ```
 
-```{r}
+```{r include=FALSE}
 # Summary statistics for active physicians per 100,000
 summary(covid.data$active.patient.care.physicians)
 
@@ -423,20 +422,20 @@ plot(covid.data$new.cases, covid.data$active.patient.care.physicians, ylab = "Ac
 
 ## Transit
 
-| Transit Score® | Description                         |
-|----------------|-------------------------------------|
-| 90–100         | Rider's Paradise                    |
-|                | World-class public transportation.  |
-| 70–89          | Excellent Transit                   |
-|                | Transit is convenient for most trips.|
-| 50–69          | Good Transit                        |
-|                | Many nearby public transportation options. |
-| 25–49          | Some Transit                        |
+| Transit Score® | Description                                 |
+|----------------|---------------------------------------------|
+| 90–100         | Rider's Paradise                            |
+|                | World-class public transportation.          |
+| 70–89          | Excellent Transit                           |
+|                | Transit is convenient for most trips.       |
+| 50–69          | Good Transit                                |
+|                | Many nearby public transportation options.  |
+| 25–49          | Some Transit                                |
 |                | A few nearby public transportation options. |
-| 0–24           | Minimal Transit                     |
-|                | It is possible to get on a bus.     |
+| 0–24           | Minimal Transit                             |
+|                | It is possible to get on a bus.             |
 
-```{r}
+```{r include=FALSE}
 
 na_count_per_column <- transit.data %>%
   summarise_all(~ sum(is.na(.)))
@@ -444,7 +443,7 @@ print(na_count_per_column)
 
 ```
 
-```{r remove NA values}
+```{r remove NA values, include=FALSE}
 clean.transit.data <- na.omit(transit.data)
 
 # standardise
@@ -465,7 +464,7 @@ ggplot(clean.transit.data, aes(x = z.transit)) +
     axis.title.y = element_text(size = 8))
 ```
 
-```{r link the geometry with transit data}
+```{r link the geometry with transit data, include=FALSE}
 us.shape.2 <- us.shape.2 %>%
   select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
   rename(county = NAME)
@@ -508,12 +507,12 @@ ggplot(transit.map) +
 
 ## Mobility
 
-```{r}
+```{r include=FALSE}
 # install.packages("zoo")
 library(zoo)
 ```
 
-```{r summarise data}
+```{r summarise data, include=FALSE}
 summarise.mobility.data <- clean.mobility.data %>%
   group_by(date) %>%
   summarise(mobility.transit = mean(mobility.transit, na.rm = TRUE),
@@ -542,7 +541,7 @@ workplace.mobility.data <- summarise.mobility.data %>%
 
 ```
 
-```{r}
+```{r include=FALSE}
 ggplot(grocery.mobility.data, aes(x = date, y = rolling_avg)) +
   geom_line(color = "blue") +
   labs(title = "Changes in Visitors to Grocery and Pharmacy Stores Over Time",
@@ -554,7 +553,7 @@ ggplot(grocery.mobility.data, aes(x = date, y = rolling_avg)) +
     axis.title.y = element_text(size = 8))
 ```
 
-```{r}
+```{r include=FALSE}
 ggplot(grocery.mobility.data, aes(x = date, y = rolling_avg)) +
   geom_line(color = "blue", size = 1) +  # Thicker line for better visibility
   # geom_point(color = "red", size = 1, alpha = 0.7) +  # Adding points for data
@@ -578,7 +577,7 @@ ggplot(grocery.mobility.data, aes(x = date, y = rolling_avg)) +
            label = "Christmas", angle = 90, vjust = -0.5, size = 3, color = "grey50")
 ```
 
-```{r}
+```{r }
 ggplot(transit.mobility.data, aes(x = date, y = rolling_avg)) +
   geom_line(color = "blue") +
   labs(title = "Changes in Visitors to Transit Over Time",
@@ -631,7 +630,7 @@ interactive_plot
 
 ## Climate data
 
-```{r}
+```{r include=FALSE}
 # Changing the climate data from a wide format to long format:
 climate.data <- climate.data %>%
   dplyr::select(county, 
@@ -675,7 +674,7 @@ climate.data.long <- climate.data.long %>%
   ))
 ```
 
-```{r link us data with shape files2, message=FALSE}
+```{r link us data with shape files2, message=FALSE, include=FALSE}
 # us.shape.2 <- us.shape.2 %>%
 #   select(-county, -Name, -Status, -COUNTYFP, -COUNTYNS, -STATEFP, -AFFGEOID, -GEOID, -LSAD, -ALAND, -AWATER, -Numeric.code, -Status)%>%
 #   rename(county = NAME)
@@ -689,7 +688,7 @@ climate.map <- full_join(us.shape.2,
  # To acknolwedge its a shape file
 ```
 
-```{r collate climate data and plot over time}
+```{r collate climate data and plot over time, include=FALSE}
 
 climate.state <- climate.data.long %>%
   group_by(state, month)%>%
@@ -758,9 +757,9 @@ ggplot(climate.map) +
 
 ```
 
-# Sarah's stuff :)
 
-```{r}
+
+```{r include=FALSE}
 
 # Ensure FIPS column is correctly named and of the same type in both data frames
 county.data <- county.data %>%
@@ -776,8 +775,7 @@ confirmed_deaths_cleaned <- confirmed_deaths_cleaned %>%
   mutate(FIPS = as.character(FIPS))
 ```
 
-
-```{r}
+```{r include=FALSE}
 
 
 county.data$FIPS <- str_pad(as.character(county.data$FIPS), width = 5, pad = "0")
@@ -810,22 +808,22 @@ county_data_geo <- join_in_chunks(us.shape.2, county.data, chunk_size = 1000)
 
 ```
 
-```{r}
+```{r include=FALSE}
 county.covid = join_in_chunks(us.shape.2, covid.data, chunk_size = 1000)
 ```
 
-```{r}
+```{r include=FALSE}
 # Summarize the data (assuming you have a county.covid dataset)
 county_cases_sum <- county.covid %>%
   group_by(GEOID) %>%
   summarize(new_cases_sum = sum(new.cases, na.rm = TRUE),
             new_case_max = max(new.cases, na.rm = TRUE), ,
-            county = first(county.x))
+            county = first(county.x), )
 
 
 ```
 
-```{r}
+```{r include=FALSE}
 county_cases_sum <- county_cases_sum %>%
   mutate(centroid = st_centroid(geometry))
 
@@ -835,20 +833,23 @@ county_cases_sum <- county_cases_sum %>%
          lat = st_coordinates(centroid)[,2])
 ```
 
-
-```{r}
+```{r include=FALSE}
 # Highlight top counties with the highest new cases
 top_counties <- county_cases_sum %>%
   arrange(desc(new_cases_sum)) %>%
   head(20)
+
+top_counties_50 <- county_cases_sum %>%
+  arrange(desc(new_cases_sum)) %>%
+  head(100)
 ```
 
-```{r}
+```{r include=FALSE}
 top_densities <- county.data %>%
   arrange(desc(Density.per.square.mile.of.land.area...Population)) %>%
   select(FIPS, Density = Density.per.square.mile.of.land.area...Population, Area_Name)  %>%
   head(20)
-top_densities
+
 
 
 lowest_physic <- county.data %>%
@@ -856,35 +857,38 @@ lowest_physic <- county.data %>%
   select(FIPS, 'ActivePhy/100k' = Total.Active.Patient.Care.Physicians.per.100000.Population.2018..AAMC., Area_Name)  %>%
   head(20)
 
-  arrange(desc()) %>%
-  select(FIPS, Density = Density.per.square.mile.of.land.area...Population, Area_Name)  %>%
-  head(20)
-
 top_65 <- county.data %>%
-  arrange(desc(Total_age65plus/POP_ESTIMATE_2018)) %>%
-  select(FIPS, '65plus%' = Total_age65plus/POP_ESTIMATE_2018, Area_Name)  %>%
+  mutate(`65plus%` = (Total_age65plus / POP_ESTIMATE_2018) * 100) %>%
+  arrange(desc(`65plus%`)) %>%
+  select(FIPS, `65plus%`, Area_Name) %>%
   head(20)
+
 
 ```
 
-```{r}
+```{r include=FALSE}
 confirmed_deaths_cleaned_sum <- confirmed_deaths_cleaned %>%
-  arrange(desc(new.deaths)) %>%
-  head(20)
+  arrange(desc(new.deaths)) 
+  
 ```
 
-```{r}
+```{r include=FALSE}
 top_deaths <- confirmed_deaths_cleaned_sum %>%
   arrange(desc(new.deaths)) %>%
   head(20)
-top_deaths
 ```
 
-
-
-```{r}
-Density_Cross = inner_join(top_65, top_deaths, by = c('FIPS' = 'FIPS'))
+```{r include=FALSE}
+Density_Cross = inner_join(top_densities, top_counties, by = c('FIPS' = 'GEOID'))
+Density_Cross_deaths = inner_join(top_densities, top_deaths, by = c('FIPS' = 'FIPS'))
+Density_Cross$Area_Name
+Density_Cross_deaths$Area
 ```
+
+## Population Density: Urban-Rural Separation
+The density per county, which measures the number of people living in a given area within a county, is an important factor in the spread of infectious diseases like COVID-19. Higher density means more people are concentrated in a smaller area, increasing the likelihood of person-to-person transmission through close contact. By analysing density per county, we can assess how different population concentrations impact the rate of new infections. This information can help identify areas that might need more stringent public health measures to control the spread of the virus.
+
+As seen below area, with the highest areas tend to have higher number of case of covid. 
 
 ```{r}
 ggplot(data = county_data_geo) +
@@ -898,6 +902,19 @@ ggplot(data = county_data_geo) +
   theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
         axis.title.y = element_blank())
 ```
+Additionally, the county areas below show that within the 20 most dense counties, there is an intersection counties with the highest case number
+```{r}
+Density_Cross$Area_Name
+```
+Additionally, this extend beyond case numbers and is also true for deaths in counties. 
+```{r}
+Density_Cross_deaths$Area
+```
+
+##Age Demographics: Vulnerability of Elderly
+The age distribution of a population, particularly the proportion of individuals over 65, is essential in studying COVID-19 spread and impact. Older adults are more susceptible to severe illness and complications from COVID-19. They are also more likely to require hospitalisation and intensive care. By examining the share of the population over 65, we can assess the potential burden on healthcare systems and identify regions where protective measures and vaccination campaigns might need to be prioritised to protect this vulnerable group.
+
+Seen below, a visual trend of areas with a higher proportion of 65+ indicates somewhat higher scores of covid cases. For example areas like Florida that historically have high numbers of retirees. However, the is no intersection between the county areas with the highest proportion of 65+ and covid cases.
 
 
 ```{r}
@@ -912,8 +929,10 @@ ggplot(data = county_data_geo) +
   theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
         axis.title.y = element_blank())
 ```
+## Healthcare Resources: Active Physicians per capita 
+The availability of healthcare resources, such as active physicians per 100,000 population, is a critical factor in managing and mitigating the effects of the COVID-19 pandemic. Areas with a higher number of active physicians can provide better medical care, testing, and treatment, which can help control the spread of the virus and reduce mortality rates. By analysing the distribution of active physicians, we can understand the capacity of different regions to respond to the pandemic and highlight areas that may need additional support and resources to effectively manage the healthcare demands caused by COVID-19. 
 
-
+However, the is no intersection between the county areas with the highest proportion of physicians and covid cases.
 ```{r}
 # Plot Active Physicians per 100,000
 ggplot(data = county_data_geo) +
@@ -927,17 +946,45 @@ ggplot(data = county_data_geo) +
   theme(legend.position = "right", axis.title.x = element_blank(),  # Remove x-axis title
         axis.title.y = element_blank())
 ```
+Active physicians, may be a confounding factor with population density, as higher dense city-areas may attract more physicians. And as there is low evidence above that increased physicians means less cases, it demonstrates that density is a more telling factor of cases then physicians. 
 
-```{r}
+## Statistical Analysis 
+This statement that population density is more significant to contributing to case numbers can be proved statistically. 
+
+```{r see the significance of proportiona of 65+, include=FALSE}
+
+county_cases_sum_df <- as.data.frame(county_cases_sum)
+
+county.covid_df <- as.data.frame(county.covid)
+county.covid_df <- na.omit(county.covid_df)
+county.covid_df <- county.covid_df %>%
+  select(GEOID, pop.density, age.65.plus, active.patient.care.physicians)
+model_df = left_join(county_cases_sum_df, county.covid_df, by = 'GEOID')
+
+model_df <- na.omit(model_df)
+
+model_df <- model_df %>%
+  distinct(GEOID, .keep_all = TRUE)
+
+model_proption65 = lm(new_cases_sum ~ pop.density + age.65.plus + active.patient.care.physicians, model_df)
+# Tidy the model output
+summary(model_proption65)
+```
+
+As seen above, compared to the other two variables, population density is most siginificant to indicating new cases. 
+
+Below is an interactive graph that demonstrates displays the top 100 counties and their new covid cases over 2020 - 2021. It can be identified visually the different Covid-waves/influxes in cases. 
+
+```{r include=FALSE}
 
 county.covid$date <- as.Date(county.covid$date)
 
 # Filter the data for the year 2021
 county.covid_2021 <- county.covid %>%
-  filter(year(date) == 2021)
+  filter(year(date) == c(2020, 2021))
 ```
 
-```{r}
+```{r include=FALSE}
 # Ensure the geometry column is in the correct format and extract centroids
 county.covid_2021 <- st_transform(county.covid_2021, 4326)
 county.covid_2021$centroid <- st_centroid(st_geometry(county.covid_2021))
@@ -951,62 +998,79 @@ county.covid_df <- county.covid_2021 %>%
 
 ```
 
-
-
-```{r}
-start_date <- as.Date("2021-01-01")
-filtered_dates <- seq(start_date, max(county.covid_df$date), by = "14 days")
+```{r include=FALSE}
+start_date <- as.Date("2020-01-01")
 county.covid_df <- county.covid_df %>%
-  filter(date %in% filtered_dates)
+  mutate(year_month = floor_date(date, "month"))
 
-# Prepare data for plotly
-county.covid_long <- county.covid_df %>%
-  gather(key = "variable", value = "value", -GEOID, -date, -cases_14days, -long, -lat)
+# Summarize the data by month
+county.covid_monthly <- county.covid_df %>%
+  group_by(year_month, GEOID, county.x, long, lat) %>%
+  summarize(new.cases = sum(new.cases, na.rm = TRUE), .groups = 'drop')
+```
 
-# Check the resulting data
-head(county.covid_long)
+```{r include=FALSE}
+top_counties_50 <- top_counties_50$county
+county.covid_monthly <- county.covid_monthly %>%
+  filter(county.x %in% top_counties_50)
+
+county.covid_long_top_df <- as.data.frame(county.covid_monthly)
+
+# Drop the geometry column
+
+# Then proceed with the
+head(county.covid_long_top_df)
+```
+
+```{r include=FALSE}
+max_cases <- max(county.covid_long_top_df$new.cases, na.rm = TRUE)
+min_cases <- min(county.covid_long_top_df$new.cases, na.rm = TRUE)
+
+county.covid_long_top_df <- county.covid_long_top_df %>%
+  mutate(marker_size = (new.cases - min_cases) / (max_cases - min_cases) * 50) # Scale to a range (e.g., 0 to 50)
+
+# Ensure the scaling factor enhances visibility
+scaling_factor <- 2
 ```
 
 
 ```{r}
-# Create the plot using plotly
-fig <- plot_ly(county.covid_long, 
-               x = ~long, 
-               y = ~lat, 
-               frame = ~date, 
-               ids = ~GEOID, 
-               type = 'scatter', 
-               mode = 'markers', 
-               marker = list(color = ~cases_14days, colorscale = 'Viridis', showscale = TRUE)) %>%
-  layout(title = "New COVID-19 Cases by County in 2021 Fortnightly Average",
-         xaxis = list(title = "Longitude"),
-         yaxis = list(title = "Latitude")) %>%
+fig <- plot_ly(county.covid_long_top_df,
+               x = ~long,
+               y = ~lat,
+               frame = ~year_month,
+               ids = ~GEOID,
+               type = 'scattergeo',
+               mode = 'markers',
+               text = ~county.x,        # Set the hover text to the county name
+               hoverinfo = 'text',    # Only display the text (county name) in the hover info
+               marker = list(
+                 size = ~log(new.cases), # Set the size of the markers based on the normalized new cases
+                 color = 'red',        # Optional: Set a constant color for the markers
+                 opacity = 0.6,
+                 line = list(width = 0)
+               ),
+               name = 'COVID-19 Cases') %>%
+  layout(
+    title = "New COVID-19 Cases by County in 2021 for Highest Reporting Counties",
+    geo = list(
+      scope = 'usa',               # Set the map scope to the USA
+      projection = list(type = 'albers usa'),
+      showland = TRUE,
+      landcolor = 'rgb(217, 217, 217)',
+      subunitwidth = 1,
+      countrywidth = 1,
+      subunitcolor = 'rgb(255, 255, 255)',
+      countrycolor = 'rgb(255, 255, 255)'
+    ),
+    margin = list(l = 0, r = 0, t = 30, b = 0) # Adjust the margins if needed
+  ) %>%
   animation_opts(frame = 1000, easing = "elastic", redraw = TRUE) %>%
   animation_button(x = 1, xanchor = "right", y = 0, yanchor = "bottom")
 
 # Render the plotly object
-## fig
+fig
 ```
-
-
-```{r}
-# Create a simpler plot without additional options
-fig_simple <- plot_ly(county.covid_long,
-                      x = ~long,
-                      y = ~lat,
-                      frame = ~date,
-                      ids = ~GEOID,
-                      type = 'scattergl',  # Use scattergl for WebGL rendering
-                      mode = 'markers')
-
-# Render the simpler plotly object
-## fig_simple
-```
-
-
-
-
-
 
 # Model
 
@@ -1033,6 +1097,7 @@ model3 <- lm(cases_14days ~mobility.transit +mobility.grocery +mobility.workplac
 summary(model3)
 ```
 
+
 ```{r testing independence}
 library(lmtest)
 
@@ -1056,6 +1121,3 @@ qqline(residuals(model3), col = "red")
 
 # Results and data journalism project explaining the spread of COVID-19 in the US. Why has it impacted some
 
-areas more than others?
-
-COVID-19
